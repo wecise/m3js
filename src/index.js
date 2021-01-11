@@ -97,6 +97,32 @@
     };
 
     /* 
+     *  Get global register info for M3 platform
+     */
+    var global = function(parent,name){
+        let parent = "/etc/global";
+        let name = "global.json";
+        let opts = {url: `/fs${parent}/${name}&type=file`};
+        ajax(opts).then( (rtn)=>{
+            console.log(rtn)
+        } ).catch( (err)=>{
+            console.log(err)
+        });
+    };
+
+    /* 
+     *  Get global register info by username for M3 platform
+     */
+    var globalByUser = function(parent,name){
+        let opts = {url: `/fs${parent}/${name}&type=file`};
+        ajax(opts).then( (rtn)=>{
+            console.log(rtn)
+        } ).catch( (err)=>{
+            console.log(err)
+        });
+    };
+
+    /* 
      *  Call a serverJS interface for M3 platform
      */
     var callFS = function(fileName, input){
@@ -301,6 +327,7 @@
     exports.json = json;
     exports.text = text;
     exports.xml = xml;
+    exports.global = global;
     exports.version = version;
     exports.connect = connect;
     exports.callFS = callFS;
