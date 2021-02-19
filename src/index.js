@@ -5,16 +5,16 @@
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-      typeof define === 'function' && define.amd ? define(['exports'], factory) :
-          (factory((global.m3 = global.m3 || {})));
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+      (factory((global.m3 = global.m3 || {})));
 }(this, (function (exports) {
   'use strict';
 
-  var version = "1.0.0";
+  const version = "1.0.0";
 
   /**
-   * **Note:** This method mutates `object`.
-   *
+   *  sessionid for M3 platform
+   * 
    * @static
    * @memberOf _
    * @since 1.0.0
@@ -23,326 +23,361 @@
    * @returns 
    * @example
    *
-   */
-  var init = function () {
-
-  };
+  */
+  let baseUrl = "";
+  let sessionid = "";
+  let globalByUser = null;
 
 
   /* 
-   *  sessionid for M3 platform
+  *  Http Request
   */
-  var baseUrl = "";
-  var sessionid = "";
-  
-  var globalByUser = null;
-
   function ajax(opts) {
-      let _url = "";
-      
-      if(opts.url.indexOf("http://") == -1){
-        _url =  `${baseUrl}${opts.url}&sessionid=${sessionid}`;
+    let _url = "";
+
+    // 测试环境
+    if (process.env.NODE_ENV === "development") {
+
+      if (opts.url.indexOf("http://") === -1) {
+        if(opts.url.indexOf("?") === -1){
+          _url = `${baseUrl}${opts.url}?sessionid=${sessionid}`;
+        } else {
+          _url = `${baseUrl}${opts.url}&sessionid=${sessionid}`;
+        }
+        
       } else {
         _url = opts.url;
       }
-      console.log(_url)
-      var xhr = new XMLHttpRequest(),
-        type = opts.type || 'GET',
-        url = _url,
-        params = opts.data,
-        dataType = opts.dataType || 'json';
-    
-      type = type.toUpperCase();
-    
-      if (type === 'GET') {
-        params = (function(obj){
-          var str = '';
-    
-          for(var prop in obj){
-            str += prop + '=' + obj[prop] + '&'
+
+    } else {
+
+      _url = opts.url;
+
+    }
+
+    let xhr = new XMLHttpRequest(),
+      type = opts.type || 'GET',
+      url = _url,
+      params = opts.data,
+      dataType = opts.dataType || 'json';
+
+    type = type.toUpperCase();
+
+    if (type === 'GET') {
+      params = (function (obj) {
+        let str = '';
+
+        for (let prop in obj) {
+          str += prop + '=' + obj[prop] + '&'
+        }
+        str = str.slice(0, str.length - 1);
+        return str;
+      })(opts.data);
+      url += url.indexOf('?') === -1 ? '?' + params : '&' + params;
+    }
+
+    xhr.open(type, url);
+
+    if (opts.contentType) {
+      xhr.setRequestHeader('Content-type', opts.contentType);
+    }
+
+    xhr.send(params ? params : null);
+
+    //return promise
+    return new Promise(function (resolve, reject) {
+      //onload are executed just after the sync request is comple，
+      //please use 'onreadystatechange' if need support IE9-
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          let result;
+          try {
+            result = JSON.parse(xhr.response);
+          } catch (e) {
+            result = xhr.response;
           }
-          str = str.slice(0, str.length - 1);
-          return str;
-        })(opts.data);
-        url += url.indexOf('?') === -1 ? '?' + params : '&' + params;
-      }
-    
-      xhr.open(type, url);
-    
-      if (opts.contentType) {
-        xhr.setRequestHeader('Content-type', opts.contentType);
-      }
-    
-      xhr.send(params ? params : null);
-    
-      //return promise
-      return new Promise(function (resolve, reject) {
-        //onload are executed just after the sync request is comple，
-        //please use 'onreadystatechange' if need support IE9-
-        xhr.onload = function () {
-          if (xhr.status === 200) {
-            var result;
-            try {
-              result = JSON.parse(xhr.response);
-            } catch (e) {
-              result = xhr.response;
-            }
-            resolve(result);
-          } else {
-            reject(xhr.response);
-          }
-        };
-        
-      });
+          resolve(result);
+        } else {
+          reject(xhr.response);
+        }
+      };
+
+    });
   };
 
   /* 
-   *  connect to M3 platform and return sessionid 
+  *  connect to M3 platform and return sessionid  For development env
   */
-  var connect = async function (url, port, company, username, password) {
-      baseUrl = "http://" + [url,port].join(":");
+  let connect = async function (url, port, company, username, password) {
+
+      baseUrl = "http://" + [url, port].join(":");
+
       let opts = {
         url: `${baseUrl}/user/signin?company=${company}&username=${username}&password=${password}`,
         type: 'post'
       };
-      await ajax(opts).then( (rtn)=>{
-          sessionid = rtn.message;
-          globalHandler();
-      } ).catch( (err)=>{
-          console.log(err)
-      });
-  };
+      await ajax(opts).then((rtn) => {
+        sessionid = rtn.message;
+        
+        init();
 
-  /* 
-   *  Get global register info for M3 platform
-   */
-  var globalHandler = async function(){
-      await callFS("/matrix/utils/global.js",null).then( (rtn)=>{
-        exports.global = rtn.message;
+      }).catch((err) => {
+        console.log(err)
+        window.location.href=baseUrl;
       });
-  };
 
-  /* 
-   *  Get global register info by username for M3 platform
-   */
-  var globalByUserHandler = function(parent,name){
-      let opts = {url: `/fs${parent}/${name}&type=file`};
-      ajax(opts).then( (rtn)=>{
-        globalByUser = rtn;
-      } ).catch( (err)=>{
-        globalByUser = err;
-      });
   };
 
   /* 
    *  Call a serverJS interface for M3 platform
    */
-  var callFS = async function(fileName, input){
-      let opts = {url: `/script/exec/js?filepath=${fileName}&input=${input}&isfile=true`};
-      let rt = null;
-      await ajax(opts).then( (rtn)=>{
-          rt = rtn;
-      } ).catch( (err)=>{
-        rt = err;
+  let callFS = async function (fileName, input) {
+    let opts = { url: `/script/exec/js?filepath=${fileName}&input=${input}&isfile=true`, type: 'POST' };
+    let rt = null;
+    await ajax(opts).then((rtn) => {
+      rt = rtn;
+    }).catch((err) => {
+      rt = err;
+    });
+
+    return rt;
+  };
+
+  /* 
+   *  Init Global let
+  */
+  let init = async function () {
+
+    await globalHandler();
+    //langHandler();   
+    await auth(); 
+
+  };
+
+  /* 
+   *   当前用户权限 
+  */
+  let auth = async function () {
+    let rt = {};
+    
+    try {
+
+      await callFS("/matrix/user/signedUser.js").then( (rtn) => {
+        let tmp = { signedUser: rtn.message, isAdmin: rtn.message.isadmin };
+        window.auth = tmp;
+        _.extend(rt, tmp);
+      });
+
+    } catch (err) {
+       rt = null;
+    }
+
+    exports.auth = rt;
+  };
+
+  /*
+  *
+  */
+  // 通过选项创建 VueI18n 实例
+  let lang = async function() {
+    
+    try {
+
+      let cache = localStorage.getItem("M3-LANG-LIST");
+      
+      if (cache) {
+        
+        // return new VueI18n({
+        //   locale: window.M3_LANG,
+        //   messages: JSON.parse(cache)
+        // });
+
+        return JSON.parse(cache);
+
+      } else {
+
+        await callFS("/matrix/lang/getLangList.js", null).then((rtn) => {
+
+          localStorage.setItem("M3-LANG-LIST", JSON.stringify(rtn.message));
+
+          return rtn.message;
+
+        });
+
+      }
+
+    } catch (err) {
+      return null;
+    }
+
+  };
+
+  /* 
+   *  Get global register info for M3 platform
+   */
+  let globalHandler = async function () {
+    await callFS("/matrix/utils/global.js", null).then((rtn) => {
+      exports.global = rtn.message;
+    });
+  };
+
+  /* 
+   *  Get global register info by username for M3 platform
+   */
+  let globalByUserHandler = function (parent, name) {
+    let opts = { url: `/fs${parent}/${name}&type=file` };
+    ajax(opts).then((rtn) => {
+      globalByUser = rtn;
+    }).catch((err) => {
+      globalByUser = err;
+    });
+  };
+
+  /* 
+   *  Set Home for login user
+   */
+  let setAppAsHome = async function(vm,item){
+    
+    let opts = { 
+                    url: '/user/settings/home', 
+                    type: 'POST', 
+                    data: JSON.stringify({
+                      home: item.url.split("").slice(1,item.url.length).join(""),
+                      _csrf: sessionid
+                    }),
+                    contentType: false
+                };
+    let rt = null;
+    await ajax(opts).then((rtn) => {
+      rt = rtn;
+      
+      vm.$message({
+        type: "info",
+        message: "首页已设置为：" + item.url
+      });
+
+    }).catch((err) => {
+      vm.$message({
+        type: "error",
+        message: "首页设置失败：" + err
+      });
+      rt = err;
+    });
+
+    return rt;
+};
+
+/* 
+*  Set Home for all user
+*/
+let setAppAsHomeForAllUser = async function(vm,item){
+    
+    let opts = { 
+        url: '/admin/users/home', 
+        type: 'POST', 
+        data: {
+          home: item.url.split("").slice(1,item.url.length).join(""),
+          _csrf: sessionid
+        },
+        contentType: false
+    };
+    
+    let rt = null;
+
+    await ajax(opts).then((rtn) => {
+      rt = rtn;
+
+      vm.$message({
+        type: "info",
+        message: "首页已设置为：" + item.url
       });
       
-      return rt;
+      }).catch((err) => {
+      rt = err;
+    });
+
+    return rt;
   };
 
-  var topBar = function () {
-
-  };
-
-  var leftBar = function () {
-
-  };
-
-  var rightBar = function () {
-
-  };
-
-  var footBar = function () {
-
-  };
-
-
-  var request = function(url, callback) {
-      var request,
-          event = dispatch("beforesend", "progress", "load", "error"),
-          mimeType,
-          headers = map$1(),
-          xhr = new XMLHttpRequest,
-          user = null,
-          password = null,
-          response,
-          responseType,
-          timeout = 0;
-    
-      // If IE does not support CORS, use XDomainRequest.
-      if (typeof XDomainRequest !== "undefined"
-          && !("withCredentials" in xhr)
-          && /^(http(s)?:)?\/\//.test(url)) xhr = new XDomainRequest;
-    
-      "onload" in xhr
-          ? xhr.onload = xhr.onerror = xhr.ontimeout = respond
-          : xhr.onreadystatechange = function(o) { xhr.readyState > 3 && respond(o); };
-    
-      function respond(o) {
-        var status = xhr.status, result;
-        if (!status && hasResponse(xhr)
-            || status >= 200 && status < 300
-            || status === 304) {
-          if (response) {
-            try {
-              result = response.call(request, xhr);
-            } catch (e) {
-              event.call("error", request, e);
-              return;
-            }
-          } else {
-            result = xhr;
+  /* 
+   *  Set Title for M3 platform
+   */ 
+  let setTitle = async function(auth){
+      try{
+          
+          let pathName = window.location.pathname;
+          
+          if(_.isEmpty(pathName)){
+              document.title = auth.Company.title;
+              return false;
           }
-          event.call("load", request, result);
-        } else {
-          event.call("error", request, o);
-        }
+          
+          await callFS("/matrix/system/getAppNameByUrl.js", encodeURIComponent(pathName)).then( (rtn)=>{
+              let name = rtn.message;
+
+              if(!_.isEmpty(name)){
+                  if(window.M3_LANG == 'zh-CN'){
+                      document.title = name['cnname'];
+                  } else {
+                      document.title = name['enname'];
+                  }
+              } else {
+                  document.title = auth.Company.title;
+              }
+          } );
+          
+      } catch(err){
+          document.title = auth.Company.title;
       }
-    
-      xhr.onprogress = function(e) {
-        event.call("progress", request, e);
-      };
-    
-      request = {
-        header: function(name, value) {
-          name = (name + "").toLowerCase();
-          if (arguments.length < 2) return headers.get(name);
-          if (value == null) headers.remove(name);
-          else headers.set(name, value + "");
-          return request;
-        },
-    
-        // If mimeType is non-null and no Accept header is set, a default is used.
-        mimeType: function(value) {
-          if (!arguments.length) return mimeType;
-          mimeType = value == null ? null : value + "";
-          return request;
-        },
-    
-        // Specifies what type the response value should take;
-        // for instance, arraybuffer, blob, document, or text.
-        responseType: function(value) {
-          if (!arguments.length) return responseType;
-          responseType = value;
-          return request;
-        },
-    
-        timeout: function(value) {
-          if (!arguments.length) return timeout;
-          timeout = +value;
-          return request;
-        },
-    
-        user: function(value) {
-          return arguments.length < 1 ? user : (user = value == null ? null : value + "", request);
-        },
-    
-        password: function(value) {
-          return arguments.length < 1 ? password : (password = value == null ? null : value + "", request);
-        },
-    
-        // Specify how to convert the response content to a specific type;
-        // changes the callback value on "load" events.
-        response: function(value) {
-          response = value;
-          return request;
-        },
-    
-        // Alias for send("GET", …).
-        get: function(data, callback) {
-          return request.send("GET", data, callback);
-        },
-    
-        // Alias for send("POST", …).
-        post: function(data, callback) {
-          return request.send("POST", data, callback);
-        },
-    
-        // If callback is non-null, it will be used for error and load events.
-        send: function(method, data, callback) {
-          xhr.open(method, url, true, user, password);
-          if (mimeType != null && !headers.has("accept")) headers.set("accept", mimeType + ",*/*");
-          if (xhr.setRequestHeader) headers.each(function(value, name) { xhr.setRequestHeader(name, value); });
-          if (mimeType != null && xhr.overrideMimeType) xhr.overrideMimeType(mimeType);
-          if (responseType != null) xhr.responseType = responseType;
-          if (timeout > 0) xhr.timeout = timeout;
-          if (callback == null && typeof data === "function") callback = data, data = null;
-          if (callback != null && callback.length === 1) callback = fixCallback(callback);
-          if (callback != null) request.on("error", callback).on("load", function(xhr) { callback(null, xhr); });
-          event.call("beforesend", request, xhr);
-          xhr.send(data == null ? null : data);
-          return request;
-        },
-    
-        abort: function() {
-          xhr.abort();
-          return request;
-        },
-    
-        on: function() {
-          var value = event.on.apply(event, arguments);
-          return value === event ? request : value;
-        }
-      };
-    
-      if (callback != null) {
-        if (typeof callback !== "function") throw new Error("invalid callback: " + callback);
-        return request.get(callback);
-      }
-    
-      return request;
   };
 
-  var type = function(defaultMimeType, response) {
-      return function(url, callback) {
-        var r = request(url).mimeType(defaultMimeType).response(response);
-        if (callback != null) {
-          if (typeof callback !== "function") throw new Error("invalid callback: " + callback);
-          return r.get(callback);
-        }
-        return r;
-      };
+  /* 
+   *  DFS 
+  */
+  var dfsWrite = function () {
+
   };
 
-  var html = type("text/html", function (xhr) {
-      return document.createRange().createContextualFragment(xhr.responseText);
-  });
+  var dfsRead = function () {
 
-  var json = type("application/json", function (xhr) {
-      return JSON.parse(xhr.responseText);
-  });
+  };
 
-  var text = type("text/plain", function (xhr) {
-      return xhr.responseText;
-  });
+  /* 全屏控制 */
+    let fullScreen = function(mode) {
+      if ( mode ) {
+          if (document.documentElement.requestFullscreen) {
+              document.documentElement.requestFullscreen();
+          } else if (document.documentElement.msRequestFullscreen) {
+              document.documentElement.msRequestFullscreen();
+          } else if (document.documentElement.mozRequestFullScreen) {
+              document.documentElement.mozRequestFullScreen();
+          } else if (document.documentElement.webkitRequestFullscreen) {
+              document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+          }
+      } else {
+          if (document.exitFullscreen) {
+              document.exitFullscreen();
+          } else if (document.msExitFullscreen) {
+              document.msExitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+              document.mozCancelFullScreen();
+          } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen();
+          }
+      }
+  };
 
-  var xml = type("application/xml", function (xhr) {
-      var xml = xhr.responseXML;
-      if (!xml) throw new Error("parse error");
-      return xml;
-  });
 
-
-
-  exports.init = init;
-  exports.html = html;
-  exports.json = json;
-  exports.text = text;
-  exports.xml = xml;
   exports.sessionid = sessionid;
   exports.version = version;
+  exports.init = init;
   exports.connect = connect;
   exports.callFS = callFS;
-  
+  exports.lang = lang;
+  exports.setTitle = setTitle;
+  exports.setAppAsHome = setAppAsHome;
+  exports.setAppAsHomeForAllUser = setAppAsHomeForAllUser;
+  exports.fullScreen = fullScreen;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
