@@ -7,16 +7,18 @@ npm install @cnwangzd/m3js
 ```
 
 # Usage
+
+## import
 ```
 const m3 = require("@cnwangzd/m3js");
 Vue.prototype.m3 = m3;
 ```
 
-## connect to M³ Server and init env
+## connect
 ```
 if(process.env.NODE_ENV === "development"){
 
-    this.m3.connect("http", address, port, company, username, password).then(()=>{
+    this.m3.connect(http/https, address, port, company, username, password).then(()=>{
         // app
     }).catch((err)=>{
         console.log(err);
@@ -26,4 +28,21 @@ if(process.env.NODE_ENV === "development"){
   this.m3.init();
   // app
 }
+```
+## call api
+```
+    # no input param
+    this.m3.callFS("/matrix/eventConsole/getEventList.js").then( (res)=>{
+        console.log(res)
+    }).catch( (err)=>{
+        console.error(err)
+    } );
+
+    # input param
+    let param = encodeURIComponent(JSON.stringify({term:'m3'}));
+    this.m3.callFS("/matrix/eventConsole/getEventList.js", param).then( (res)=>{
+        console.log(res)
+    }).catch( (err)=>{
+        console.error(err)
+    } );
 ```
