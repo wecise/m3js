@@ -1,6 +1,6 @@
 {
   "name": "@cnwangzd/m3js",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "JavaScript library for M3 platform",
   "main": "src/index.js",
   "scripts": {

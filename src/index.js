@@ -587,7 +587,9 @@ let setAppAsHomeForAllUser = async function(vm,item){
     },
     datasource: {
       name: "数据源",
-      datasource: ""
+      class: "",
+      fields: [],
+      filter: ""
     },
     view: {
       columns: []
