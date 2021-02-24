@@ -1,19 +1,17 @@
 # m3js
 JavaScript library for M³ platform.The aim of the project is to create an easy to use, tool library with  M³ platform.
 
----
-
 # Features
 ### Connect
 ### Init
 ### Dfs
 ### Consolelog
     
-    * consolelogTrace
+    consolelogTrace
     
-    * consolelogDelete
+    consolelogDelete
     
-    * consolelogTruncate
+    consolelogTruncate
     
 ### Job
 ### Rule

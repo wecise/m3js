@@ -395,6 +395,10 @@ let setAppAsHomeForAllUser = async function(vm,item){
   /* 
    * JOB 
     */
+  let jobList = function(){
+
+  };
+
   let jobNew = function(){
 
   };
@@ -652,6 +656,8 @@ let setAppAsHomeForAllUser = async function(vm,item){
   exports.ruleDelete = ruleDelete;
   exports.ruleExport = ruleExport;
   
+  /* job */
+
   /* console log */
   exports.consolelogTrace = consolelogTrace;
   exports.consolelogDelete = consolelogDelete;
