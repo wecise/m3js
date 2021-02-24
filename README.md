@@ -6,6 +6,9 @@ JavaScript library for M³ platform.The aim of the project is to create an easy 
 ### Init
 ### Dfs
 ### Consolelog
+    consolelogTrace
+    consolelogDelete
+    consolelogTruncate
 ### Job
 ### Rule
 ### User
