@@ -2,9 +2,25 @@
 JavaScript library for M³ platform.The aim of the project is to create an easy to use, tool library with  M³ platform.
 
 # Features
+### app
+
+    setAppAsHome
+    setAppAsHomeForAllUser
+    setTitle
+
+
 ### Connect
 ### Init
 ### Dfs
+    
+    dfsNew
+
+    dfsDelete
+
+    dfsRename
+  
+    dfsUpdateAttr
+
 ### Consolelog
     
     consolelogTrace
@@ -15,6 +31,7 @@ JavaScript library for M³ platform.The aim of the project is to create an easy 
     
 ### Job
 ### Rule
+    ruleGet
 ### User
 
 
