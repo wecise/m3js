@@ -34,7 +34,7 @@
   */
   function ajax(opts) {
     let _url = "";
-
+    
     // 测试环境
     if (process.env.NODE_ENV === "development") {
 
@@ -59,7 +59,7 @@
       type = opts.type || 'GET',
       url = _url,
       params = opts.data,
-      processData = opts.processData || true,
+      processData = opts.processData !== ' undefined' ? opts.processData : true,
       dataType = opts.dataType || 'json';
 
     type = type.toUpperCase();
@@ -83,14 +83,14 @@
     if (opts.contentType) {
       xhr.setRequestHeader('Content-type', opts.contentType);
     }
-    
-    if (!opts.processData){
+  
+    if (!processData){
       let fm = new FormData();
       _.forEach(params,(v,k)=>{
         fm.append(k,v);
       })
       xhr.send(params ? fm : null);
-    } else{
+    } else {
       xhr.send(params ? params : null);
     }
 
@@ -380,12 +380,57 @@ let setAppAsHomeForAllUser = async function(vm,item){
     })
   };
 
-  let ruleAdd = function(){
+  let ruleAdd = async function(data){
 
+    let opts = { 
+        url: '/config/set', 
+        type: 'POST', 
+        data:{
+          key: data.key,
+          ttl: data.ttl ? data.ttl : '',
+          value: data.value
+        }
+    };
+    
+    return new Promise( await function (resolve, reject) {
+        
+        ajax(opts).then((rtn) => {
+          resolve(rtn);
+        }).catch((err)=>{
+          if(typeof err === 'string'){
+            reject(JSON.parse(err));
+          } else {
+            reject(err);
+          }
+          
+        })
+    })
+    
   };
 
-  let ruleDelete = function(){
-
+  let ruleDelete = async function(){
+    let opts = { 
+        url: 'config/del', 
+        type: 'POST', 
+        data:{
+          key: data.key
+        }
+    };
+    
+    return new Promise( await function (resolve, reject) {
+        
+        ajax(opts).then((rtn) => {
+          resolve(rtn);
+        }).catch((err)=>{
+          if(typeof err === 'string'){
+            reject(JSON.parse(err));
+          } else {
+            reject(err);
+          }
+          
+        })
+    })
+    
   };
 
   let ruleExport = function(){
@@ -407,9 +452,55 @@ let setAppAsHomeForAllUser = async function(vm,item){
 
   };
 
-  let dfsRead = function () {
+  let dfsList = async function (data) {
 
+        let opts = { 
+            url: `/fs${data.parent}${window.auth.isAdmin?'?issys=true':''}`, 
+            type: 'GET',
+            data: {
+              type: 'dir'
+            }
+        };
+        
+        return new Promise( await function (resolve, reject) {
+            
+            ajax(opts).then((rtn) => {
+              resolve(rtn);
+            }).catch((err)=>{
+              if(typeof err === 'string'){
+                reject(JSON.parse(err));
+              } else {
+                reject(err);
+              }
+              
+            })
+        })
   };
+
+  let dfsGet = async function (data) {
+
+    let opts = { 
+        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`, 
+        type: 'GET',
+        data: {
+          type: 'file'
+        }
+    };
+    
+    return new Promise( await function (resolve, reject) {
+        
+        ajax(opts).then((rtn) => {
+          resolve(rtn);
+        }).catch((err)=>{
+          if(typeof err === 'string'){
+            reject(JSON.parse(err));
+          } else {
+            reject(err);
+          }
+          
+        })
+    })
+};
 
   let dfsNew = async function(data) {
     
@@ -642,6 +733,8 @@ let setAppAsHomeForAllUser = async function(vm,item){
   exports.setAppAsHomeForAllUser = setAppAsHomeForAllUser;
   exports.fullScreen = fullScreen;
   /* dfs */
+  exports.dfsList = dfsList;
+  exports.dfsGet = dfsGet;
   exports.dfsNew = dfsNew;
   exports.dfsDelete = dfsDelete;
   exports.dfsRename = dfsRename;
