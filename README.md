@@ -1,5 +1,5 @@
 # m3js
-JavaScript library for M³ platform.The aim of the project is to create an easy to use, tool library with  M³ platform.
+JavaScript library for M³ platform.The aim of the project is to create an easy to use, tool library for  M³ platform.
 
 # Features
 ### app
