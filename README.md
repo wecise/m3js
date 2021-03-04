@@ -40,14 +40,14 @@ JavaScript library for M³ platform.The aim of the project is to create an easy 
 
 # Install
 ```
-npm install @cnwangzd/m3js
+npm install @wecise/m3js
 ```
 
 # Usage
 
 ## import
 ```
-const m3 = require("@cnwangzd/m3js");
+const m3 = require("@wecise/m3js");
 Vue.prototype.m3 = m3;
 ```
 
