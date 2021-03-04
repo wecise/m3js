@@ -600,6 +600,27 @@ let setAppAsHomeForAllUser = async function(vm,item){
     })
   }
 
+  let dfsRefresh = async function(data){
+    let opts = { 
+        url: `/fs/tolocal/${data.name}${window.auth.isAdmin?'?issys=true':''}`, 
+        type: 'POST'
+    };
+    
+    return new Promise( await function (resolve, reject) {
+        
+        ajax(opts).then((rtn) => {
+          resolve(rtn);
+        }).catch((err)=>{
+          if(typeof err === 'string'){
+            reject(JSON.parse(err));
+          } else {
+            reject(err);
+          }
+          
+        })
+    })
+  }
+
   /* Console Log */
   let consolelogTrace = async function(data){
       
@@ -739,6 +760,8 @@ let setAppAsHomeForAllUser = async function(vm,item){
   exports.dfsDelete = dfsDelete;
   exports.dfsRename = dfsRename;
   exports.dfsUpdateAttr = dfsUpdateAttr;
+  exports.dfsRefresh = dfsRefresh;
+  
   /* rule */
   exports.ruleGet = ruleGet;
   exports.ruleAdd = ruleAdd;
