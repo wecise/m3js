@@ -1,6 +1,6 @@
-<div style="text-align:center;width:100%;">
-<img class="avatar avatar-user" height="128" width="128" alt="@wecise" src="https://avatars.githubusercontent.com/u/58409973?s=88&amp;u=ca03bd3f6931f823130d74c02ee2ec372fb8b35a&amp;v=4">
-</div>
+<p>
+<img class="avatar avatar-user" height="128" width="128" alt="@wecise" src="https://avatars.githubusercontent.com/u/58409973?s=88&amp;u=ca03bd3f6931f823130d74c02ee2ec372fb8b35a&amp;v=4" style="text-align:center;width:100%;">
+</p>
 
 # m3js
 JavaScript library for M³ platform.The aim of the project is to create an easy to use, tool library for  M³ platform.
