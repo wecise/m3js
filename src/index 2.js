@@ -174,6 +174,7 @@
   let init = async function () {
 
     await globalHandler();
+    //langHandler();   
     await auth(); 
 
   };
@@ -289,10 +290,10 @@
     return rt;
 };
 
-  /* 
-  *  Set Home for all user
-  */
-  let setAppAsHomeForAllUser = async function(vm,item){
+/* 
+*  Set Home for all user
+*/
+let setAppAsHomeForAllUser = async function(vm,item){
     
     let opts = { 
         url: '/admin/users/home', 
@@ -447,6 +448,10 @@
   /* 
    *  DFS 
   */
+  let dfsWrite = function () {
+
+  };
+
   let dfsList = async function (data) {
 
         let opts = { 
@@ -472,33 +477,7 @@
         })
   };
 
-  let dfsWrite = async function(data) {
-    
-    let opts = { 
-        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`, 
-        type: 'PUT', 
-        contentType: false,
-        processData: false,
-        data:data.data
-    };
-    
-    return new Promise( await function (resolve, reject) {
-        
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
-    })
-
-  };
-
-  let dfsRead = async function(data){
+  let dfsGet = async function (data) {
 
     let opts = { 
         url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`, 
@@ -521,7 +500,7 @@
           
         })
     })
-  };
+};
 
   let dfsNew = async function(data) {
     
@@ -774,17 +753,15 @@
   exports.setAppAsHome = setAppAsHome;
   exports.setAppAsHomeForAllUser = setAppAsHomeForAllUser;
   exports.fullScreen = fullScreen;
-
   /* dfs */
   exports.dfsList = dfsList;
-  exports.dfsWrite = dfsWrite;
-  exports.dfsRead = dfsRead;
+  exports.dfsGet = dfsGet;
   exports.dfsNew = dfsNew;
   exports.dfsDelete = dfsDelete;
   exports.dfsRename = dfsRename;
   exports.dfsUpdateAttr = dfsUpdateAttr;
   exports.dfsRefresh = dfsRefresh;
-
+  
   /* rule */
   exports.ruleGet = ruleGet;
   exports.ruleAdd = ruleAdd;
@@ -800,8 +777,6 @@
 
   /* utils */
   exports.bytesToSize = bytesToSize;
-  exports.jsFormat = require("./utils/jsFormat.js");
-  exports.htmlFormat = require("./utils/htmlFormat.js");
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
