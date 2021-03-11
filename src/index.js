@@ -86,7 +86,7 @@
   
     if (!processData){
       let fm = new FormData();
-      _.forEach(params,(v,k)=>{
+      params.forEach((v,k)=>{
         fm.append(k,v);
       })
       xhr.send(params ? fm : null);
@@ -123,8 +123,9 @@
       baseUrl = http + "://" + [url, port].join(":");
 
       let opts = {
-        url: `${baseUrl}/user/signin?company=${company}&username=${username}&password=${password}`,
-        type: 'post'
+        url: `${baseUrl}/user/signin?company=${ encodeURIComponent(company) }&username=${ encodeURIComponent(username) }&password=${ encodeURIComponent(password) }`,
+        type: 'post',
+        processData: true
       };
 
       return new Promise( await function (resolve, reject) {
