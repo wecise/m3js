@@ -107,6 +107,8 @@
             result = xhr.response;
           }
           resolve(result);
+        } else if(xhr.status === 'signin'){
+          window.location.href = "/";
         } else {
           reject(xhr.response);
         }
@@ -151,7 +153,11 @@
    *  Call a serverJS interface for M3 platform
    */
   let callFS = async function (fileName, input) {
-    let opts = { url: `/script/exec/js?filepath=${fileName}&input=${input}&isfile=true`, type: 'POST' };
+    let opts = { 
+      url: `/script/exec/js?filepath=${fileName}&input=${input}&isfile=true`, 
+      type: 'POST',
+      processData: true
+    };
     
     return new Promise( await function (resolve, reject) {
         
@@ -239,7 +245,7 @@
    *  Get global register info for M3 platform
    */
   let globalHandler = async function () {
-    await callFS("/matrix/utils/global.js", null).then((rtn) => {
+    await callFS("/matrix/utils/global.js").then((rtn) => {
       exports.global = rtn.message;
     });
   };
