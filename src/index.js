@@ -59,7 +59,7 @@
       type = opts.type || 'GET',
       url = _url,
       params = opts.data,
-      processData = opts.processData !== ' undefined' ? opts.processData : true,
+      processData = opts.processData ? opts.processData : true,
       dataType = opts.dataType || 'json';
 
     type = type.toUpperCase();
