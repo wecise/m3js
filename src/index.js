@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-(function (global, factory) {
+ (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
       (factory((global.m3 = global.m3 || {})));
@@ -23,128 +23,29 @@
    * @returns 
    * @example
    *
-  */
-  let baseUrl = "";
-  let sessionid = "";
-  let globalByUser = null;
-
-
+  */  
+  
   /* 
   *  Http Request
   */
-  function ajax(opts) {
-    let _url = "";
-    
-    // 测试环境
-    if (process.env.NODE_ENV === "development") {
-
-      if (opts.url.indexOf("http://") === -1 && opts.url.indexOf("https://") === -1) {
-        if(opts.url.indexOf("?") === -1){
-          _url = `${baseUrl}${opts.url}?sessionid=${sessionid}`;
-        } else {
-          _url = `${baseUrl}${opts.url}&sessionid=${sessionid}`;
-        }
-        
-      } else {
-        _url = opts.url;
-      }
-
-    } else {
-
-      _url = opts.url;
-
-    }
-
-    let xhr = new XMLHttpRequest(),
-      type = opts.type || 'GET',
-      url = _url,
-      params = opts.data,
-      processData = opts.processData ? opts.processData : true,
-      dataType = opts.dataType || 'json';
-
-    type = type.toUpperCase();
-
-    if (type === 'GET') {
-      params = (function (obj) {
-        let str = '';
-
-        for (let prop in obj) {
-          str += prop + '=' + obj[prop] + '&'
-        }
-        str = str.slice(0, str.length - 1);
-        
-        return str;
-      })(opts.data);
-      url += url.indexOf('?') === -1 ? '?' + params : '&' + params;
-    }
-
-    xhr.open(type, url);
-
-    if (opts.contentType) {
-      xhr.setRequestHeader('Content-type', opts.contentType);
-    }
+ const http = require('./axios/http').default;
   
-    if (!processData){
-      let fm = new FormData();
-      params.forEach((v,k)=>{
-        fm.append(k,v);
-      })
-      xhr.send(params ? fm : null);
-    } else {
-      xhr.send(params ? params : null);
-    }
-
-    //return promise
-    return new Promise(function (resolve, reject) {
-      //onload are executed just after the sync request is comple，
-      //please use 'onreadystatechange' if need support IE9-
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          let result;
-          try {
-            result = JSON.parse(xhr.response);
-          } catch (e) {
-            result = xhr.response;
-          }
-          resolve(result);
-        } else if(xhr.status === 'signin'){
-          window.location.href = "/";
-        } else {
-          reject(xhr.response);
-        }
-      };
-
-    });
-  };
 
   /* 
   *  connect to M3 platform and return sessionid  For development env
   */
-  let connect = async function (http, url, port, company, username, password) {
+  let connect = async function (param) {
 
-      baseUrl = http + "://" + [url, port].join(":");
+    return new Promise( await function (resolve, reject) {
 
-      let opts = {
-        url: `${baseUrl}/user/signin?company=${ encodeURIComponent(company) }&username=${ encodeURIComponent(username) }&password=${ encodeURIComponent(password) }`,
-        type: 'post',
-        processData: true
-      };
-
-      return new Promise( await function (resolve, reject) {
-        
-        ajax(opts).then((rtn) => {
-          sessionid = rtn.message;
-          init();
-          resolve(rtn);
-        }).catch((err)=>{
-          window.location.href=baseUrl;
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
+      http.post({
+        url: `/user/signin?company=${ encodeURIComponent(param.company) }&username=${ encodeURIComponent(param.username) }&password=${ encodeURIComponent(param.password) }`
+      }).then(res=>{
+        window.sessionid = res.data.message;
+        init();
+        resolve(res);
+      })
+      
     })
 
   };
@@ -153,35 +54,16 @@
    *  Call a serverJS interface for M3 platform
    */
   let callFS = async function (fileName, input) {
-    let opts = { 
-      url: `/script/exec/js?filepath=${fileName}&input=${input}&isfile=true`, 
-      type: 'POST',
-      processData: true
-    };
     
     return new Promise( await function (resolve, reject) {
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
+      http.post({
+        url: `/script/exec/js?filepath=${fileName}&input=${input}&isfile=true`
+      }).then(res=>{
+        resolve(res.data);
+      })
+        
     })
-
-  };
-
-  /* 
-   *  Init Global let
-  */
-  let init = async function () {
-
-    await globalHandler();
-    await auth(); 
 
   };
 
@@ -189,22 +71,45 @@
    *   当前用户权限 
   */
   let auth = async function () {
-    let rt = {};
     
-    try {
-
-      await callFS("/matrix/user/signedUser.js").then( (rtn) => {
-        let tmp = { signedUser: rtn.message, isAdmin: rtn.message.isadmin };
+    return new Promise( await function (resolve, reject) {
+      let rt = {};
+      callFS("/matrix/user/signedUser.js").then(res=>{
+        let tmp = { signedUser: res.message, isAdmin: res.message.isadmin };
         window.auth = tmp;
-        _.extend(rt, tmp);
-      });
-
-    } catch (err) {
-       rt = null;
-    }
-
-    exports.auth = rt;
+        _.extend(rt,tmp);
+        resolve(rt);
+      })
+      exports.auth = rt;
+        
+    })
   };
+
+  /* 
+   *  Get global register info for M3 platform
+   */
+  let global = async function () {
+
+    return new Promise( await function (resolve, reject) {
+      
+      callFS("/matrix/utils/global.js").then(res=>{
+        exports.global = res.message;
+      })
+        
+    })
+
+  };
+
+  /* 
+   *  Init Global let
+  */
+  let init = function () {
+
+    Promise.all([auth(),global()]);
+
+  };
+
+  
 
   /*
   * 通过选项创建 VueI18n 实例
@@ -221,19 +126,10 @@
 
         } else {
 
-          callFS("/matrix/lang/getLangList.js", null).then((rtn) => {
-
-            localStorage.setItem("M3-LANG-LIST", JSON.stringify(rtn.message));
-
-            resolve(rtn.message);
-
-          }).catch((err)=>{
-            if(typeof err === 'string'){
-              reject(JSON.parse(err));
-            } else {
-              reject(err);
-            }
-          });
+          callFS("/matrix/lang/getLangList.js").then(res=>{
+              localStorage.setItem("M3-LANG-LIST", JSON.stringify(res.message));
+              resolve(res.message);
+          })
 
         }  
         
@@ -241,26 +137,6 @@
 
   };
 
-  /* 
-   *  Get global register info for M3 platform
-   */
-  let globalHandler = async function () {
-    await callFS("/matrix/utils/global.js").then((rtn) => {
-      exports.global = rtn.message;
-    });
-  };
-
-  /* 
-   *  Get global register info by username for M3 platform
-   */
-  let globalByUserHandler = function (parent, name) {
-    let opts = { url: `/fs${parent}/${name}&type=file` };
-    ajax(opts).then((rtn) => {
-      globalByUser = rtn;
-    }).catch((err) => {
-      globalByUser = err;
-    });
-  };
 
   /* 
    *  Set Home for login user
@@ -270,11 +146,11 @@
     let opts = { 
                     url: '/user/settings/home', 
                     type: 'POST', 
-                    data: JSON.stringify({
+                    data: {
                       home: item.url.split("").slice(1,item.url.length).join(""),
-                      _csrf: sessionid
-                    }),
-                    contentType: false
+                      _csrf: getCookie("_csrf")
+                    },
+                    processData: false
                 };
     let rt = null;
     await ajax(opts).then((rtn) => {
@@ -306,9 +182,9 @@
         type: 'POST', 
         data: {
           home: item.url.split("").slice(1,item.url.length).join(""),
-          _csrf: sessionid
+          _csrf: getCookie("_csrf")
         },
-        contentType: false
+        processData: false
     };
     
     let rt = null;
@@ -341,8 +217,8 @@
               return false;
           }
           
-          await callFS("/matrix/system/getAppNameByUrl.js", encodeURIComponent(pathName)).then( (rtn)=>{
-              let name = rtn.message;
+          await callFS("/matrix/system/getAppNameByUrl.js", encodeURIComponent(pathName)).then( res=>{
+              let name = res.message;
 
               if(!_.isEmpty(name)){
                   if(window.M3_LANG == 'zh-CN'){
@@ -356,7 +232,7 @@
           } );
           
       } catch(err){
-          document.title = auth.Company.title;
+        document.title = auth.Company.title;
       }
   };
   
@@ -365,76 +241,50 @@
   */
   let ruleGet = async function(data){
     
-    let opts = { 
-        url: '/config/get', 
-        type: 'GET', 
-        data:{key:data}
-    };
     
     return new Promise( await function (resolve, reject) {
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
+      http.get({
+        url: `/config/get`,
+        param: {key:data} 
+      }).then(res=>{
+        resolve(res.data);
+      })
+        
     })
+
   };
 
   let ruleAdd = async function(data){
 
-    let opts = { 
-        url: '/config/set', 
-        type: 'POST', 
-        data:{
+    return new Promise( await function (resolve, reject) {
+        
+      http.post({
+        url: `/config/set`,
+        param: {
           key: data.key,
           ttl: data.ttl ? data.ttl : '',
           value: data.value
         }
-    };
-    
-    return new Promise( await function (resolve, reject) {
+      }).then(res=>{
+        resolve(res.data);
+      })
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
     })
     
   };
 
-  let ruleDelete = async function(){
-    let opts = { 
-        url: 'config/del', 
-        type: 'POST', 
-        data:{
-          key: data.key
-        }
-    };
+  let ruleDelete = async function(data){
     
     return new Promise( await function (resolve, reject) {
-        
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
+      http.post({
+        url: `/config/del`,
+        param: {key: data.key}
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err);
+      })
     })
     
   };
@@ -456,126 +306,95 @@
   */
   let dfsList = async function (data) {
 
-        let opts = { 
-            url: `/fs${data.parent}${window.auth.isAdmin?'?issys=true':''}`, 
-            type: 'GET',
-            data: {
-              type: 'dir'
-            }
-        };
-        
-        return new Promise( await function (resolve, reject) {
-            
-            ajax(opts).then((rtn) => {
-              resolve(rtn);
-            }).catch((err)=>{
-              if(typeof err === 'string'){
-                reject(JSON.parse(err));
-              } else {
-                reject(err);
-              }
-              
-            })
+      return new Promise( await function (resolve, reject) {
+          
+        http.get({
+          url: `/fs${data.parent}${window.auth.isAdmin?'?issys=true':''}`,
+          param: {
+            type: 'dir'
+          }
+        }).then(res=>{
+          resolve(res.data);
         })
+          
+      })
+    
   };
 
   let dfsWrite = async function(data) {
     
-    let opts = { 
-        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`, 
-        type: 'PUT', 
-        contentType: false,
-        processData: false,
-        data:data.data
-    };
-    
     return new Promise( await function (resolve, reject) {
+      
+      let fm = new FormData();
+
+      fm.append("data", data.data.content);
+      fm.append("type", data.data.ftype);
+      fm.append("attr", JSON.stringify(data.data.attr)=='{}'?'':JSON.stringify(data.data.attr));
+      fm.append("index", true);
+
+      http.put({
+        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
+        param: fm
+      }).then(res=>{
+        resolve(res.data);
+      })
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
     })
 
   };
 
   let dfsRead = async function(data){
 
-    let opts = { 
-        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`, 
-        type: 'GET',
-        data: {
-          type: 'file'
-        }
-    };
-    
     return new Promise( await function (resolve, reject) {
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
+      http.get({
+        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
+        param: {
+          type: 'file'
+        }
+      }).then(res=>{
+        resolve(res.data);
+      })
+        
     })
+
   };
 
   let dfsNew = async function(data) {
     
-    let opts = { 
-        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`, 
-        type: 'PUT', 
-        contentType: false,
-        processData: false,
-        data:data.data
-    };
-    
     return new Promise( await function (resolve, reject) {
+      
+      let fm = new FormData();
+
+      fm.append("data", data.data.content);
+      fm.append("type", data.data.ftype);
+      fm.append("attr", JSON.stringify(data.data.attr)=='{}'?'':JSON.stringify(data.data.attr));
+      fm.append("index", true);
+
+      http.put({
+        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
+        param: fm,
+        config: {
+          contentType: false
+        }
+      }).then(res=>{
+        resolve(res.data);
+      })
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
     })
 
   };
 
   let dfsDelete = async function(data) {
     
-    let opts = { 
-        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`, 
-        type: 'DELETE', 
-        contentType: false
-    };
-    
     return new Promise( await function (resolve, reject) {
+      
+      http.delete({
+        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`
+      }).then(res=>{
+        resolve(res.data);
+      })
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
     })
 
   };
@@ -652,27 +471,20 @@
   /* Console Log */
   let consolelogTrace = async function(data){
       
-      let opts = { 
-          url: `/consolelog/${data.type}?name=${encodeURIComponent( data.name )}&limit=${data.param.limit}`, 
-          type: 'GET'
-      };
-
-      if(data.param.level != null && data.param.level.length > 0){
-          opts.url = `${opts.url}&level=${data.param.level.join("&level=")}`;
-      }
-      
       return new Promise( await function (resolve, reject) {
+        
+        let url = `/consolelog/${data.type}?name=${encodeURIComponent( data.name )}&limit=${data.param.limit}`
+        
+        if(data.param.level != null && data.param.level.length > 0){
+            url = `${url}&level=${data.param.level.join("&level=")}`;
+        }
+
+        http.get({
+          url: url
+        }).then(res=>{
+          resolve(res.data);
+        })
           
-          ajax(opts).then((rtn) => {
-            resolve(rtn);
-          }).catch((err)=>{
-            if(typeof err === 'string'){
-              reject(JSON.parse(err));
-            } else {
-              reject(err);
-            }
-            
-          })
       })
   };
 
@@ -770,8 +582,21 @@
     }
   };
 
+  // Get cookie
+  let getCookie = function(key){
+    if (document.cookie.length>0) {
+      let c_start=document.cookie.indexOf(key + "=")
+        if (c_start!=-1){ 
+          c_start=c_start + key.length+1 
+          let c_end=document.cookie.indexOf(";",c_start)
+          if (c_end==-1) c_end=document.cookie.length
+          return unescape(document.cookie.substring(c_start,c_end))
+        } 
+      }
+    return ""
+  };
 
-  exports.sessionid = sessionid;
+
   exports.version = version;
   exports.init = init;
   exports.connect = connect;
@@ -809,6 +634,7 @@
   exports.bytesToSize = bytesToSize;
   exports.jsFormat = require("./utils/jsFormat.js");
   exports.htmlFormat = require("./utils/htmlFormat.js");
+  exports.getCookie = getCookie;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
