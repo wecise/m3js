@@ -87,3 +87,9 @@ if(process.env.NODE_ENV === "development"){
         console.error(err)
     } );
 ```
+
+## License
+
+[MIT](https://opensource.org/licenses/MIT)
+
+Copyright (c) 2016-present, WECISE.COM
