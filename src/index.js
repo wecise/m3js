@@ -44,6 +44,8 @@
         window.sessionid = res.data.message;
         init();
         resolve(res);
+      }).catch(err=>{
+        reject(err.data);
       })
       
     })
@@ -61,6 +63,8 @@
         url: `/script/exec/js?filepath=${fileName}&input=${input}&isfile=true`
       }).then(res=>{
         resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
       })
         
     })
@@ -189,7 +193,7 @@
     
     let rt = null;
 
-    await ajax(opts).then((rtn) => {
+    await ajax(opts).then(rtn=> {
       rt = rtn;
 
       vm.$message({
@@ -197,7 +201,7 @@
         message: "首页已设置为：" + item.url
       });
       
-      }).catch((err) => {
+      }).catch(err=> {
       rt = err;
     });
 
@@ -249,6 +253,8 @@
         param: {key:data} 
       }).then(res=>{
         resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
       })
         
     })
@@ -283,7 +289,7 @@
       }).then(res=>{
         resolve(res.data);
       }).catch(err=>{
-        reject(err);
+        reject(err.data);
       })
     })
     
@@ -305,7 +311,7 @@
    *  DFS 
   */
   let dfsList = async function (data) {
-
+      
       return new Promise( await function (resolve, reject) {
           
         http.get({
@@ -315,6 +321,8 @@
           }
         }).then(res=>{
           resolve(res.data);
+        }).catch(err=>{
+          reject(err.data);
         })
           
       })
@@ -337,6 +345,8 @@
         param: fm
       }).then(res=>{
         resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
       })
         
     })
@@ -354,6 +364,8 @@
         }
       }).then(res=>{
         resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
       })
         
     })
@@ -379,6 +391,8 @@
         }
       }).then(res=>{
         resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
       })
         
     })
@@ -393,6 +407,8 @@
         url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`
       }).then(res=>{
         resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
       })
         
     })
@@ -401,70 +417,58 @@
 
   let dfsRename = async function(data){
     
-    let opts = { 
-        url: `/fs/rename${window.auth.isAdmin?'?issys=true':''}`, 
-        type: 'POST', 
-        processData: false,
-        data
-    };
-
     return new Promise( await function (resolve, reject) {
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
+      
+      let fm = new FormData();
+      fm.append("srcpath", data.srcpath);
+      fm.append("dstpath", data.dstpath);
+
+      http.post({
+        url: `/fs/rename${window.auth.isAdmin?'?issys=true':''}`,
+        param: fm
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
+        
     })
+  
 
   }
   
   let dfsUpdateAttr = async function(data){
-    let opts = { 
-        url: `/fs${data.parent}/${data.name}?type=attr${window.auth.isAdmin?'&issys=true':''}`, 
-        type: 'PUT', 
-        processData: false,
-        contentType: false,
-        data: {attr: data.attr}
-    };
-    
+
     return new Promise( await function (resolve, reject) {
+      
+      let fm = new FormData();
+      fm.append("attr", data.attr);
+
+      http.put({
+        url: `/fs${data.parent}/${data.name}?type=attr${window.auth.isAdmin?'&issys=true':''}`,
+        param: fm
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
     })
+
   }
 
   let dfsRefresh = async function(data){
-    let opts = { 
-        url: `/fs/tolocal/${data.name}${window.auth.isAdmin?'?issys=true':''}`, 
-        type: 'POST'
-    };
-    
+
     return new Promise( await function (resolve, reject) {
+      
+      http.post({
+        url: `/fs/tolocal/${data.name}${window.auth.isAdmin?'?issys=true':''}`
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
     })
   }
 
@@ -489,44 +493,32 @@
   };
 
   let consolelogDelete = async function(data){
-    let opts = { 
-        url: `/consolelog/${data.type}?name=${encodeURIComponent( data.name )}`, 
-        type: 'DELETE'
-    };
     
     return new Promise( await function (resolve, reject) {
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
+      http.delete({
+        url: `/consolelog/${data.type}?name=${encodeURIComponent( data.name )}`
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
+        
     })
+
   };
 
   let consolelogTruncate = async function(data){
-    let opts = { 
-        url: `/consolelog/${data.type}/truncate`, 
-        type: 'DELETE'
-    };
-    
     return new Promise( await function (resolve, reject) {
         
-        ajax(opts).then((rtn) => {
-          resolve(rtn);
-        }).catch((err)=>{
-          if(typeof err === 'string'){
-            reject(JSON.parse(err));
-          } else {
-            reject(err);
-          }
-          
-        })
+      http.delete({
+        url: `/consolelog/${data.type}/truncate`
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
+        
     })
   };
 
@@ -596,6 +588,56 @@
     return ""
   };
 
+  let EDITOR_THEME = [
+                        {
+                        name: "亮色",
+                        items: [
+                            { name: "chrome" },
+                            { name: "clouds" },
+                            { name: "crimson_editor" },
+                            { name: "dawn" },
+                            { name: "dreamweaver" },
+                            { name: "eclipse" },
+                            { name: "github" },
+                            { name: "iplastic" },
+                            { name: "solarized_light" },
+                            { name: "textmate" },
+                            { name: "tomorrow" },
+                            { name: "xcode" },
+                            { name: "kuroir" },
+                            { name: "katzenmilch" },
+                            { name: "sqlserver" },
+                        ],
+                        },
+                        {
+                        name: "暗色",
+                        items: [
+                            { name: "ambiance" },
+                            { name: "chaos" },
+                            { name: "clouds_midnight" },
+                            { name: "dracula" },
+                            { name: "cobalt" },
+                            { name: "gruvbox" },
+                            { name: "gob" },
+                            { name: "idle_fingers" },
+                            { name: "kr_theme" },
+                            { name: "merbivore" },
+                            { name: "merbivore_soft" },
+                            { name: "mono_industrial" },
+                            { name: "monokai" },
+                            { name: "pastel_on_dark" },
+                            { name: "solarized_dark" },
+                            { name: "terminal" },
+                            { name: "tomorrow_night" },
+                            { name: "tomorrow_night_blue" },
+                            { name: "tomorrow_night_bright" },
+                            { name: "tomorrow_night_eighties" },
+                            { name: "twilight" },
+                            { name: "vibrant_ink" },
+                        ],
+                        },
+                    ];
+
 
   exports.version = version;
   exports.init = init;
@@ -629,6 +671,8 @@
   exports.consolelogTruncate = consolelogTruncate;
 
   exports.EventViewDataObj = EventViewDataObj;
+
+  exports.EDITOR_THEME = EDITOR_THEME;
 
   /* utils */
   exports.bytesToSize = bytesToSize;
