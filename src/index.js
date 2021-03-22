@@ -147,33 +147,32 @@
    */
   let setAppAsHome = async function(vm,item){
     
-    let opts = { 
-                    url: '/user/settings/home', 
-                    type: 'POST', 
-                    data: {
-                      home: item.url.split("").slice(1,item.url.length).join(""),
-                      _csrf: getCookie("_csrf")
-                    },
-                    processData: false
-                };
-    let rt = null;
-    await ajax(opts).then((rtn) => {
-      rt = rtn;
+    return new Promise( await function (resolve, reject) {
       
-      vm.$message({
-        type: "info",
-        message: "首页已设置为：" + item.url
-      });
+      let fm = new FormData();
 
-    }).catch((err) => {
-      vm.$message({
-        type: "error",
-        message: "首页设置失败：" + err
-      });
-      rt = err;
-    });
+      fm.append("home", item.url.split("").slice(1,item.url.length).join(""));
+      fm.append("_csrf", getCookie("_csrf"))
 
-    return rt;
+      http.post({
+        url: `/user/settings/home`,
+        param: fm
+      }).then(res=>{
+        vm.$message({
+          type: "info",
+          message: "首页已设置为：" + item.url
+        });
+        resolve(res.data);
+      }).catch(err=>{
+        vm.$message({
+          type: "error",
+          message: "首页设置失败：" + err
+        });
+        reject(err.data);
+      })
+        
+    })
+
 };
 
   /* 
@@ -181,31 +180,32 @@
   */
   let setAppAsHomeForAllUser = async function(vm,item){
     
-    let opts = { 
-        url: '/admin/users/home', 
-        type: 'POST', 
-        data: {
-          home: item.url.split("").slice(1,item.url.length).join(""),
-          _csrf: getCookie("_csrf")
-        },
-        processData: false
-    };
-    
-    let rt = null;
-
-    await ajax(opts).then(rtn=> {
-      rt = rtn;
-
-      vm.$message({
-        type: "info",
-        message: "首页已设置为：" + item.url
-      });
+    return new Promise( await function (resolve, reject) {
       
-      }).catch(err=> {
-      rt = err;
-    });
+      let fm = new FormData();
 
-    return rt;
+      fm.append("home", item.url.split("").slice(1,item.url.length).join(""));
+      fm.append("_csrf", getCookie("_csrf"))
+
+      http.post({
+        url: `/admin/users/home`,
+        param: fm
+      }).then(res=>{
+        vm.$message({
+          type: "info",
+          message: "首页已设置为：" + item.url
+        });
+        resolve(res.data);
+      }).catch(err=>{
+        vm.$message({
+          type: "error",
+          message: "首页设置失败：" + err
+        });
+        reject(err.data);
+      })
+        
+    })
+
   };
 
   /* 
@@ -264,16 +264,20 @@
   let ruleAdd = async function(data){
 
     return new Promise( await function (resolve, reject) {
-        
+      
+      let fm = new FormData();
+
+      fm.append("key", data.key);
+      fm.append("ttl", data.ttl ? data.ttl : '');
+      fm.append("value", data.value);
+
       http.post({
         url: `/config/set`,
-        param: {
-          key: data.key,
-          ttl: data.ttl ? data.ttl : '',
-          value: data.value
-        }
+        param: fm
       }).then(res=>{
         resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
       })
         
     })
@@ -472,6 +476,45 @@
     })
   }
 
+  let dfsMove = async function(data){
+
+    return new Promise( await function (resolve, reject) {
+      
+      let fm = new FormData();
+      fm.append("srcpath", data.srcpath.replace(/\/\//g,'/'));
+      fm.append("dstpath", data.dstpath.replace(/\/\//g,'/'));
+
+      http.post({
+        url: `/fs/move${window.auth.isAdmin?'?issys=true':''}`,
+        param: fm
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
+        
+    })
+
+  };
+
+
+  let dfsSyncToLocal = async function(data){
+
+
+    return new Promise( await function (resolve, reject) {
+      
+      http.post({
+        url: `/fs/tolocal${item.fullname}${window.auth.isAdmin?'?issys=true':''}`
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
+        
+    })
+
+  };
+
   /* Console Log */
   let consolelogTrace = async function(data){
       
@@ -658,6 +701,8 @@
   exports.dfsRename = dfsRename;
   exports.dfsUpdateAttr = dfsUpdateAttr;
   exports.dfsRefresh = dfsRefresh;
+  exports.dfsMove = dfsMove;
+  exports.dfsSyncToLocal = dfsSyncToLocal;
 
   /* rule */
   exports.ruleGet = ruleGet;
