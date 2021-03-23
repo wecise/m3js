@@ -287,9 +287,14 @@
   let ruleDelete = async function(data){
     
     return new Promise( await function (resolve, reject) {
+      
+      let fm = new FormData();
+
+      fm.append("key", data.key);
+
       http.post({
         url: `/config/del`,
-        param: {key: data.key}
+        param: fm
       }).then(res=>{
         resolve(res.data);
       }).catch(err=>{
@@ -515,6 +520,20 @@
 
   };
 
+  /* Org & User */
+  let userList = async function(data){
+      
+    return new Promise( await function (resolve, reject) {
+      
+      http.get({
+        url: `/admin/users?fullname=/`
+      }).then(res=>{
+        resolve(res.data);
+      })
+        
+    })
+};
+
   /* Console Log */
   let consolelogTrace = async function(data){
       
@@ -691,6 +710,9 @@
   exports.setAppAsHome = setAppAsHome;
   exports.setAppAsHomeForAllUser = setAppAsHomeForAllUser;
   exports.fullScreen = fullScreen;
+
+  /* user */
+  exports.userList = userList;
 
   /* dfs */
   exports.dfsList = dfsList;
