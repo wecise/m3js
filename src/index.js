@@ -29,6 +29,10 @@
   *  Http Request
   */
  const http = require('./axios/http').default;
+ 
+
+ /* FileSave */
+ const FileSaver = require('./utils/FileSaver.min.js');
   
 
   /* 
@@ -304,8 +308,40 @@
     
   };
 
-  let ruleExport = function(){
+  let ruleExport = async function(key){
+    return new Promise( await function (resolve, reject) {
+      
+      http.get({
+        url: `/config/export?key=${key}`
+      }).then(res=>{
+        let blob = new Blob([JSON.stringify(res.data,null,2)], {type: "text/plain;charset=utf-8"});
+        let fileName = `ETCD${key}_${new Date().toLocaleString()}.json`;
+        FileSaver.saveAs(blob, fileName);
+        resolve(fileName);
+      }).catch(err=>{
+        reject(err.data);
+      })
+    })
+    
+  };
 
+  let ruleImport = async function(file){
+
+    return new Promise( await function (resolve, reject) {
+      
+      let fm = new FormData();
+      fm.append("uploadfile", file);
+
+      http.post({
+        url: `/config/import`,
+        param: fm,
+        headers: {'Content-Type':'multipart/form-data'}
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
+    })
   };
 
   /* 
@@ -520,6 +556,59 @@
 
   };
 
+  let dfsExport = async function(srcPath){
+
+
+    return new Promise( await function (resolve, reject) {
+      
+      http.post({
+        url: `/fs/export?srcpath=${srcPath}${window.auth.isAdmin?'&issys=true':''}`,
+        config: {
+          responseType: "blob"
+        }
+      }).then(res=>{
+        
+        let blob = new Blob([res.data], {type: "octet/stream"});
+        let fileName = "";
+        
+        if( srcPath == '/' ){
+            fileName = `${window.location.host}_${window.auth.signedUser.Company.ospace}_dfs_${new Date().toLocaleString()}.zip`;
+        } else {
+            fileName = `${window.location.host}_${window.auth.signedUser.Company.ospace}_${_.last(srcPath.split("/"))}_${new Date().toLocaleString()}.zip`;
+        }
+
+        FileSaver.saveAs(blob, fileName);
+        resolve(fileName);
+      }).catch(err=>{
+        reject(err.data);
+      })
+    })
+
+  };
+
+  let dfsImport = async function(file){
+
+
+    return new Promise( await function (resolve, reject) {
+      
+      let fm = new FormData();
+      fm.append("uploadfile", file);
+
+      http.post({
+        url: `/fs/import${window.auth.isAdmin?'?issys=true':''}`,
+        param: fm
+      }).then(res=>{
+        resolve(file);
+      }).catch(err=>{
+        reject(err.data);
+      })
+        
+    })
+
+  };
+
+  
+
   /* Org & User */
   let userList = async function(data){
       
@@ -725,12 +814,15 @@
   exports.dfsRefresh = dfsRefresh;
   exports.dfsMove = dfsMove;
   exports.dfsSyncToLocal = dfsSyncToLocal;
+  exports.dfsExport = dfsExport;
+  exports.dfsImport = dfsImport;
 
   /* rule */
   exports.ruleGet = ruleGet;
   exports.ruleAdd = ruleAdd;
   exports.ruleDelete = ruleDelete;
   exports.ruleExport = ruleExport;
+  exports.ruleImport = ruleImport;
   
   /* console log */
   exports.consolelogTrace = consolelogTrace;

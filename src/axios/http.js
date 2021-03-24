@@ -4,6 +4,7 @@ const axios = require('./axios.min.js');
 // 创建axios实例
 const service = axios.create({
   baseURL: 'http://47.92.151.165:8080',
+  //baseURL: 'http://18.188.85.82:8080',
   timeout: 5000,
   responseType: 'json'
 });
@@ -114,7 +115,8 @@ export default {
     return new Promise((resolve, reject) => {
       service.post(
         evt.url,
-        evt.param
+        evt.param,
+        evt.config?evt.config:null
       ).then(res => {
         resolve(res)
       }, err => {
