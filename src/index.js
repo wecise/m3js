@@ -239,6 +239,23 @@
         document.title = auth.Company.title;
       }
   };
+
+  /* OMDB */
+  let getClassFieldsById = async function(id){
+    
+    return new Promise( await function (resolve, reject) {
+        
+      http.get({
+        url: `/mxobject/schema/class/fields`,
+        param: {id:id} 
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
+        
+    })
+  }
   
   /* 
    * RULE 
@@ -712,6 +729,9 @@
   exports.setAppAsHome = setAppAsHome;
   exports.setAppAsHomeForAllUser = setAppAsHomeForAllUser;
   exports.fullScreen = fullScreen;
+
+  /* omdb */
+  exports.getClassFieldsById = getClassFieldsById;
 
   /* user */
   exports.userList = userList;
