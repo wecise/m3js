@@ -38,7 +38,7 @@ service.interceptors.request.use(config => {
 //响应拦截器即异常处理
 service.interceptors.response.use(response => {
     
-    if(response.data.status == 'siginin'){
+    if(response.data.status == 'signin'){
       window.location.href = "/user/login";
     }
 

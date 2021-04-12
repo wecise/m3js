@@ -373,7 +373,7 @@
         dfsSyncToLocal(data);
         resolve(res.data);
       }).catch(err=>{
-        reject(err.data);
+        reject(err);
       })
         
     })
@@ -417,8 +417,8 @@
           contentType: false
         }
       }).then(res=>{
-        dfsSyncToLocal(data.data);
-        resolve(res.data);
+        dfsSyncToLocal(data);
+        resolve(data.name);
       }).catch(err=>{
         reject(err.data);
       })
@@ -603,6 +603,53 @@
     })
   };
 
+  /* Trigger */
+  let triggerList = async function(className){
+      
+      return new Promise( await function (resolve, reject) {
+        
+        http.get({
+          url: `/mxobject/trigger?class=${encodeURIComponent(className)}`
+        }).then(res=>{
+          resolve(res.data);
+        }).catch(err=>{
+          reject(err.data);
+        })
+          
+      })
+  };
+
+  let triggerNew = async function(data){
+      
+      return new Promise( await function (resolve, reject) {
+        
+        http.put({
+          url: `/mxobject/trigger`,
+          param: data
+        }).then(res=>{
+          resolve(res.data);
+        }).catch(err=>{
+          reject(err.data);
+        })
+          
+      })
+  };
+
+let triggerDelete = async function(className,name){
+      
+    return new Promise( await function (resolve, reject) {
+      
+      http.delete({
+        url: `/mxobject/trigger?class=${encodeURIComponent(className)}&name=${name}`,
+        param: event
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
+        
+    })
+};
 
   /* 告警视图结构 */
   let EventViewDataObj = {
@@ -613,7 +660,7 @@
     datasource: {
       name: "数据源",
       class: "",
-      fields: [],
+      fields: {},
       filter: ""
     },
     view: {
@@ -758,6 +805,11 @@
   exports.consolelogTrace = consolelogTrace;
   exports.consolelogDelete = consolelogDelete;
   exports.consolelogTruncate = consolelogTruncate;
+
+  /* trigger log */
+  exports.triggerList = triggerList;
+  exports.triggerNew = triggerNew;
+  exports.triggerDelete = triggerDelete;
 
   exports.EventViewDataObj = EventViewDataObj;
 
