@@ -301,6 +301,29 @@
     
   };
 
+  let ruleUpdate = async function(data){
+
+    return new Promise( await function (resolve, reject) {
+      
+      let fm = new FormData();
+
+      fm.append("key", data.key);
+      fm.append("ttl", data.ttl ? data.ttl : '');
+      fm.append("value", data.value);
+
+      http.post({
+        url: `/config/set`,
+        param: fm
+      }).then(res=>{
+        resolve(res.data);
+      }).catch(err=>{
+        reject(err.data);
+      })
+        
+    })
+    
+  };
+
   let ruleDelete = async function(data){
     
     return new Promise( await function (resolve, reject) {
@@ -341,7 +364,7 @@
       return new Promise( await function (resolve, reject) {
           
         http.get({
-          url: `/fs${data.parent}${window.auth.isAdmin?'?issys=true':''}`,
+          url: `/fs${data.fullname}${window.auth.isAdmin?'?issys=true':''}`,
           param: {
             type: 'dir'
           }
@@ -380,6 +403,7 @@
 
   };
 
+  
   let dfsRead = async function(data){
 
     return new Promise( await function (resolve, reject) {
@@ -798,6 +822,7 @@ let triggerDelete = async function(className,name){
   /* rule */
   exports.ruleGet = ruleGet;
   exports.ruleAdd = ruleAdd;
+  exports.ruleUpdate = ruleUpdate;
   exports.ruleDelete = ruleDelete;
   exports.ruleExport = ruleExport;
   
