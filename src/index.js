@@ -726,6 +726,18 @@ let triggerDelete = async function(className,name){
     }
   };
 
+  let fullScreenByEl = function(el) {
+        
+      if (document.fullscreenElement) {
+          document.exitFullscreen();
+          return false;
+      } else {
+          el.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+          return true;
+      }
+
+  }
+
   // Get cookie
   let getCookie = function(key){
     if (document.cookie.length>0) {
@@ -800,6 +812,7 @@ let triggerDelete = async function(className,name){
   exports.setAppAsHome = setAppAsHome;
   exports.setAppAsHomeForAllUser = setAppAsHomeForAllUser;
   exports.fullScreen = fullScreen;
+  exports.fullScreenByEl = fullScreenByEl;
 
   /* omdb */
   exports.getClassFieldsById = getClassFieldsById;
