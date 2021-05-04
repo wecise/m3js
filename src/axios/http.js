@@ -3,8 +3,7 @@ const axios = require('./axios.min.js');
 
 // 创建axios实例
 const service = axios.create({
-  //baseURL: process.env.NODE_ENV === 'production'?'http://123.56.21.75:8080':'http://47.92.151.165:8080',
-  baseURL: process.env.NODE_ENV === 'production'?'http://47.92.151.165:8080':'http://47.92.151.165:8080',
+  baseURL: process.env.NODE_ENV === 'production'?window.location.origin:'http://47.92.151.165:8080',
   timeout: 5000,
   responseType: 'json'
 });
