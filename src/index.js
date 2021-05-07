@@ -296,7 +296,7 @@
 
   /* omdb */
   const omdb = require('./omdb/index.js');
-  exports.getClassFieldsById = omdb.etClassFieldsById;
+  exports.getClassFieldsById = omdb.getClassFieldsById;
 
 
   /* job */

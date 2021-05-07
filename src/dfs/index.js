@@ -53,7 +53,7 @@ export let dfsRead = async function(data){
   return new Promise( await function (resolve, reject) {
       
     http.get({
-      url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
+      url: `/static${data.parent}/${data.name}`,
       param: {
         type: 'file'
       }

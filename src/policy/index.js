@@ -1,20 +1,19 @@
-
 /* 
   *  Http Request
   */
 const http = require('../axios/http').default;
 
-async function policyDeploy(data){
+export async function policyDeploy(data){
       
     return new Promise( await function (resolve, reject) {
       
-      let url = `/monitoring/policy/deploy/conf/testconf`
+      let url = `/monitoring/policy/deploy/conf/${data.policy}`
       
       let fm = new FormData();
       data.hosts.forEach(v=>{
         fm.append('hosts',v);
       });
-      fm.append('conf', data.policy);
+      fm.append('conf', data.content);
 
       http.put({
         url: url,
@@ -26,7 +25,7 @@ async function policyDeploy(data){
     })
 };
 
-async function policyUndeploy(data){
+export async function policyUndeploy(data){
       
   return new Promise( await function (resolve, reject) {
     
