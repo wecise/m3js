@@ -347,6 +347,7 @@
 
   const event = require("./global/event.js");
   exports.EventViewDataObj = event.EventViewDataObj;
+  exports.EventViewTools = event.EventViewTools;
 
 
 

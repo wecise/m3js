@@ -14,3 +14,51 @@ export let EventViewDataObj = {
       columns: []
     }
   };
+
+export let EventViewTools = {
+  "url": {
+    "id": null,
+    "name": "",
+    "icon": "",
+    "type":"url",
+    "url":{
+        "value": "",
+        "target": "_blank"
+    }
+  },
+  "component": {
+    "id": null,
+    "name": "",
+    "icon": "",
+    "type":"component",
+    "component":{
+        "name": ""
+    }
+  },
+  "divider": null,
+  "action": {
+    "id": null,
+    "name": "",
+    "icon": "",
+    "type": "action",
+    "action": {
+        "name":"",
+        "value": null
+    }
+  },
+  "attachment": {
+    "id": null,
+    "name": "",
+    "icon": "",
+    "type":"attachment"
+  },
+  "tags": {
+    "id": null,
+    "name": "", 
+    "icon": "",
+    "type": "tags"
+  },
+  "dir": {
+    "name": ""
+  }
+};
