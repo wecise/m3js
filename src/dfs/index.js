@@ -51,14 +51,13 @@ export let dfsWrite = async function(data) {
 export let dfsRead = async function(data){
 
   return new Promise( await function (resolve, reject) {
-      
     http.get({
-      url: `/static${data.parent}/${data.name}`,
+      url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
       param: {
         type: 'file'
       }
     }).then(res=>{
-      resolve(res.data);
+      resolve(res.data.message);
     }).catch(err=>{
       reject(err.data);
     })

@@ -7,7 +7,7 @@ export let EventViewDataObj = {
     datasource: {
       name: "数据源",
       class: "",
-      fields: {},
+      fields: [],
       filter: ""
     },
     view: {
@@ -23,7 +23,8 @@ export let EventViewTools = {
     "type":"url",
     "url":{
         "value": "",
-        "target": "_blank"
+        "target": "_blank",
+        "param": ""
     }
   },
   "component": {
@@ -59,6 +60,11 @@ export let EventViewTools = {
     "type": "tags"
   },
   "dir": {
-    "name": ""
+    "name": "",
+    "type": "dir"
+  },
+  "divider": {
+    "name": "",
+    "type": "divider"
   }
 };

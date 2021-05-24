@@ -100,7 +100,8 @@ export default {
 	// get请求
   get (evt) {
     return new Promise((resolve, reject) => {
-      service.get(evt.url,{params:evt.param})
+      
+      service.get(evt.url, evt.param?{params: evt.param}:null )
       	.then(res => {
          resolve(res)
       }, err => {

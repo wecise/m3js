@@ -320,6 +320,10 @@
   exports.dfsMove = dfs.dfsMove;
   exports.dfsSyncToLocal = dfs.dfsSyncToLocal;
 
+  /* app */
+  const app = require('./app/index.js');
+  exports.appDeploy = app.appDeploy;
+
   /* rule */
   const rule = require('./rule/index.js');
   exports.ruleGet = rule.ruleGet;
