@@ -12,7 +12,7 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   
   config.headers = {
-		'Content-Type': 'application/json'
+		'Content-Type': 'application/json;charset=utf-8'
 	}
 
   if(window.sessionid){
@@ -91,7 +91,6 @@ service.interceptors.response.use(response => {
 		err.message = "连接到服务器失败"
 	}
 	// window.location.href="error.html";
-  console.log("error",err)
   
 	return Promise.reject(err.response);
 })

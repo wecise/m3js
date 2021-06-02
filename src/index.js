@@ -45,12 +45,18 @@
   /* 
    *  Call a serverJS interface for M3 platform
    */
-  let callFS = async function (fileName, input) {
+  let callFS = async function (fileName, param) {
     
     return new Promise( await function (resolve, reject) {
         
+      let fm = new FormData();
+
+      fm.append("input", param);
+      fm.append("isfile",true);
+
       http.post({
-        url: `/script/exec/js?filepath=${fileName}&input=${input}&isfile=true`
+        url: `/script/exec/js?filepath=${fileName}`,
+        param: fm
       }).then(res=>{
         resolve(res.data);
       }).catch(err=>{
