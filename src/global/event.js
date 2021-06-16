@@ -8,7 +8,8 @@ export let EventViewDataObj = {
       name: "数据源",
       class: "",
       fields: [],
-      filter: ""
+      filter: "",
+      top: 200
     },
     view: {
       columns: []

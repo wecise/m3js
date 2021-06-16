@@ -1,6 +1,6 @@
 {
   "name": "@wecise/m3js",
-  "version": "1.0.35",
+  "version": "1.0.37",
   "description": "JavaScript library for M³ platform",
   "main": "src/index.js",
   "scripts": {
