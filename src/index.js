@@ -365,7 +365,12 @@
   exports.bytesToSize = bytesToSize;
   exports.jsFormat = require("./utils/jsFormat.js");
   exports.htmlFormat = require("./utils/htmlFormat.js");
-  
+
+  const adjustColor = function(color, amount) {
+    return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+  };
+  exports.adjustColor = adjustColor;
+
   const cookie = require("./utils/cookie.js");
   exports.getCookie = cookie.getCookie;
 

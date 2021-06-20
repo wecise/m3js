@@ -9,7 +9,13 @@ export let consolelogTrace = async function(data){
       
     return new Promise( await function (resolve, reject) {
       
-      let url = `/consolelog/${data.type}?name=${encodeURIComponent( data.name )}&limit=${data.param.limit}`
+      let url = "";
+      
+      if(data.type==='trigger'){
+        url = `/consolelog/${data.type}?name=${encodeURIComponent( data.class )}${encodeURIComponent( '#'+data.name )}&limit=${data.param.limit}`;
+      } else {
+        url = `/consolelog/${data.type}?name=${encodeURIComponent( data.name )}&limit=${data.param.limit}`
+      }
       
       if(data.param.level != null && data.param.level.length > 0){
           url = `${url}&level=${data.param.level.join("&level=")}`;
