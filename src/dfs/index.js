@@ -51,18 +51,34 @@ export let dfsWrite = async function(data) {
 export let dfsRead = async function(data){
 
   return new Promise( await function (resolve, reject) {
-    http.get({
-      url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
-      param: {
-        type: 'file'
-      }
-    }).then(res=>{
-      resolve(res.data.message);
-    }).catch(err=>{
-      reject(err.data);
+    
+    if(data.ftype === 'js'){
+      http.get({
+        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
+        param: {
+          type: 'file'
+        }
+      }).then(res=>{
+        resolve(res.data.message);
+      }).catch(err=>{
+        reject(err.data);
+      })
+    } else {
+      http.get({
+        //url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
+        url: `/static${data.parent}/${data.name}`,
+        // param: {
+        //   type: 'file'
+        // }
+      }).then(res=>{
+        //resolve(res.data.message);
+        resolve( JSON.stringify(res.data));
+      }).catch(err=>{
+        reject(err.data);
+      })
+    }
+
     })
-      
-  })
 
 };
 
