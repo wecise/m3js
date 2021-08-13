@@ -221,3 +221,23 @@ export let dfsSyncToLocal = async function(data){
   })
 
 };
+
+
+export let dfsUnZip = async function(data,file){
+
+  return new Promise( await function (resolve, reject) {
+    
+    let fm = new FormData();
+    fm.append("uploadfile", file);
+
+    http.post({
+      url: `/fs/import${window.auth.isAdmin?'?issys=true':''}`,
+      param: fm
+    }).then(res=>{
+      resolve(res.data);
+    }).catch(err=>{
+      reject(err.data);
+    })
+      
+  })
+};
