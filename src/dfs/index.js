@@ -65,14 +65,14 @@ export let dfsRead = async function(data){
       })
     } else {
       http.get({
-        //url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
-        url: `/static${data.parent}/${data.name}`,
-        // param: {
-        //   type: 'file'
-        // }
+        url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
+        //url: `/static${data.parent}/${data.name}`,
+        param: {
+          type: 'file'
+        }
       }).then(res=>{
-        //resolve(res.data.message);
-        resolve( JSON.stringify(res.data));
+        resolve(res.data.message);
+        //resolve( JSON.stringify(res.data));
       }).catch(err=>{
         reject(err.data);
       })
@@ -153,7 +153,7 @@ export let dfsUpdateAttr = async function(data){
   return new Promise( await function (resolve, reject) {
     
     let fm = new FormData();
-    fm.append("attr", data.attr);
+    fm.append("attr", JSON.stringify(data.attr));
 
     http.put({
       url: `/fs${data.parent}/${data.name}?type=attr${window.auth.isAdmin?'&issys=true':''}`,
