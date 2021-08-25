@@ -231,7 +231,7 @@ export let dfsUnZip = async function(data,file){
     fm.append("uploadfile", file);
 
     http.post({
-      url: `/fs/import${window.auth.isAdmin?'?issys=true':''}`,
+      url: `/fs/import${window.auth.isAdmin?'?depth=3&issys=true':''}`,
       param: fm
     }).then(res=>{
       resolve(res.data);
