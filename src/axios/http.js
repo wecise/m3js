@@ -4,7 +4,7 @@ const axios = require('./axios.min.js');
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.NODE_ENV === 'production'?window.location.origin:'http://'+process.env.VUE_APP_M3_HOST,
-  timeout: 60000,
+  timeout: 60000 * 10,
   responseType: 'json'
 });
 
@@ -12,8 +12,12 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   
   config.headers = {
-		'Content-Type': 'application/json;charset=utf-8'
+		'Content-Type': 'application/json;charset=utf-8',
 	}
+
+  if(config.data && config.data.responseType){
+    config.responseType = config.data.responseType;
+  }
 
   if(window.sessionid){
     if(config.url.indexOf("?") === -1){
@@ -30,7 +34,7 @@ service.interceptors.request.use(config => {
 	//   config.token = {'token':token}
 	// }
   
-	return config
+	return config;
 }, error => {
 	return Promise.reject(error)
 })
@@ -38,7 +42,8 @@ service.interceptors.request.use(config => {
 //响应拦截器即异常处理
 service.interceptors.response.use(response => {
     
-    if(response.data.status == 'signin'){
+    console.log(55,response)
+    if(response.data && response.data.status == 'signin'){
       window.location.href = "/user/login";
     }
 
@@ -85,7 +90,7 @@ service.interceptors.response.use(response => {
 				err.message = 'http版本不支持该请求'
 				break;
 			default:
-				err.message = `连接错误${err.response.status}`
+				err.message = `连接错误 ${err.response.status}`
 		}
 	} else {
 		err.message = "连接到服务器失败"

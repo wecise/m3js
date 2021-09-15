@@ -326,6 +326,7 @@
   exports.dfsMove = dfs.dfsMove;
   exports.dfsSyncToLocal = dfs.dfsSyncToLocal;
   exports.dfsUnZip = dfs.dfsUnZip;
+  exports.dfsZip = dfs.dfsZip;
 
   /* app */
   const app = require('./app/index.js');

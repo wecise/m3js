@@ -231,12 +231,30 @@ export let dfsUnZip = async function(data,file){
     fm.append("uploadfile", file);
 
     http.post({
-      url: `/fs/import${window.auth.isAdmin?'?depth=3&issys=true':''}`,
+      url: `/fs/import?depth=3&issys=true`,
       param: fm
     }).then(res=>{
       resolve(res.data);
     }).catch(err=>{
-      reject(err.data);
+      reject(err);
+    })
+      
+  })
+};
+
+export let dfsZip = async function(data,file){
+
+  return new Promise( await function (resolve, reject) {
+  
+    http.post({
+      url: `/fs/export?srcpath=${data.srcpath}&issys=true`,
+      param:{
+        responseType:"arraybuffer"
+      }
+    }).then(res=>{
+      resolve(res.data);
+    }).catch(err=>{
+      reject(err);
     })
       
   })
