@@ -208,33 +208,40 @@
    *  Set Title for M3 platform
    */ 
   let setTitle = async function(auth){
-      try{
-          
-          let pathName = window.location.pathname;
-          
-          if(_.isEmpty(pathName)){
-              document.title = auth.Company.title;
-              return false;
-          }
-          
-          await callFS("/matrix/system/getAppNameByUrl.js", encodeURIComponent(pathName)).then( res=>{
-              let name = res.message;
+    try{
+        
+        let pathName = window.location.pathname;
+        
+        if(_.isEmpty(pathName)){
+            document.title = auth.Company.title;
+            return false;
+        }
+        
+        await callFS("/matrix/system/getAppNameByUrl.js", encodeURIComponent(pathName)).then( res=>{
+            let name = res.message;
 
-              if(!_.isEmpty(name)){
-                  if(window.M3_LANG == 'zh-CN'){
-                      document.title = name['cnname'];
-                  } else {
-                      document.title = name['enname'];
-                  }
-              } else {
-                  document.title = auth.Company.title;
+            if(!_.isEmpty(name)){
+                document.title = name['cnname'] || name['enname'];
+            } else {
+                document.title = auth.Company.title;
+            }
+
+            setTimeout(()=>{
+              let link = document.querySelector("link[rel~='icon']");
+              if (!link) {
+                  link = document.createElement('link');
+                  link.rel = 'icon';
+                  document.getElementsByTagName('head')[0].appendChild(link);
               }
-          } );
-          
-      } catch(err){
-        document.title = auth.Company.title;
-      }
-  };
+              link.href = auth.Company.icon || auth.Company.logo;
+            },50)
+        } );
+        
+    } catch(err){
+      console.error(err,auth)
+      document.title = auth.Company.title;
+    }
+};
   
   
 
