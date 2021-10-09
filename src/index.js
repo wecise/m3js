@@ -68,6 +68,15 @@
   };
 
   /* 
+   *  Call a m3service interface by nats for M3 platform
+   */
+  let callService = function (service, action, params) {
+    service = (process.env.NODE_ENV==='production'?"v1.":"dev.")+service
+    let input = encodeURIComponent(JSON.stringify({ service: service, action: action, params: params }));
+    return callFS("/matrix/nats/action.js", input);
+  };
+
+  /* 
    *   当前用户权限 
   */
   let auth = async function () {
@@ -298,6 +307,7 @@
   exports.init = init;
   exports.connect = connect;
   exports.callFS = callFS;
+  exports.callService = callService;
   exports.lang = lang;
   exports.setTitle = setTitle;
   exports.setAppAsHome = setAppAsHome;
