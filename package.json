@@ -1,25 +1,43 @@
 {
   "name": "@wecise/m3js",
   "version": "1.0.46",
+  "author": "wecise",
+  "license": "MIT",
   "description": "Applet JavaScript library for M³ platform",
+  "keywords": [
+    "M³"
+  ],
   "main": "src/index.js",
   "scripts": {
-    "test": "m3.VERSION"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wecise/m3js.git"
   },
-  "author": "wecise",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/wecise/m3js/issues"
   },
   "homepage": "https://github.com/wecise/m3js#readme",
+  "private": true,
   "dependencies": {
+    "animate.css": "^4.1.1",
+    "axios": "^0.23.0",
+    "js-beautify": "^1.14.0",
+    "js-cookie": "^2.2.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "svg-sprite-loader": "^6.0.2",
+    "vue": "^2.6.14",
+    "vue-i18n": "^8.22.3",
+    "vue-split-panel": "^1.0.4"
   },
-  "devDependencies": {},
-  "keywords": [
-    "M³"
-  ]
+  "devDependencies": {
+    "@vue/cli-service": "~4.5.0",
+    "compression-webpack-plugin": "^5.0.2",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack-zip-plugin": "^0.1.6"
+  }
 }
