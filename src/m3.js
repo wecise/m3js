@@ -62,9 +62,9 @@ let m3config = {
     mods,
 }
 
-let Lang = async function(name) {
+let Lang = function(name) {
     return new Promise((resolve, reject)=>{
-        m3.lang().then((res)=>{
+        m3.langList().then((res)=>{
             let VueI18n = window.VueI18n
             let Vue = window.Vue
             Vue.use(VueI18n);

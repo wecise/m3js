@@ -162,12 +162,12 @@ let langInfo = function() {
         try{
             let cache = localStorage.getItem("M3-LANG-LIST");
             if (cache) {
-                G.m3.langList = JSON.parse(cache)
+                G.m3.langListInfo = JSON.parse(cache)
                 resolve();
             } else {
                 callFS("/matrix/lang/getLangList.js").then(res=>{
                     localStorage.setItem("M3-LANG-LIST", JSON.stringify(res.message));
-                    G.m3.langList = res.message
+                    G.m3.langListInfo = res.message
                     resolve(res.message);
                 }).catch(e=>{
                     reject(e);
@@ -181,9 +181,9 @@ let langInfo = function() {
 /**
  * 通过选项创建 VueI18n 实例
  */
-let lang = function() {
+let langList = function() {
     return new Promise((resolve, reject) => {
-        resolve(G.m3.langList);
+        resolve(G.m3.langListInfo);
     })
 };
 
@@ -654,7 +654,7 @@ exports.init = init;
 exports.connect = connect;
 exports.callFS = callFS;
 exports.callService = callService;
-exports.lang = lang;
+exports.langList = langList;
 exports.auth = auth;
 exports.global = global;
 exports.render = render;
