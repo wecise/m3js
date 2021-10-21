@@ -22,7 +22,7 @@ HTML5 是 HyperText Markup Language 5 的缩写，是构建Web内容的一种描
 
 ### Vue
 
-[Vue](https://cn.vuejs.org/v2/guide/index.html)是一套用于构建用户界面的渐进式框架。我们使用[Vue CLI](https://cli.vuejs.org/zh/guide/) 作为前端快速开发的辅助组件。M3JS也是在Vue CLI基础上提供的开发工具包。
+M³小应用以 Vue 组件形式进行开发。[Vue](https://cn.vuejs.org/v2/guide/index.html)是一套用于构建用户界面的渐进式框架。我们使用[Vue CLI](https://cli.vuejs.org/zh/guide/) 作为前端快速开发的辅助组件。M3JS是在Vue CLI基础上提供的开发工具包。
 
 ### Node.js
 
@@ -57,7 +57,110 @@ cd /opt/code/MyM3App
 npm install @wecise/m3js
 ```
 
+3. 初始化工程文件
 
+```
+cd /opt/code/MyM3App
+node_modules/\@wecise/m3js/cmd init
+```
+
+4. 修改环境信息
+
+```
+cd /opt/code/MyM3App
+vi .env
+```
+编辑.env文件
+
+```
+NODE_ENV="development"
+VUE_APP_M3_APP="m3app"
+VUE_APP_M3_TITLE="M3小应用"
+VUE_APP_M3_APP_VERSION="1.0.0"
+VUE_APP_M3_HOST="47.92.151.165:8080"
+VUE_APP_M3_COMPANY="wecise"
+VUE_APP_M3_USERNAME="username"
+VUE_APP_M3_PASSWORD="123456"
+```
+
+5. 本地试运行
+
+```
+cd /opt/code/MyM3App
+node_modules/\@wecise/m3js/cmd run
+```
+
+终端显示类似如下内容：
+```
+  App running at:
+  - Local:   http://localhost:8080
+  - Network: http://192.168.1.4:8080
+
+  Note that the development build is not optimized.
+  To create a production build, run npm run build.
+```
+
+6. 查看运行结果
+
+在浏览器中打开 http://localhost:8080 查看页面是否正常。
+
+### M³小应用开发
+
+M³小应用以 Vue 组件形式进行开发。所有 Vue 组件均存放在工程目录的 src 目录下，入口主文件为 App.vue。其它使用到的 Vue 组件放在 components 目录下。用户可根据实际需求进行分析设计，组织 Vue 组件的目录结构。
+
+M3JS在初始化M³小应用时，已经创建好入口主文件 App.vue 和一些常用的 Vue组件。后面会逐一说明这些组件的功能。
+
+
+### M³小应用测试
+
+......
+
+### M³小应用发布
+
+执行M3JS发布命令，M3JS 自动完成编译、部署工作
+```
+cd /opt/code/MyM3App
+node_modules/\@wecise/m3js/cmd publish
+```
+
+通过浏览器访问M³平台，激活刚刚发布的 M³小应用。激活工作只需要执行一次。
+通过M³平台还可以对 M³小应用进行相关配置，具体操作方法请参考[M³平台用户手册]()。
+
+## M³小应用开发框架
+
+### Vue组件
+
+#### 入口主文件
+
+......
+
+#### 布局组件
+
+......
+
+#### 消息组件
+
+......
+
+#### 标签组件
+
+......
+
+#### ......
+
+......
+
+### M³平台接口
+
+......
+
+### M³小应用服务端接口
+
+......
+
+### 其它常用功能
+
+......
 
 ## Features
 
