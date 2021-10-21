@@ -25,7 +25,11 @@ import 'moment/dist/locale/en-gb.js';
 import animate from 'animate.css'
 import Cookies from 'js-cookie';
 
+import "./icons"
+
 import Vue from 'vue';
+
+import "./element"
 
 window.M3_LANG = 'zh-CN';
 
