@@ -28,9 +28,34 @@ HTML5 是 HyperText Markup Language 5 的缩写，是构建Web内容的一种描
 
 [Node.js](http://nodejs.cn/learn)是一个 JavaScript 运行时环境。Vue CLI需要在Node.js上运行，以提供对前端开发过程的支持。
 
-您需要在开发电脑上安装Node.js软件。通过[这里](http://nodejs.cn/download/)可以下载安装对应不同操作系统版本的Node.js。
+你需要在开发电脑上安装Node.js软件。通过[这里](http://nodejs.cn/download/)可以下载安装对应不同操作系统版本的Node.js。
 
 在前端开发过程中，会经常使用Node.js中的[npm](https://docs.npmjs.com/about-npm)命令。
+
+
+
+## 开发流程
+
+下面以Mac操作系统为例，说明M³小应用开发流程。
+
+### 创建工程
+
+假设你要创建的M³小应用的英文简称为 MyM3App，中文名称为M³小应用。
+
+1. 创建工程目录
+
+工程目录可以创建在你电脑上任何位置，这里以创建在 /opt/code 目录下为例。
+```
+mkdir -p /opt/code/MyM3App
+cd /opt/code/MyM3App
+```
+
+2. 安装M3JS
+
+```
+cd /opt/code/MyM3App
+npm install @wecise/m3js
+```
 
 
 

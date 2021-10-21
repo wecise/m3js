@@ -1,9 +1,9 @@
 {
-  "name": "@wecise/m3js",
-  "version": "1.0.71",
+  "name": "m3app",
+  "version": "1.0.0",
   "author": "wecise",
   "license": "MIT",
-  "description": "Applet JavaScript library for M³ platform",
+  "description": "M³ Applet",
   "keywords": [
     "M³"
   ],
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/wecise/m3js#readme",
   "dependencies": {
+    "@wecise/m3js": "^1.0.68",
     "animate.css": "^4.1.1",
     "axios": "^0.23.0",
     "element-ui": "^2.15.6",
