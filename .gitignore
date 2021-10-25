@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .DS_Store
 node_modules/
 dist/
@@ -22,3 +23,11 @@ pnpm-debug.log*
 *.sln
 *.sw?
 *.
+=======
+
+# Editor directories and files
+.DS_Store
+.vscode
+node_modules/
+/*.zip
+>>>>>>> a3afc957d5de55517d059616bc9c343ea4c22b44

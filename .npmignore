@@ -1,0 +1,10 @@
+
+# Editor directories and files
+.DS_Store
+.vscode
+node_modules/
+/*.zip
+
+/.env
+/reinstall.sh
+/publish.sh

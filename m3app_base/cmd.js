@@ -17,20 +17,32 @@ function m3cmd(){
     }
     //第一个参数应该是node
     const nodepath = process.argv.shift()
+<<<<<<< HEAD
     //第二个参数应该是当前文件
     if(process.argv[0] != __filename) {
         console.error("command error: "+CURDIR+"> "+nodepath+" "+process.argv.join(" "))
         return 254
     }
     process.argv.shift()
+=======
+    //第二个参数应该是启动程序js
+    const mainjs = process.argv.shift()
+>>>>>>> a3afc957d5de55517d059616bc9c343ea4c22b44
     //定义命令执行函数
     function runcmd(cmdjs) {
         //执行命令
         const child_process = require('child_process')
+<<<<<<< HEAD
         //console.log(nodepath, [cmdjs, ...process.argv.slice(1)])
         process.env.M3JSDIR = M3JSDIR
         process.env.M3APPNAME = M3APPNAME
         const sp = child_process.spawn(nodepath, [cmdjs, ...process.argv.slice(1)], {
+=======
+        //console.log(nodepath, [cmdjs, ...process.argv])
+        process.env.M3JSDIR = M3JSDIR
+        process.env.M3APPNAME = M3APPNAME
+        const sp = child_process.spawn(nodepath, [cmdjs, ...process.argv], {
+>>>>>>> a3afc957d5de55517d059616bc9c343ea4c22b44
             windowsHide: true,
             stdio: [process.stdin, process.stdout, process.stderr]
         })
@@ -42,7 +54,11 @@ function m3cmd(){
     //默认显示使用方法
     if(process.argv.length > 0) {
         //第一个参数为命令参数
+<<<<<<< HEAD
         const cmd=process.argv[0]
+=======
+        const cmd=process.argv.shift()
+>>>>>>> a3afc957d5de55517d059616bc9c343ea4c22b44
         const cmdjs=`${M3JSDIR}/m3app_base/${cmd}.js`
         const fs=require('fs')
         if(fs.existsSync(cmdjs)) {
@@ -53,10 +69,22 @@ function m3cmd(){
                 return 254
             }
         }
+<<<<<<< HEAD
     }
     console.log(`Usage:
     m3js init 根据M3JS提供的模版初始化工程目录
     `)
+=======
+        console.log(`命令 ${cmd} 不存在`)
+    }
+    console.log(`Usage:
+    m3js init   根据M3JS提供的模版初始化工程目录
+    m3js run    开发阶段启动当前M³小应用
+    m3js update 更新当前M³小应用所使用的最新版M3JS
+    m3js deploy 编译部署当前M³小应用
+    `)
+    console.log(`当前工作目录：${CURDIR}`)
+>>>>>>> a3afc957d5de55517d059616bc9c343ea4c22b44
     return 1
 }
 //执行m3cmd
