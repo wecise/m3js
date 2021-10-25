@@ -12,7 +12,7 @@ if(fs.existsSync("src") && process.argv.indexOf("--force")<0) {
     process.exit(255)
 }
 
-fs.cpSync(`${process.env.M3JSDIR}/m3app_template/`, "./", {recursive: true, force: true})
+fs.cpSync(`${process.env.M3JSDIR}/mtemplate/`, "./", {recursive: true, force: true})
 
 let spkg = fs.readFileSync("package.json")
 spkg = JSON.parse(spkg.toString())
@@ -20,15 +20,12 @@ spkg.name = process.env.M3APPNAME
 //spkg = spkg.replace(/\"name\":\s*\".*\"/, `"name": "${process.env.M3APPNAME}"`)
 fs.writeFileSync("package.json", JSON.stringify(spkg,"  ",2))
 
-<<<<<<< HEAD
-=======
 let senv = fs.readFileSync(".env")
 senv = senv.toString()
 senv = senv.replace(/VUE_APP_M3_APP\s*\=\s*[\"\'].*[\"\']/, `VUE_APP_M3_APP="${process.env.M3APPNAME}"`)
 senv = senv.replace(/VUE_APP_M3_TITLE\s*\=\s*[\"\'].*[\"\']/, `VUE_APP_M3_TITLE="${process.env.M3APPNAME}"`)
 fs.writeFileSync(".env", senv)
 
->>>>>>> a3afc957d5de55517d059616bc9c343ea4c22b44
 const child_process = require('child_process')
 const npm = child_process.spawnSync("npm", ["install", ".", "--force", "--save"], {
     windowsHide: true,

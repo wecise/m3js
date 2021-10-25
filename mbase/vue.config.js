@@ -80,7 +80,7 @@ module.exports = {
             "element-ui": "ELEMENT",
         }
         // HTML模版，需要配合 config.externals 引入相应js
-        let assetsLibPath = "/static/app/assets"
+        let assetsLibPath = IS_PROD?"/static/app/assets":"assets"
         config.plugins.push(new HtmlWebpackPlugin({
             filename: "index.html",
             templateContent: `<!DOCTYPE html>
@@ -123,7 +123,7 @@ module.exports = {
         config.resolve = {
             alias: {
                 "~": oconfig.context, // 工程所在目录
-                "@": oconfig.context+(IS_M3JS?"/m3app_template/src":"/src"), // 工程src目录
+                "@": oconfig.context+(IS_M3JS?"/mtemplate/src":"/src"), // 工程src目录
             },
         }
         // 使用 @wecise/m3js 内置入口

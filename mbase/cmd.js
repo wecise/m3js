@@ -39,7 +39,7 @@ function m3cmd(){
     if(process.argv.length > 0) {
         //第一个参数为命令参数
         const cmd=process.argv.shift()
-        const cmdjs=`${M3JSDIR}/m3app_base/${cmd}.js`
+        const cmdjs=`${M3JSDIR}/mbase/${cmd}.js`
         const fs=require('fs')
         if(fs.existsSync(cmdjs)) {
             try{
