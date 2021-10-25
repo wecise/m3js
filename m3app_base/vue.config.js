@@ -80,7 +80,7 @@ module.exports = {
             "element-ui": "ELEMENT",
         }
         // HTML模版，需要配合 config.externals 引入相应js
-        let jsLibPath = "unpkg.js"
+        let assetsLibPath = "/static/app/assets"
         config.plugins.push(new HtmlWebpackPlugin({
             filename: "index.html",
             templateContent: `<!DOCTYPE html>
@@ -89,10 +89,11 @@ module.exports = {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <script src="${jsLibPath}/lodash.js"></script>
-    <script src="${jsLibPath}/moment.js"></script>
-    <script src="${jsLibPath}/vue.js"></script>
-    <script src="${jsLibPath}/element-ui.js"></script>
+    <script src="${assetsLibPath}/js/lodash.js"></script>
+    <script src="${assetsLibPath}/js/moment.js"></script>
+    <script src="${assetsLibPath}/js/vue.js"></script>
+    <script src="${assetsLibPath}/js/element-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="${assetsLibPath}/css/loading.css" />
     <script>
         window.timeStart=window.timePhase=Date.now();
         Date.prototype.format=function(f){var o={"M+":this.getMonth()+1,"d+":this.getDate(),"h+":this.getHours(),"m+":this.getMinutes(),"s+":this.getSeconds(),"S":this.getMilliseconds()};if(/(y+)/.test(f))f=f.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length));for(var k in o)if(new RegExp("("+k+")").test(f))f=f.replace(RegExp.$1,RegExp.$1.length==1?o[k]:("00"+ o[k]).substr((""+ o[k]).length));return f}
@@ -108,6 +109,7 @@ module.exports = {
         <strong>Please enable JavaScript to continue.</strong>
     </noscript>
     <div id="preload" style="width:100vw;height:100vh;display:block;position:relative;">
+        <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         <div style="width:100vw;height:100vh;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;">
         <label id="preload_message" style="flex:0 0 auto;">正在加载页面...</label>
         </div>
