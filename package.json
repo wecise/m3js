@@ -9,7 +9,7 @@
   ],
   "main": "src/index.js",
   "bin": {
-    "m3js": "m3app_base/_.js"
+    "m3js": "mbase/_.js"
   },
   "scripts": {
     "serve": "vue-cli-service serve",

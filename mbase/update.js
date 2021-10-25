@@ -7,7 +7,8 @@ if(process.env.M3JSDIR!=path.dirname(__dirname) || process.env.M3APPNAME!=path.b
 }
 
 const child_process = require('child_process')
-const npm = child_process.spawnSync("npm", ["install", "@wecise/m3js", "--save", ...process.argv], {
+const cmds = "npm install @wecise/m3js --save --force".split(" ")
+const npm = child_process.spawnSync(cmds[0], [...cmds.slice(1), ...process.argv.slice(2)], {
     windowsHide: true,
     stdio: [process.stdin, process.stdout, process.stderr]
 })

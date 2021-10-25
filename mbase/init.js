@@ -27,7 +27,8 @@ senv = senv.replace(/VUE_APP_M3_TITLE\s*\=\s*[\"\'].*[\"\']/, `VUE_APP_M3_TITLE=
 fs.writeFileSync(".env", senv)
 
 const child_process = require('child_process')
-const npm = child_process.spawnSync("npm", ["install", ".", "--force", "--save"], {
+const cmds = "npm install . --force --save".split(" ")
+const npm = child_process.spawnSync(cmds[0], [...cmds.slice(1), ...process.argv.slice(2)], {
     windowsHide: true,
     stdio: [process.stdin, process.stdout, process.stderr]
 })
