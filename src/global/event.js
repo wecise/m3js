@@ -37,7 +37,6 @@ export let EventViewTools = {
         "name": ""
     }
   },
-  "divider": null,
   "action": {
     "id": null,
     "name": "",

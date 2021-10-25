@@ -4,9 +4,9 @@
 const http = require('../axios/http').default;
 
 /* Org & User */
-export let userList = async function(data){
+export let userList = function(data){
       
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
       
       http.get({
         url: `/admin/users?fullname=/`

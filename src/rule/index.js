@@ -6,10 +6,10 @@ const http = require('../axios/http').default;
 /* 
    * RULE 
   */
-export let ruleGet = async function(data){
+export let ruleGet = function(data){
     
     
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
         
       http.get({
         url: `/config/get`,
@@ -24,9 +24,9 @@ export let ruleGet = async function(data){
 
   };
 
-export let ruleAdd = async function(data){
+export let ruleAdd = function(data){
 
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
       
       let fm = new FormData();
 
@@ -47,9 +47,9 @@ export let ruleAdd = async function(data){
     
   };
 
-export let ruleUpdate = async function(data){
+export let ruleUpdate = function(data){
 
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
       
       let fm = new FormData();
 
@@ -70,9 +70,9 @@ export let ruleUpdate = async function(data){
     
   };
 
-export let ruleDelete = async function(data){
+export let ruleDelete = function(data){
     
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
       
       let fm = new FormData();
 

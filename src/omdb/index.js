@@ -4,9 +4,9 @@
 const http = require('../axios/http').default;
 
 /* OMDB */
-export let getClassFieldsById = async function(id){
+export let getClassFieldsById = function(id){
   
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
       
     http.get({
       url: `/mxobject/schema/class/fields`,

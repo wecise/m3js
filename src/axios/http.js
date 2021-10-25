@@ -1,4 +1,6 @@
-const axios = require('./axios.min.js');
+
+//import { axios } from "./axios.min.js";
+import axios from 'axios';
 //const qs = require('./qs.min.js');
 
 // 创建axios实例
@@ -10,7 +12,11 @@ const service = axios.create({
 
 //请求拦截器
 service.interceptors.request.use(config => {
-  
+  if(window.loaded) {
+    //页面加载渲染完成后，timePhase记录每次请求的发起时间
+    window.timePhase=Date.now();
+  }
+
   config.headers = {
 		'Content-Type': 'application/json;charset=utf-8',
 	}
@@ -42,7 +48,7 @@ service.interceptors.request.use(config => {
 //响应拦截器即异常处理
 service.interceptors.response.use(response => {
     
-    console.log(55,response)
+    console.debug("[MHR]",response)
     if(response.data && response.data.status == 'signin'){
       window.location.href = "/user/login";
     }
@@ -104,12 +110,11 @@ export default {
 	// get请求
   get (evt) {
     return new Promise((resolve, reject) => {
-      
       service.get(evt.url, evt.param?{params: evt.param}:null )
-      	.then(res => {
-         resolve(res)
+      .then(res => {
+        resolve(res)
       }, err => {
-          reject(err)
+        reject(err)
       })
     })
   },
@@ -140,13 +145,13 @@ export default {
   },
   // delete
   delete (evt){
-  	return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       service.delete(evt.url, evt.param)
-        .then(response => {
-          resolve(response)
-        }, err => {
-          reject(err)
-        })
+      .then(response => {
+        resolve(response)
+      }, err => {
+        reject(err)
+      })
     })
   }
 

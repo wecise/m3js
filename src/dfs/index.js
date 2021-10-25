@@ -3,9 +3,9 @@
   */
 const http = require('../axios/http').default;
 
-export let dfsList = async function (data) {
+export let dfsList = function (data) {
       
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
         
       http.get({
         url: `/fs${data.fullname}${window.auth.isAdmin?'?issys=true':''}`,
@@ -22,9 +22,9 @@ export let dfsList = async function (data) {
   
 };
 
-export let dfsWrite = async function(data) {
+export let dfsWrite = function(data) {
   
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     let fm = new FormData();
 
@@ -48,9 +48,9 @@ export let dfsWrite = async function(data) {
 };
 
 
-export let dfsRead = async function(data){
+export let dfsRead = function(data){
 
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     if(data.ftype === 'js'){
       http.get({
@@ -82,9 +82,9 @@ export let dfsRead = async function(data){
 
 };
 
-export let dfsNew = async function(data) {
+export let dfsNew = function(data) {
   
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     let fm = new FormData();
 
@@ -110,9 +110,9 @@ export let dfsNew = async function(data) {
 
 };
 
-export let dfsDelete = async function(data) {
+export let dfsDelete = function(data) {
   
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     http.delete({
       url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`
@@ -126,9 +126,9 @@ export let dfsDelete = async function(data) {
 
 };
 
-export let dfsRename = async function(data){
+export let dfsRename = function(data){
   
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     let fm = new FormData();
     fm.append("srcpath", data.srcpath);
@@ -148,9 +148,9 @@ export let dfsRename = async function(data){
 
 }
 
-export let dfsUpdateAttr = async function(data){
+export let dfsUpdateAttr = function(data){
 
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     let fm = new FormData();
     fm.append("attr", JSON.stringify(data.attr));
@@ -168,9 +168,9 @@ export let dfsUpdateAttr = async function(data){
 
 }
 
-export let dfsRefresh = async function(data){
+export let dfsRefresh = function(data){
 
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     http.post({
       url: `/fs/tolocal/${data.name}${window.auth.isAdmin?'?issys=true':''}`
@@ -183,9 +183,9 @@ export let dfsRefresh = async function(data){
   })
 }
 
-export let dfsMove = async function(data){
+export let dfsMove = function(data){
 
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     let fm = new FormData();
     fm.append("srcpath", data.srcpath.replace(/\/\//g,'/'));
@@ -205,10 +205,10 @@ export let dfsMove = async function(data){
 };
 
 
-export let dfsSyncToLocal = async function(data){
+export let dfsSyncToLocal = function(data){
 
 
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     http.post({
       url: `/fs/tolocal${data.parent}${window.auth.isAdmin?'?issys=true':''}`
@@ -223,9 +223,9 @@ export let dfsSyncToLocal = async function(data){
 };
 
 
-export let dfsUnZip = async function(data,file){
+export let dfsUnZip = function(data,file){
 
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     let fm = new FormData();
     fm.append("uploadfile", file);
@@ -242,9 +242,9 @@ export let dfsUnZip = async function(data,file){
   })
 };
 
-export let dfsZip = async function(data,file){
+export let dfsZip = function(data,file){
 
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
   
     http.post({
       url: `/fs/export?srcpath=${data.srcpath}&issys=true`,

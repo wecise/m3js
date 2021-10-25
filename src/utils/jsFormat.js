@@ -288,7 +288,8 @@
     indent_level = indent_level || 0;
     parser_pos = 0; // parser position
     in_case = false; // flag for parser that case/default has been processed, and next colon needs special attention
-    while (true) {
+    var go = true;
+    while (go) {
         var t = get_next_token(parser_pos);
         token_text = t[0];
         token_type = t[1];

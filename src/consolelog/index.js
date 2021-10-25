@@ -5,9 +5,9 @@ const http = require('../axios/http').default;
 
 
 /* Console Log */
-export let consolelogTrace = async function(data){
+export let consolelogTrace = function(data){
       
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
       
       let url = "";
       
@@ -30,9 +30,9 @@ export let consolelogTrace = async function(data){
     })
 };
 
-export let consolelogDelete = async function(data){
+export let consolelogDelete = function(data){
   
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
       
     http.delete({
       url: `/consolelog/${data.type}?name=${encodeURIComponent( data.name )}`
@@ -46,8 +46,8 @@ export let consolelogDelete = async function(data){
 
 };
 
-export let consolelogTruncate = async function(data){
-  return new Promise( await function (resolve, reject) {
+export let consolelogTruncate = function(data){
+  return new Promise( function (resolve, reject) {
       
     http.delete({
       url: `/consolelog/${data.type}/truncate`

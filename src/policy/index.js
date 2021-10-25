@@ -3,9 +3,9 @@
   */
 const http = require('../axios/http').default;
 
-export async function policyDeploy(data){
+export function policyDeploy(data){
       
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
       
       let url = `/monitoring/policy/deploy/conf/${data.policy}`
       
@@ -23,11 +23,11 @@ export async function policyDeploy(data){
       })
         
     })
-};
+}
 
-export async function policyUndeploy(data){
+export function policyUndeploy(data){
       
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     let hosts = data.hosts.map(v=>{ return `hosts=${v}`; }).join("&");
     let url = `/monitoring/policy/undeploy/conf/${data.policy}?${hosts}`
@@ -39,4 +39,4 @@ export async function policyUndeploy(data){
     })
       
   })
-}; 
+}

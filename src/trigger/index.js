@@ -5,9 +5,9 @@ const http = require('../axios/http').default;
 
 
 /* Trigger */
-export let triggerList = async function(className){
+export let triggerList = function(className){
       
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
       
       http.get({
         url: `/mxobject/trigger?class=${encodeURIComponent(className)}`
@@ -20,9 +20,9 @@ export let triggerList = async function(className){
     })
 };
 
-export let triggerNew = async function(data){
+export let triggerNew = function(data){
     
-    return new Promise( await function (resolve, reject) {
+    return new Promise( function (resolve, reject) {
       
       http.put({
         url: `/mxobject/trigger`,
@@ -36,9 +36,9 @@ export let triggerNew = async function(data){
     })
 };
 
-export let triggerDelete = async function(className,name){
+export let triggerDelete = function(className,name){
     
-  return new Promise( await function (resolve, reject) {
+  return new Promise( function (resolve, reject) {
     
     http.delete({
       url: `/mxobject/trigger?class=${encodeURIComponent(className)}&name=${name}`,

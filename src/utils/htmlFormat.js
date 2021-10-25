@@ -1,8 +1,10 @@
 ﻿
+import {js_beautify} from 'js-beautify';
+
 function style_html(html_source, indent_size, indent_character, max_char) {
 //Wrapper function to invoke all the necessary constructors and deal with the output.
   
-  var Parser, multi_parser;
+  var multi_parser;
   
   function Parser() {
     
@@ -202,8 +204,8 @@ function style_html(html_source, indent_size, indent_character, max_char) {
       else if (tag_check.charAt(0) === '!') { //peek for <!-- comment
         if (tag_check.indexOf('[if') != -1) { //peek for <!--[if conditional comment
           if (tag_complete.indexOf('!IE') != -1) { //this type needs a closing --> so...
-            var comment = this.get_unformatted('-->', tag_complete); //...delegate to get_unformatted
-            content.push(comment);
+            var commentif = this.get_unformatted('-->', tag_complete); //...delegate to get_unformatted
+            content.push(commentif);
           }
           this.tag_type = 'START';
         }
@@ -212,8 +214,8 @@ function style_html(html_source, indent_size, indent_character, max_char) {
           this.unindent();
         }
         else if (tag_check.indexOf('[cdata[') != -1) { //if it's a <[cdata[ comment...
-          var comment = this.get_unformatted(']]>', tag_complete); //...delegate to get_unformatted function
-          content.push(comment);
+          var commentcdata = this.get_unformatted(']]>', tag_complete); //...delegate to get_unformatted function
+          content.push(commentcdata);
           this.tag_type = 'SINGLE'; //<![CDATA[ comments are treated like single tags
         }
         else {
@@ -275,7 +277,7 @@ function style_html(html_source, indent_size, indent_character, max_char) {
       } while (content.indexOf(delimiter) == -1);
       return content;
     }
-    
+
     this.get_token = function () { //initial handler for token-retrieval
       var token;
       
@@ -366,9 +368,9 @@ function style_html(html_source, indent_size, indent_character, max_char) {
   multi_parser.printer(html_source, indent_character, indent_size); //initialize starting values
 
 
-
+  var go = true;
   var f = true;
-  while (true) {
+  while (go) {
       var t = multi_parser.get_token();
       multi_parser.token_text = t[0];
       multi_parser.token_type = t[1];
