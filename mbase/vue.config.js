@@ -108,10 +108,10 @@ module.exports = {
     <noscript>
         <strong>Please enable JavaScript to continue.</strong>
     </noscript>
-    <div id="preload" style="width:100vw;height:100vh;display:block;position:relative;">
-        <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-        <div style="width:100vw;height:100vh;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;">
-        <label id="preload_message" style="flex:0 0 auto;">正在加载页面...</label>
+    <div id="preload" style="width:100vw;height:100vh;display:block;font-size:10px;">
+        <div style="width:100vw;height:80vh;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;position:relative;">
+            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <label id="preload_message" style="flex:0 0 auto;">正在加载页面...</label>
         </div>
     </div>
     <div id="app"></div>
