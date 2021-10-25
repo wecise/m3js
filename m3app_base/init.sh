@@ -15,4 +15,4 @@ cp -f "${M3JSDIR}/m3app_template/.env" .
 
 sed -e 's/"name":[ ]*".*"/"name": "'${m3appname}'"/' -i "" package.json
 
-npm install
+npm install --save

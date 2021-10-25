@@ -54,14 +54,14 @@ cd /opt/code/MyM3App
 
 ```
 cd /opt/code/MyM3App
-npm install @wecise/m3js
+npm install -g @wecise/m3js
 ```
 
 3. 初始化工程文件
 
 ```
 cd /opt/code/MyM3App
-node_modules/\@wecise/m3js/cmd init
+m3js init
 ```
 
 4. 修改环境信息
