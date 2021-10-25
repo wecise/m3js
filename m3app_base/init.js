@@ -20,6 +20,12 @@ spkg.name = process.env.M3APPNAME
 //spkg = spkg.replace(/\"name\":\s*\".*\"/, `"name": "${process.env.M3APPNAME}"`)
 fs.writeFileSync("package.json", JSON.stringify(spkg,"  ",2))
 
+let senv = fs.readFileSync(".env")
+senv = senv.toString()
+senv = senv.replace(/VUE_APP_M3_APP\s*\=\s*[\"\'].*[\"\']/, `VUE_APP_M3_APP="${process.env.M3APPNAME}"`)
+senv = senv.replace(/VUE_APP_M3_TITLE\s*\=\s*[\"\'].*[\"\']/, `VUE_APP_M3_TITLE="${process.env.M3APPNAME}"`)
+fs.writeFileSync(".env", senv)
+
 const child_process = require('child_process')
 const npm = child_process.spawnSync("npm", ["install", ".", "--force", "--save"], {
     windowsHide: true,
