@@ -6,8 +6,8 @@
  * 
  * 输出接口形式：
  *   常量(const)，全大写，常量可以是对象
- *   异步函数(Promise)，大写开头，CamelCase
- *   普通函数(function)，小写开头，snake_case
+ *   变量(var)，小写开头，camelCase
+ *   函数(function)，小写开头，camelCase
  * 不输出变量接口
  * 
  * Copyright (c) 2020, Wecise

@@ -1,6 +1,6 @@
 {
   "name": "@wecise/m3js",
-  "version": "1.0.88",
+  "version": "1.0.95",
   "author": "wecise",
   "license": "MIT",
   "description": "Applet JavaScript library for M³ platform",
@@ -9,7 +9,7 @@
   ],
   "main": "src/index.js",
   "bin": {
-    "m3js": "m3app_base/_.js"
+    "m3js": "mbase/_.js"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
