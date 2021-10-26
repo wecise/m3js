@@ -118,7 +118,7 @@ let render = function() {
                     resolve();
                 },
                 i18n: window.i18n,
-            }).$mount('#app')
+            }).$mount('#'+m3config.rootDivID)
         } catch(e) {
             reject(e);
             console.error(e);
@@ -147,7 +147,7 @@ let completed = function() {
 }
 
 let init = function(cfg) {
-    m3config = m3.combin_config(m3config, cfg)
+    m3config = m3.mergeConfig(m3config, cfg)
     return new Promise((resolve, reject)=>{
         m3.compose(m3config).then((a)=>{
             pageSetting().then(()=>{
@@ -195,81 +195,5 @@ exports.init = init
 exports.render = render
 exports.completed = completed
 exports.go = go
-
-const theme = require("./global/theme.js");
-exports.EDITOR_THEME = theme.EDITOR_THEME;
-  
-/* omdb */
-const omdb = require('./omdb/index.js');
-exports.getClassFieldsById = omdb.getClassFieldsById;
-
-
-/* job */
-const job = require('./job/index.js');
-exports.jobNew = job.userList;
-
-/* user */
-const user = require('./user/index.js');
-exports.userList = user.userList;
-
-/* dfs */
-const dfs = require('./dfs/index.js');
-exports.dfsList = dfs.dfsList;
-exports.dfsWrite = dfs.dfsWrite;
-exports.dfsRead = dfs.dfsRead;
-exports.dfsNew = dfs.dfsNew;
-exports.dfsDelete = dfs.dfsDelete;
-exports.dfsRename = dfs.dfsRename;
-exports.dfsUpdateAttr = dfs.dfsUpdateAttr;
-exports.dfsRefresh = dfs.dfsRefresh;
-exports.dfsMove = dfs.dfsMove;
-exports.dfsSyncToLocal = dfs.dfsSyncToLocal;
-exports.dfsUnZip = dfs.dfsUnZip;
-exports.dfsZip = dfs.dfsZip;
-
-/* app */
-const app = require('./app/index.js');
-exports.appDeploy = app.appDeploy;
-
-/* rule */
-const rule = require('./rule/index.js');
-exports.ruleGet = rule.ruleGet;
-exports.ruleAdd = rule.ruleAdd;
-exports.ruleUpdate = rule.ruleUpdate;
-exports.ruleDelete = rule.ruleDelete;
-exports.ruleExport = rule.ruleExport;
-
-/* policy */
-const policy = require('./policy/index.js');
-exports.policyDeploy = policy.policyDeploy;
-exports.policyUndeploy = policy.policyUndeploy;
-
-/* console log */
-const consolelog = require('./consolelog/index.js');
-exports.consolelogTrace = consolelog.consolelogTrace;
-exports.consolelogDelete = consolelog.consolelogDelete;
-exports.consolelogTruncate = consolelog.consolelogTruncate;
-
-/* trigger */
-const trigger = require('./trigger/index.js');
-exports.triggerList = trigger.triggerList;
-exports.triggerNew = trigger.triggerNew;
-exports.triggerDelete = trigger.triggerDelete;
-
-const event = require("./global/event.js");
-exports.EventViewDataObj = event.EventViewDataObj;
-exports.EventViewTools = event.EventViewTools;
-
-/* utils */
-exports.jsFormat = require("./utils/jsFormat.js");
-exports.htmlFormat = require("./utils/htmlFormat.js");
-
-const adjustColor = function(color, amount) {
-    return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
-};
-exports.adjustColor = adjustColor;
-
-const cookie = require("./utils/cookie.js");
-exports.getCookie = cookie.getCookie;
 
 export default exports

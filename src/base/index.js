@@ -185,199 +185,6 @@ let langList = function() {
 };
 
 /**
- * Set Home for login user
- */
-let setAppAsHome = function(vm,item){
-    return new Promise(function(resolve, reject) {
-        let fm = new FormData();
-        fm.append("home", item.url.split("").slice(1,item.url.length).join(""));
-        fm.append("_csrf", G.getCookie("_csrf"))
-        http.post({
-            url: `/user/settings/home`,
-            param: fm
-        }).then(res=>{
-            vm.$message({
-                type: "info",
-                message: "首页已设置为：" + item.url
-            });
-            resolve(res.data);
-        }).catch(err=>{
-            vm.$message({
-                type: "error",
-                message: "首页设置失败：" + err
-            });
-            reject(err.data);
-        })
-    })
-};
-
-/**
- * Set Home for all user
- */
-let setAppAsHomeForAllUser = function(vm,item){
-    return new Promise(function(resolve, reject) {
-        let fm = new FormData();
-        fm.append("home", item.url.split("").slice(1,item.url.length).join(""));
-        fm.append("_csrf", G.getCookie("_csrf"))
-        http.post({
-            url: `/admin/users/home`,
-            param: fm
-        }).then(res=>{
-            vm.$message({
-                type: "info",
-                message: "首页已设置为：" + item.url
-            });
-            resolve(res.data);
-        }).catch(err=>{
-            vm.$message({
-                type: "error",
-                message: "首页设置失败：" + err
-            });
-            reject(err.data);
-        })
-    })
-};
-
-/**
- * Set Title for M3 platform
- */
-let setTitle = function(auth){
-    new Promise((resolve,reject)=>{
-        try {
-            let pathName = window.location.pathname;
-            if(G._.isEmpty(pathName)) {
-                document.title = auth.Company.title;
-                return false;
-            }
-            callFS("/matrix/system/getAppNameByUrl.js", encodeURIComponent(pathName)).then( res=>{
-                let name = res.message;
-                if(!G._.isEmpty(name)) {
-                    document.title = name['cnname'] || name['enname'];
-                } else {
-                    document.title = auth.Company.title;
-                }
-                setTimeout(()=>{
-                    let link = document.querySelector("link[rel~='icon']");
-                    if (!link) {
-                        link = document.createElement('link');
-                        link.rel = 'icon';
-                        document.getElementsByTagName('head')[0].appendChild(link);
-                    }
-                    link.href = auth.Company.icon || auth.Company.logo;
-                    resolve();
-                },0)
-            });
-        } catch(err) {
-            console.error(err,auth)
-            document.title = auth.Company.title;
-            reject(err);
-        }
-    })
-};
-
-/**
- * 单位转换
- */
-let bytesToSize = function(bytes) {
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes == 0) return '0 Byte';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
-};
-
-/**
- * 全屏控制
- */
-let fullScreen = function(mode) {
-    if ( mode ) {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-        } else if (document.documentElement.msRequestFullscreen) {
-            document.documentElement.msRequestFullscreen();
-        } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        }
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
-    }
-};
-
-let fullScreenByEl = function(el) {
-    if (document.fullscreenElement) {
-        document.exitFullscreen();
-        return false;
-    } else {
-        el.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        return true;
-    }
-}
-
-/**
- * Vue Render
- */
- let renderVueMount = function() {
-    return new Promise(function(resolve,reject){
-        try {
-            new G.Vue({
-                render: h => h(G.App),
-                mounted: function() {
-                    resolve();
-                    console.log("Vue mounted.")
-                },
-            }).$mount('#'+m3config.rootDivID)
-        } catch(e) {
-            reject(e)
-        }
-    })
-}
-
-var renderReady = false;
-/**
- * Vue Render
- */
-let renderPending = function() {
-    return new Promise(function(resolve,reject){
-        try {
-            renderReady = true
-            resolve()
-        } catch(e) {
-            reject(e)
-        }
-    })
-}
-
-let render = function() {
-    return new Promise(function(resolve,reject){
-        try {
-            if(renderReady){
-                resolve()
-            }else{
-                reject("页面渲染所需组建未加载")
-            }
-        } catch(e) {
-            reject(e)
-        }
-    })
-}
-
-/**
- * Vue Render Completed
- */
-let completed = function() {
-    //document.getElementById("preload").style.display = "none";
-}
-
-/**
  * 组件加载并初始化相关数据，必须保证执行顺序，下一级组件或操作依赖上一级输出，同一层次的组件可以同时加载：
  * -> m3（this）
  *    -> js-cookie cookie信息存取
@@ -394,9 +201,9 @@ let completed = function() {
  *          -> theme 可切换主题皮肤CSS
  *       -> vue-split 分割栏
  * -> (依赖auth, global) App.vue 应用组件 
- *    -> m3.render() 开始render页面 
+ *    -> m3.ready() 动态组件加载完成，可以开始页面渲染前的其它准备工作
  *       -> 其他应用组件由应用自行控制 
- *          ->m3.completed() render完成
+ *          ->m3.loaded() 全部加载完成
  */
 
 var mods = {Vue:{}, App:{}}
@@ -428,18 +235,16 @@ mods.lang = {
     f: langInfo,
     deps: [mods.autoConnect, mods.lodash],
 }
-mods.render = {
-    f: renderPending,
+mods.ready = {
+    desc: "依赖组件加载完成",
+    f: () => {},
     deps: [mods.Vue, mods.App, mods.getCookie],
 }
-mods.completed = {
-    f: completed,
-    deps: [mods.render],
+mods.loaded = {
+    desc: "动态组件加载完成",
+    f: () => {},
+    deps: [mods.ready],
 }
-// mods.completed = {
-//     f: () => {},
-//     deps: [mods.Vue, mods.App, mods.getCookie],
-// }
 
 /**
  * 合并Mods
@@ -596,7 +401,7 @@ let loadCompos = function() {
     })
 }
 
-let combin_config = function(mconfig, cfg) {
+let mergeConfig = function(mconfig, cfg) {
     G = cfg.global||mconfig.global||G;
     merge(mconfig, cfg, {global:1, mods:1})
     mconfig.mods = combin_mods(mconfig.mods, cfg.mods);
@@ -624,7 +429,7 @@ let combin_config = function(mconfig, cfg) {
  *              -> 其他应用组件由应用自行控制 
  */
 let compose = function(cfg) {
-    m3config = combin_config(m3config, cfg);
+    m3config = mergeConfig(m3config, cfg);
     G.m3 = this;
     return new Promise((resolve, reject) => {
         try {
@@ -643,23 +448,21 @@ let compose = function(cfg) {
 }
 
 let exports = {}
-
+/** 版本信息 */
 exports.VERSION = VERSION;
+/** 通用功能函数 */
 exports.merge = merge;
-exports.combin_config = combin_config;
+/** 配置合并 */
+exports.mergeConfig = mergeConfig;
+/** 有序异步动态加载 */
 exports.compose = compose;
-exports.connect = connect;
+/** 平台交互基本功能 */
 exports.callFS = callFS;
 exports.callService = callService;
+/** 连接平台 */
+exports.connect = connect;
 exports.langList = langList;
 exports.auth = auth;
 exports.global = global;
-exports.render = render;
-exports.setTitle = setTitle;
-exports.setAppAsHome = setAppAsHome;
-exports.setAppAsHomeForAllUser = setAppAsHomeForAllUser;
-exports.fullScreen = fullScreen;
-exports.fullScreenByEl = fullScreenByEl;
-exports.bytesToSize = bytesToSize;
 
 export default exports
