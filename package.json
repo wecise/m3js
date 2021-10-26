@@ -1,6 +1,10 @@
 {
   "name": "@wecise/m3js",
+<<<<<<< HEAD
   "version": "1.0.96",
+=======
+  "version": "1.0.97",
+>>>>>>> 48468b8b9be3757575974c911ca7ccc693262a67
   "author": "wecise",
   "license": "MIT",
   "description": "Applet JavaScript library for M³ platform",
