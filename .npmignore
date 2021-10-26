@@ -8,3 +8,5 @@ node_modules/
 /.env
 /reinstall.sh
 /publish.sh
+/vue.config.js
+/src/main.js

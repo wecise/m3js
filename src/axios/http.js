@@ -48,11 +48,11 @@ service.interceptors.request.use(config => {
 //响应拦截器即异常处理
 service.interceptors.response.use(response => {
     
-    console.debug("[MHR]",response)
     if(response.data && response.data.status == 'signin'){
       window.location.href = "/user/login";
     }
-
+    console.debug("[MHR]",response)
+  
     return response;
 
 }, err => {
@@ -102,7 +102,6 @@ service.interceptors.response.use(response => {
 		err.message = "连接到服务器失败"
 	}
 	// window.location.href="error.html";
-  
 	return Promise.reject(err.response);
 })
 
@@ -111,24 +110,27 @@ export default {
   get (evt) {
     return new Promise((resolve, reject) => {
       service.get(evt.url, evt.param?{params: evt.param}:null )
-      .then(res => {
-        resolve(res)
+      .then(response => {
+        resolve(response)
       }, err => {
+        reject(err)
+      }).catch(err => {
         reject(err)
       })
     })
   },
   // post请求
   post (evt) {
-    
     return new Promise((resolve, reject) => {
       service.post(
         evt.url,
         evt.param
-      ).then(res => {
-        resolve(res)
+      ).then(response => {
+        resolve(response)
       }, err => {
-          reject(err)
+        reject(err)
+      }).catch(err => {
+        reject(err)
       })
     })
   },
@@ -139,6 +141,8 @@ export default {
         .then(response => {
           resolve(response)
         }, err => {
+          reject(err)
+        }).catch(err => {
           reject(err)
         })
     })
@@ -151,8 +155,9 @@ export default {
         resolve(response)
       }, err => {
         reject(err)
+      }).catch(err => {
+        reject(err)
       })
     })
   }
-
 }

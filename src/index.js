@@ -1,3 +1,4 @@
-#!/usr/bin/env node
 
-import "./m3.js"
+import m3 from "./m3.js"
+
+export default m3

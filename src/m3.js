@@ -6,8 +6,9 @@
  * 
  * 输出接口形式：
  *   常量(const)，全大写，常量可以是对象
+ *   类(class)，大写开头，CamelCase
  *   变量(var)，小写开头，camelCase
- *   函数(function)，小写开头，camelCase
+ *   普通函数(function)，小写开头，camelCase
  * 不输出变量接口
  * 
  * Copyright (c) 2020, Wecise
@@ -64,7 +65,7 @@ let m3config = {
     mods,
 }
 
-let Lang = function(name) {
+let lang = function(name) {
     return new Promise((resolve, reject)=>{
         m3.langList().then((res)=>{
             let VueI18n = window.VueI18n
@@ -74,6 +75,7 @@ let Lang = function(name) {
                 locale: name,
                 messages: res, 
             });
+            //Vue.prototype.i18n = window.i18n;
             _.merge(Vue.prototype.$ELEMENT, {
                 size: Cookies.get('size') || 'small',
                 i18n: (key, value) => window.i18n.t(key, value)
@@ -86,29 +88,41 @@ let Lang = function(name) {
     })
 }
 
-let Render = function() {
+let pageSetting = function() {
+    // 此时所有 mods 指定组件都已经加载完成
     return new Promise((resolve, reject)=>{
-        // 此时所有 mods 指定组件都已经加载完成
         m3.Theme.initTheme(m3config.theme).then(()=>{
             // window.state && window.state("主题样式加载完成...")
-        }) // 样式直接生效，无需后续处理
-        Lang(window.M3_LANG).then(()=>{
-            window.state && window.state("语言包加载完成...")
-            try {
-                let App = window.App;
-                new Vue({
-                    render: h => h(App),
-                    mounted: function(){
-                        window.state && window.state("页面组织完成...")
-                        resolve();
-                    },
-                    i18n: window.i18n,
-                }).$mount('#app')
-            } catch(e) {
-                reject(e);
-                console.error(e);
-            }
+            // 样式直接生效，无需后续处理
+        }).catch((e) => {
+            reject(e);
+            console.error(e);
         })
+        lang(window.M3_LANG).then(()=>{
+            window.state && window.state("语言包加载完成...")
+            resolve();
+        }).catch((e) => {
+            reject(e);
+            console.error(e);
+        })
+    })
+}
+
+let render = function() {
+    return new Promise((resolve, reject)=>{
+        try {
+            new Vue({
+                render: h => h(window.App),
+                mounted: function(){
+                    window.state && window.state("页面渲染完成...")
+                    resolve();
+                },
+                i18n: window.i18n,
+            }).$mount('#app')
+        } catch(e) {
+            reject(e);
+            console.error(e);
+        }
     })
 }
 
@@ -126,17 +140,19 @@ let renderCompleted = function(resolve, reject) {
     }
 }
 
-let Completed = function() {
+let completed = function() {
     return new Promise((resolve, reject)=>{
         renderCompleted(resolve, reject);
     })
 }
 
-let Init = function(cfg) {
+let init = function(cfg) {
     m3config = m3.combin_config(m3config, cfg)
     return new Promise((resolve, reject)=>{
-        m3.init(m3config).then((a)=>{
-            resolve(a);
+        m3.compose(m3config).then((a)=>{
+            pageSetting().then(()=>{
+                resolve(a);
+            })
         }).catch(e=>{
             reject(e);
             console.error(e);
@@ -144,11 +160,41 @@ let Init = function(cfg) {
     })
 }
 
+let go = function(m3config) {
+    window.state && window.state("正在初始化小应用配置...")
+    // m3js加载完成，根据配置信息动态有序异步加载依赖组件，完成M3小应用初始化
+    init(m3config).then(()=>{
+        window.state && window.state("正在渲染页面...")
+        // m3.render完成的工作是渲染Vue页面，也可以写成
+        // new Vue({
+        //     render: h => h(window.App),
+        //     mounted: function(){
+        //         window.state && window.state("页面渲染完成...")
+        //         m3.completed() // 加载数据
+        //     },
+        // }).$mount('#app')
+        render().then(()=>{
+            window.state && window.state("正在加载数据...")
+            // 此时Vue渲染已经完成，但是页面还不能正常显示，还需要加载页面相关数据，并驱动Vue相关组件更新显示状态
+            completed().then(()=>{
+                // 此时页面才能正常显示
+                window.state && window.state("页面输出完成.");
+            }).catch((e)=>{
+                console.error(e)
+            })
+        }).catch((e)=>{
+            console.error(e)
+        })
+    }).catch((e)=>{
+        console.error(e)
+    })
+}
+
 let exports = m3
-exports.Init = Init
-exports.Lang = Lang
-exports.Render = Render
-exports.Completed = Completed
+exports.init = init
+exports.render = render
+exports.completed = completed
+exports.go = go
 
 const theme = require("./global/theme.js");
 exports.EDITOR_THEME = theme.EDITOR_THEME;

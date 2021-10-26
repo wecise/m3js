@@ -8,11 +8,37 @@ const IS_M3JS = process.env.VUE_APP_M3_APP === "m3js"
 const IS_DEBUG = process.env.VUE_APP_M3_DEBUG && process.env.VUE_APP_M3_DEBUG.indexOf("vue.config")>=0
 const productionGzipExtensions = ['html', 'js', 'css']
 
+/**
+ * 两个对象的深度合并，合并结果保存在第一个对象中
+ * 如果数据类型不同，第二个对象中对应的数据将覆盖第一个对象
+ * 同一对象直接返回
+ */
+let merge = function (o, n) {
+    if(n===undefined) return o; //n 未定义，返回 o
+    if(o===undefined) return n; //o 未定义，n有值，返回 n
+    if(n==null || typeof n !== 'object') return n; //n 为空或不是对象，返回n
+    if(o==null || typeof o !== 'object') return n; //o 为空或不是对象，n 是对象，返回n
+    if(n === o) return o; // n和o为同一对象，返回o
+    if(Array.isArray(o) && Array.isArray(n)) { // 数组合并
+        for(let i=0;i<n.length;i++){
+            o.push(n[i])
+        }
+    } else {
+        let keys = Object.keys(n); // n的全部key集合
+        for(let i =0,len=keys.length; i<len; i++) {
+            let key = keys[i];
+            o[key] = merge(o[key], n[key]);
+        }
+    }
+    //console.log("o:"+o)
+    return o;
+}
+
 function resolve(dir) {
     return path.join(process.cwd(), dir)
 }
 
-module.exports = {
+let vue_config = {
     // 开发阶段本地web服务
     devServer: {
         port: 8080, // 开发阶段本地服务端口，当前端口被占用时按自动+1处理
@@ -28,9 +54,12 @@ module.exports = {
     // 配置Webpack
     configureWebpack: oconfig => {
         // 将默认的配置信息打印输出到 console
-        if(IS_DEBUG)console.log("default config: "+JSON.stringify(oconfig, " ", 2));
-        config = {};
-        config.plugins = [];
+        // if(IS_DEBUG)console.log("default config: "+JSON.stringify(oconfig, " ", 2));
+        // 采用直接修改默认配置的方式定义configureWebpack
+        config = oconfig; 
+        if(!config.plugins) {
+            config.plugins = [];
+        }
         if (IS_PROD) { // 生产环境
             // 混淆代码，去除注释
             config.plugins.push(new UglifyJsPlugin({
@@ -71,14 +100,15 @@ module.exports = {
             // }));
         }
         //防止将某些 import 的包(package)打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖
-        config.externals = {
-            //"要导入的包": "window对象中的对应变量"
-            "lodash": "_",
-            "moment": "moment",
-            "../moment": "moment", // 单独加载 moment 内部语言包时使用
-            "vue": "Vue",
-            "element-ui": "ELEMENT",
+        if(!config.externals) {
+            config.externals = {}
         }
+        //"要导入的包": "window对象中的对应变量"
+        config.externals["lodash"] = "_";
+        config.externals["moment"] = "moment";
+        config.externals["../moment"] = "moment"; // 单独加载 moment 内部语言包时使用
+        config.externals["vue"] = "Vue";
+        config.externals["element-ui"] = "ELEMENT";
         // HTML模版，需要配合 config.externals 引入相应js
         let assetsLibPath = IS_PROD?"/static/app/assets":"assets"
         config.plugins.push(new HtmlWebpackPlugin({
@@ -108,10 +138,10 @@ module.exports = {
     <noscript>
         <strong>Please enable JavaScript to continue.</strong>
     </noscript>
-    <div id="preload" style="width:100vw;height:100vh;display:block;position:relative;">
-        <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-        <div style="width:100vw;height:100vh;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;">
-        <label id="preload_message" style="flex:0 0 auto;">正在加载页面...</label>
+    <div id="preload" style="width:100vw;height:100vh;display:block;font-size:10px;">
+        <div style="width:100vw;height:80vh;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;position:relative;">
+            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <label id="preload_message" style="flex:0 0 auto;">正在加载页面...</label>
         </div>
     </div>
     <div id="app"></div>
@@ -120,12 +150,14 @@ module.exports = {
 </html>`
         }));
         // 设置目录别名
-        config.resolve = {
-            alias: {
-                "~": oconfig.context, // 工程所在目录
-                "@": oconfig.context+(IS_M3JS?"/mtemplate/src":"/src"), // 工程src目录
-            },
+        if(!config.resolve) {
+            config.resolve = {}
         }
+        if(!config.resolve.alias) {
+            config.resolve.alias = {}
+        }
+        config.resolve.alias["~"] = oconfig.context; // 工程所在目录
+        config.resolve.alias["@"] = oconfig.context+(IS_M3JS?"/mtemplate/src":"/src"); // 工程src目录默认应该已经定义为oconfig.context+'src'
         // 使用 @wecise/m3js 内置入口
         config.entry = {
             app: IS_M3JS?"./src/main.js":"@wecise/m3js/src/main.js"
@@ -133,10 +165,9 @@ module.exports = {
         // 运行模式（运行环境标记）
         // 开发阶段在 .env 文件中指定，通过 npm run serve 执行，一般指定 NODE_ENV="development"
         // 生产发布时 process.env.NODE_ENV === 'production'，通过 npm run build 编译部署到 M3 主服务器，同时自动发布到小应用市场
-        config.mode = process.env.NODE_ENV
+        // config.mode = process.env.NODE_ENV
         // 将定制的配置信息打印输出到 console
-        if(IS_DEBUG)console.log("custom config: "+JSON.stringify(config, " ", 2));
-        return config;
+        //if(IS_DEBUG)console.log("custom config: "+JSON.stringify(config, " ", 2));
     },
     // 配置Webpack处理规则
     chainWebpack(config) {
@@ -162,4 +193,43 @@ module.exports = {
     },
     // 修正生产环境的public路径
     publicPath: process.env.NODE_ENV === 'production'?'/static/app/matrix/'+process.env.VUE_APP_M3_APP:''
+}
+
+let merge_vue_config = function(app_config) {
+    m3config = merge({}, vue_config)
+    m3config = merge(m3config, app_config)
+    if(m3config.configureWebpack != vue_config.configureWebpack) {
+        m3config.configureWebpack = (oconfig) => {
+            // 先执行M3定义的Webpack配置
+            if(IS_DEBUG)console.log("default config: "+JSON.stringify(oconfig, " ", 2));
+            vue_config.configureWebpack(oconfig)
+            if(IS_DEBUG)console.log("m3inner config: "+JSON.stringify(oconfig, " ", 2));
+            if (typeof(app_config.configureWebpack) == 'function') {
+                // 执行函数形式的Webpack配置
+                app_wp_config = app_config.configureWebpack(oconfig)
+                if(app_wp_config){
+                    // 返回结果
+                    if(IS_DEBUG)console.log("custom return config: "+JSON.stringify(app_wp_config, " ", 2));
+                    return app_wp_config
+                }
+                // 没有结果不返回任何值
+                if(IS_DEBUG)console.log("custom update config: "+JSON.stringify(oconfig, " ", 2));
+            } else {
+                // 直接返回应用定义的Webpack配置信息
+                if(IS_DEBUG)console.log("custom defined config: "+JSON.stringify(app_config.configureWebpack, " ", 2));
+                return app_config.configureWebpack
+            }
+        }
+    }
+    if(m3config.chainWebpack != vue_config.chainWebpack) {
+        m3config.chainWebpack = (config) => {
+            vue_config.chainWebpack(config)
+            app_config.chainWebpack(config)
+        }
+    }
+    return m3config
+}
+
+module.exports = (config)=>{
+    return merge_vue_config(config)
 }
