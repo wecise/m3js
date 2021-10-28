@@ -2,40 +2,38 @@
 
 
 
-## 客户端与服务端的分离
+## 客户端与服务端的剥离
 
-### 数据服务接口与应用的分离
+### 数据服务接口与界面的剥离
 
-#### WebServer只提供API，不提供界面
-
-WebServer只提供API，不提供界面
+WebServer只提供API，不提供界面，包括登录界面
 
 ##### 服务端API
 
 21组
 
-| **odb**        |
-| -------------- |
-| **appcontext** |
-| **message**    |
-| **http**       |
-| **concurrent** |
-| **tagdir**     |
-| **dfs**        |
-| **graphalg**   |
-| **aialg**      |
-| **forward**    |
-| **webcontext** |
-| **nlp**        |
-| **perm**       |
-| **job**        |
-| **depot**      |
-| **policy**     |
-| **zabbix**     |
-| **consolelog** |
-| **rule**       |
-| **etcd**       |
-| **nats**       |
+| **odb**        |      |
+| -------------- | ---- |
+| **appcontext** |      |
+| **message**    |      |
+| **http**       |      |
+| **concurrent** |      |
+| **tagdir**     |      |
+| **dfs**        |      |
+| **graphalg**   |      |
+| **aialg**      |      |
+| **forward**    |      |
+| **webcontext** |      |
+| **nlp**        |      |
+| **perm**       |      |
+| **job**        |      |
+| **depot**      |      |
+| **policy**     |      |
+| **zabbix**     |      |
+| **consolelog** |      |
+| **rule**       |      |
+| **etcd**       |      |
+| **nats**       |      |
 
 ##### 客户端API
 
@@ -82,4 +80,16 @@ WebServer只提供API，不提供界面
 | **[APP PERMS]**         | **应用权限**                |
 | **[CONSOLELOG]**        | **脚本控制台日志**          |
 | **[APP]**               | **小程序**                  |
+
+### 服务端JS
+
+/script/matrix/[appname]/\*.js
+
+### 客户端页面
+
+/app/matrix/[appname]/\*.\*
+
+### 客户端访问URL
+
+/static/app/matrix/[appname]/\*.\*
 
