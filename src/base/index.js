@@ -451,6 +451,8 @@ let exports = {}
 /** 版本信息 */
 exports.VERSION = VERSION;
 /** 通用功能函数 */
+exports.http = http;
+/** 通用功能函数 */
 exports.merge = merge;
 /** 配置合并 */
 exports.mergeConfig = mergeConfig;
