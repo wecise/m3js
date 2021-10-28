@@ -65,11 +65,13 @@
             }
         },
         created(){
-            this.m3.callFS('/matrix/footer/api_contextmenu.js', null).then( (rtn)=>{
+            this.m3.callFS('/matrix/footer/api_contextmenu.js', null).then((rtn)=>{
                 this.api.list = _.map(rtn.message,(v,k)=>{
                     return {name: v.name, url: k, icon: v.icon};
                 });
-            } );
+            }).catch((err)=>{
+                console.error(err)
+            });
         },
         methods:{
             onLangCommand(cmd) {

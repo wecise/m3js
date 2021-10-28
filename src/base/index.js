@@ -130,6 +130,7 @@ let authUser = function () {
     return new Promise((resolve, reject) => {
         callFS("/matrix/user/signedUser.js").then(res=>{
             let tmp = { signedUser: res.message, isAdmin: res.message.isadmin };
+            tmp.Company = tmp.signedUser.Company;
             G._.assign(G.m3.auth, tmp);
             G.auth = G.m3.auth;
             resolve();
@@ -206,22 +207,19 @@ let langList = function() {
  *          ->m3.loaded() 全部加载完成
  */
 
-var mods = {Vue:{}, App:{}}
+var mods = {Vue:{}, App:{}, element:{}}
 mods._ = {
     f: () => import("lodash"),
 }
 mods.lodash = {
     deps: [mods._],
 }
-mods.Cookies = {
-    f: () => import("js-cookie"),
-}
-mods.getCookie = {
-    f: () => import("../utils/cookie"),
+mods.cookie = {
+    f: () => import("../cookie"),
 }
 mods.autoConnect = {
     f: autoConnect,
-    deps: [mods.Cookies],
+    deps: [mods.cookie],
 }
 mods.auth = {
     f: authUser,
@@ -238,7 +236,7 @@ mods.lang = {
 mods.ready = {
     desc: "依赖组件加载完成",
     f: () => {},
-    deps: [mods.Vue, mods.App, mods.getCookie],
+    deps: [mods.Vue, mods.App, mods.element, mods.cookie],
 }
 mods.loaded = {
     desc: "动态组件加载完成",

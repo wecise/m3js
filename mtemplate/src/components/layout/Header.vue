@@ -85,9 +85,9 @@ export default{
     },
     created(){
         this.initTheme();
+        this.m3.html.setTitle(this.auth);
     },
     mounted(){
-        this.m3.setTitle(this.auth);
     },
     methods: {
         onSelect(key) {
@@ -111,7 +111,7 @@ export default{
             //let theme = {dark:'#252D47',light:'#409EFF'};
             
             Cookies.set('m3-theme',val);
-            window.m3.Theme.initTheme();
+            window.m3.theme.initTheme();
             //window.location.reload();
         }
     }

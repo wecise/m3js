@@ -109,35 +109,8 @@ export default {
 	// get请求
   get (evt) {
     return new Promise((resolve, reject) => {
-      service.get(evt.url, evt.param?{params: evt.param}:null )
-      .then(response => {
-        resolve(response)
-      }, err => {
-        reject(err)
-      }).catch(err => {
-        reject(err)
-      })
-    })
-  },
-  // post请求
-  post (evt) {
-    return new Promise((resolve, reject) => {
-      service.post(
-        evt.url,
-        evt.param
-      ).then(response => {
-        resolve(response)
-      }, err => {
-        reject(err)
-      }).catch(err => {
-        reject(err)
-      })
-    })
-  },
-  // put请求
-  put (evt) {
-    return new Promise((resolve, reject) => {
-      service.put(evt.url, evt.param)
+      try {
+        service.get(evt.url, evt.param?{params: evt.param}:null )
         .then(response => {
           resolve(response)
         }, err => {
@@ -145,19 +118,62 @@ export default {
         }).catch(err => {
           reject(err)
         })
+      }catch(err){
+        reject(err)
+      }
+    })
+  },
+  // post请求
+  post (evt) {
+    return new Promise((resolve, reject) => {
+      try {
+        service.post(
+          evt.url,
+          evt.param
+        ).then(response => {
+          resolve(response)
+        }, err => {
+          reject(err)
+        }).catch(err => {
+          reject(err)
+        })
+      }catch(err){
+        reject(err)
+      }
+    })
+  },
+  // put请求
+  put (evt) {
+    return new Promise((resolve, reject) => {
+      try {
+        service.put(evt.url, evt.param)
+        .then(response => {
+          resolve(response)
+        }, err => {
+          reject(err)
+        }).catch(err => {
+          reject(err)
+        })
+      }catch(err){
+        reject(err)
+      }
     })
   },
   // delete
   delete (evt){
     return new Promise((resolve, reject) => {
-      service.delete(evt.url, evt.param)
-      .then(response => {
-        resolve(response)
-      }, err => {
+      try {
+        service.delete(evt.url, evt.param)
+        .then(response => {
+          resolve(response)
+        }, err => {
+          reject(err)
+        }).catch(err => {
+          reject(err)
+        })
+      }catch(err){
         reject(err)
-      }).catch(err => {
-        reject(err)
-      })
+      }
     })
   }
 }

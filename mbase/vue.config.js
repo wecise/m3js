@@ -124,11 +124,14 @@ let vue_config = {
     <script src="${assetsLibPath}/js/vue.js"></script>
     <script src="${assetsLibPath}/js/element-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="${assetsLibPath}/css/loading.css" />
+    <title>${process.env.VUE_APP_M3_TITLE}</title>
     <script>
         window.timeStart=window.timePhase=Date.now();
+        window.errorCount=0;
         Date.prototype.format=function(f){var o={"M+":this.getMonth()+1,"d+":this.getDate(),"h+":this.getHours(),"m+":this.getMinutes(),"s+":this.getSeconds(),"S":this.getMilliseconds()};if(/(y+)/.test(f))f=f.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length));for(var k in o)if(new RegExp("("+k+")").test(f))f=f.replace(RegExp.$1,RegExp.$1.length==1?o[k]:("00"+ o[k]).substr((""+ o[k]).length));return f}
+        console.oerror=console.error;console.error=function(){window.errorCount++;var e=document.getElementById("error_count");if(e){e.innerHTML=" "+window.errorCount;e.style.display="";}console.oerror.call(this,...arguments);}
         console.odebug=console.debug;console.debug=function(){var t=Date.now();console.odebug.call(this,new Date().format("yyyy-MM-dd hh:mm:ss.S"),"("+(t-window.timePhase)+"/"+(t-window.timeStart)+")",...arguments)}
-        window.state=(s)=>{if(s){console.debug("[M3S]",s);e=document.getElementById("preload_message");if(e)e.innerHTML=s}window.timePhase=Date.now()}
+        window.state=(s)=>{if(s){console.debug("[M3S]",s);var e=document.getElementById("preload_message");if(e)e.innerHTML=s}window.timePhase=Date.now()}
         window.state("正在加载页面...")
     </script>
     <link rel="icon" href="favicon.ico"/>
@@ -138,9 +141,10 @@ let vue_config = {
     <noscript>
         <strong>Please enable JavaScript to continue.</strong>
     </noscript>
-    <div id="preload" style="width:100vw;height:100vh;display:block;font-size:10px;">
-        <div style="width:100vw;height:80vh;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;position:relative;">
-            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    <div id="error_count" style="position:fixed;right:5px;bottom:5px;color:red;display:none;" class="el-icon-warning">0</div>
+    <div id="preload" class="preload" style="position:fixed;display:block;width:100vw;height:100vh;overflow:hidden;font-size:10px;">
+        <div class="lds-ripple" style="position:absolute;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <div style="position:absolute;width:100%;height:100%;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;">
             <label id="preload_message" style="flex:0 0 auto;">正在加载页面...</label>
         </div>
     </div>

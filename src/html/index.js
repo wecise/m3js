@@ -1,4 +1,7 @@
 
+import http from "../axios/http"
+import m3 from "../base"
+
 /**
  * Set Home for login user
  */
@@ -6,7 +9,7 @@
     return new Promise(function(resolve, reject) {
         let fm = new FormData();
         fm.append("home", item.url.split("").slice(1,item.url.length).join(""));
-        fm.append("_csrf", G.getCookie("_csrf"))
+        fm.append("_csrf", m3.getCookie("_csrf"))
         http.post({
             url: `/user/settings/home`,
             param: fm
@@ -33,7 +36,7 @@ let setAppAsHomeForAllUser = function(vm,item){
     return new Promise(function(resolve, reject) {
         let fm = new FormData();
         fm.append("home", item.url.split("").slice(1,item.url.length).join(""));
-        fm.append("_csrf", G.getCookie("_csrf"))
+        fm.append("_csrf", m3.cookies.get("_csrf"))
         http.post({
             url: `/admin/users/home`,
             param: fm
@@ -60,13 +63,13 @@ let setTitle = function(auth){
     new Promise((resolve,reject)=>{
         try {
             let pathName = window.location.pathname;
-            if(G._.isEmpty(pathName)) {
+            if(m3._.isEmpty(pathName)) {
                 document.title = auth.Company.title;
                 return false;
             }
-            callFS("/matrix/system/getAppNameByUrl.js", encodeURIComponent(pathName)).then( res=>{
+            m3.callFS("/matrix/system/getAppNameByUrl.js", encodeURIComponent(pathName)).then( res=>{
                 let name = res.message;
-                if(!G._.isEmpty(name)) {
+                if(!m3._.isEmpty(name)) {
                     document.title = name['cnname'] || name['enname'];
                 } else {
                     document.title = auth.Company.title;

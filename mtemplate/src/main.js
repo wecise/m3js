@@ -25,6 +25,10 @@ let m3config = {
 
 // 加载m3js
 import("@wecise/m3js").then((m)=>{
+    m.default.go(m3config)
+    /*******************************************************************************************
+     **** m.default.go 所做的操作如下。如需定制化处理，可以使用下面的代码代替 m.default.go(m3config) ****
+     *******************************************************************************************
     let m3 = m.default;
     window.state && window.state("正在初始化小应用配置...")
     // m3js加载完成，根据配置信息动态有序异步加载依赖组件，完成M3小应用初始化
@@ -53,6 +57,7 @@ import("@wecise/m3js").then((m)=>{
     }).catch((e)=>{
         console.error(e)
     })
+    /**** m.default.go ****/
 }).catch((e)=>{
     console.error(e)
 });
