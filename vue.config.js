@@ -8,8 +8,8 @@ module.exports = m3config({
     devServer: {
         port: 8080, // 开发阶段本地服务端口，当前端口被占用时按自动+1处理
     },
-    configureWebpack: {
-        entry: {
+    configureWebpack: config => {
+        config.entry = {
             app: "./src/main.js"
         }
     }

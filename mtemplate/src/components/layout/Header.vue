@@ -10,7 +10,9 @@
             <MessageView></MessageView>
         </el-col>
         <el-col :span="1" style="text-align: right;">
-            
+            <div>
+                <el-button type="text" @click.stop="onToggleTheme($event)" class="toggle-theme" style="padding: 5px;border-radius: 10px;"></el-button>
+            </div>
         </el-col>
         <el-col :span="2">
             <el-menu :default-active="activeIndex" 
@@ -25,16 +27,9 @@
                     <el-menu-item index="/matrix/user">
                         <template slot="title">
                             <svg-icon icon-class="user2"/> 
-                            <span slot="title">用户
-                                <!--div>
-                                <el-button type="text" @click.stop="onToggleTheme('dark')" style="background:#252D47;padding: 5px;border-radius: 10px;"></el-button>
-                                <el-button type="text" @click.stop="onToggleTheme('light')" style="background: #1890ff;padding: 5px;border-radius: 10px;"></el-button>
-                                </div>
-                                <el-divider style="margin:0px;"></el-divider-->
-                            </span>
+                            <span slot="title">用户</span>
                         </template>
                     </el-menu-item>
-                    
                     <el-menu-item index="/matrix/system" divided v-if="auth.isadmin">
                         <template slot="title">
                             <svg-icon icon-class="system"/>
@@ -102,23 +97,29 @@ export default{
             }
         },
         initTheme(){
+            window.m3.theme.initTheme();
             let body = document.body;
             let value = Cookies.get('m3-theme')?Cookies.get('m3-theme'):'dark';
             body.classList.add(value);
         },
-        onToggleTheme(val){
-
-            //let theme = {dark:'#252D47',light:'#409EFF'};
-            
-            Cookies.set('m3-theme',val);
-            window.m3.theme.initTheme();
-            //window.location.reload();
+        onToggleTheme(event){
+            let val=Cookies.get("m3-theme")=='dark'?'light':'dark';
+            window.m3.theme.setTheme(val);
+            let body = document.body;
+            body.classList.remove(body.classList.item(0))
+            body.classList.add(val);
         }
     }
 }
 </script>
 
 <style>
+    .dark .toggle-theme, .dark .toggle-theme.el-button--text:focus, .dark .toggle-theme.el-button--text:active, .dark .toggle-theme.el-button--text:hover {
+        background: #1890ff;
+    }
+    .light .toggle-theme, .light .toggle-theme.el-button--text:focus, .light .toggle-theme.el-button--text:active, .light .toggle-theme.el-button--text:hover {
+        background: #252D47;
+    }
     .dark .m3 > .header{
         height: 50px!important;
         line-height: 50px;

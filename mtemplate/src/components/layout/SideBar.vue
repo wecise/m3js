@@ -240,7 +240,7 @@ export default{
 </style>
 
 <style>
-    .el-menu:not(.el-menu--popup-bottom-start), 
+    /* .el-menu:not(.el-menu--popup-bottom-start), 
     .el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, 
     .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, 
     .el-menu--horizontal>.el-submenu .el-submenu__title:hover {
@@ -251,5 +251,5 @@ export default{
     }
     .el-submenu:hover {
         background-color: #409dfe!important;
-    }
+    } */
 </style>
