@@ -124,6 +124,7 @@ let vue_config = {
     <script src="${assetsLibPath}/js/vue.js"></script>
     <script src="${assetsLibPath}/js/element-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="${assetsLibPath}/css/loading.css" />
+    <link rel="stylesheet" type="text/css" href="${assetsLibPath}/css/lds-ripple.css" />
     <title>${process.env.VUE_APP_M3_TITLE}</title>
     <script>
         window.timeStart=window.timePhase=Date.now();
