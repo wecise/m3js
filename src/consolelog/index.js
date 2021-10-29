@@ -5,7 +5,7 @@ const http = require('../axios/http').default;
 
 
 /* Console Log */
-export let consolelogTrace = function(data){
+export let trace = function(data){
       
     return new Promise( function (resolve, reject) {
       
@@ -30,7 +30,7 @@ export let consolelogTrace = function(data){
     })
 };
 
-export let consolelogDelete = function(data){
+export let remove = function(data){
   
   return new Promise( function (resolve, reject) {
       
@@ -46,7 +46,7 @@ export let consolelogDelete = function(data){
 
 };
 
-export let consolelogTruncate = function(data){
+export let truncate = function(data){
   return new Promise( function (resolve, reject) {
       
     http.delete({

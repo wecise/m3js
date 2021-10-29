@@ -5,7 +5,7 @@ const http = require('../axios/http').default;
 
 
 /* Trigger */
-export let triggerList = function(className){
+export let list = function(className){
       
     return new Promise( function (resolve, reject) {
       
@@ -20,7 +20,7 @@ export let triggerList = function(className){
     })
 };
 
-export let triggerNew = function(data){
+export let newTrigger = function(data){
     
     return new Promise( function (resolve, reject) {
       
@@ -36,7 +36,7 @@ export let triggerNew = function(data){
     })
 };
 
-export let triggerDelete = function(className,name){
+export let deleteTrigger = function(className,name){
     
   return new Promise( function (resolve, reject) {
     

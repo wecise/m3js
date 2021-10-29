@@ -1,4 +1,4 @@
 
-import m3 from "./m3"
+import m3 from "./wmaf"
 
 export default m3

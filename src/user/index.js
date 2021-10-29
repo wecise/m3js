@@ -4,7 +4,7 @@
 const http = require('../axios/http').default;
 
 /* Org & User */
-export let userList = function(data){
+export let list = function(data){
       
     return new Promise( function (resolve, reject) {
       

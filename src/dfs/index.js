@@ -3,7 +3,8 @@
   */
 const http = require('../axios/http').default;
 
-export let dfsList = function (data) {
+// dfsList
+export let list = function (data) {
       
     return new Promise( function (resolve, reject) {
         
@@ -22,7 +23,8 @@ export let dfsList = function (data) {
   
 };
 
-export let dfsWrite = function(data) {
+// dfsWrite
+export let write = function(data) {
   
   return new Promise( function (resolve, reject) {
     
@@ -47,8 +49,8 @@ export let dfsWrite = function(data) {
 
 };
 
-
-export let dfsRead = function(data){
+// dfsRead
+export let read = function(data){
 
   return new Promise( function (resolve, reject) {
     
@@ -82,7 +84,9 @@ export let dfsRead = function(data){
 
 };
 
-export let dfsNew = function(data) {
+// dfsNew
+// 创建一个新文件
+export let newFile = function(data) {
   
   return new Promise( function (resolve, reject) {
     
@@ -110,7 +114,9 @@ export let dfsNew = function(data) {
 
 };
 
-export let dfsDelete = function(data) {
+// dfsDelete
+// 删除指定文件
+export let deleteFile = function(data) {
   
   return new Promise( function (resolve, reject) {
     
@@ -126,7 +132,8 @@ export let dfsDelete = function(data) {
 
 };
 
-export let dfsRename = function(data){
+// dfsRename
+export let rename = function(data){
   
   return new Promise( function (resolve, reject) {
     
@@ -148,7 +155,8 @@ export let dfsRename = function(data){
 
 }
 
-export let dfsUpdateAttr = function(data){
+// dfsUpdateAttr
+export let updateAttr = function(data){
 
   return new Promise( function (resolve, reject) {
     
@@ -168,7 +176,8 @@ export let dfsUpdateAttr = function(data){
 
 }
 
-export let dfsRefresh = function(data){
+// dfsRefresh
+export let refresh = function(data){
 
   return new Promise( function (resolve, reject) {
     
@@ -183,7 +192,8 @@ export let dfsRefresh = function(data){
   })
 }
 
-export let dfsMove = function(data){
+// dfsMove
+export let move = function(data){
 
   return new Promise( function (resolve, reject) {
     
@@ -204,8 +214,8 @@ export let dfsMove = function(data){
 
 };
 
-
-export let dfsSyncToLocal = function(data){
+// dfsSyncToLocal
+export let syncToLocal = function(data){
 
 
   return new Promise( function (resolve, reject) {
@@ -222,8 +232,8 @@ export let dfsSyncToLocal = function(data){
 
 };
 
-
-export let dfsUnZip = function(data,file){
+// dfsUnZip
+export let unzip = function(data,file){
 
   return new Promise( function (resolve, reject) {
     
@@ -242,7 +252,8 @@ export let dfsUnZip = function(data,file){
   })
 };
 
-export let dfsZip = function(data,file){
+// dfsZip
+export let zip = function(data,file){
 
   return new Promise( function (resolve, reject) {
   

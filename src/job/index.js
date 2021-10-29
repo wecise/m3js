@@ -6,6 +6,6 @@ const http = require('../axios/http').default;
 /* 
   * JOB 
   */
-export let jobNew = async function(){
+export let newJob = async function(){
 
 };

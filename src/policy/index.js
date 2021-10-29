@@ -3,7 +3,7 @@
   */
 const http = require('../axios/http').default;
 
-export function policyDeploy(data){
+export function deploy(data){
       
     return new Promise( function (resolve, reject) {
       
@@ -25,7 +25,7 @@ export function policyDeploy(data){
     })
 }
 
-export function policyUndeploy(data){
+export function undeploy(data){
       
   return new Promise( function (resolve, reject) {
     

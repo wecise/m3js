@@ -2,7 +2,7 @@
 import http from "../axios/http"
 
 /* App */
-export let appDeploy = function(data){
+export let deployApp = function(data){
       
     return new Promise( function (resolve, reject) {
       
@@ -23,7 +23,7 @@ export let appDeploy = function(data){
 };
 
 
-export let appExport = function(data){
+export let exportApp = function(data){
       
     return new Promise( function (resolve, reject) {
       
@@ -41,7 +41,7 @@ export let appExport = function(data){
     })
 };
 
-export let appImport = function(data){
+export let importApp = function(data){
       
     return new Promise( function (resolve, reject) {
       

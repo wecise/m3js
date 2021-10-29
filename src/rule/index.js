@@ -6,7 +6,7 @@ const http = require('../axios/http').default;
 /* 
    * RULE 
   */
-export let ruleGet = function(data){
+export let get = function(data){
     
     
     return new Promise( function (resolve, reject) {
@@ -24,7 +24,7 @@ export let ruleGet = function(data){
 
   };
 
-export let ruleAdd = function(data){
+export let add = function(data){
 
     return new Promise( function (resolve, reject) {
       
@@ -47,7 +47,7 @@ export let ruleAdd = function(data){
     
   };
 
-export let ruleUpdate = function(data){
+export let update = function(data){
 
     return new Promise( function (resolve, reject) {
       
@@ -70,7 +70,7 @@ export let ruleUpdate = function(data){
     
   };
 
-export let ruleDelete = function(data){
+export let remove = function(data){
     
     return new Promise( function (resolve, reject) {
       
@@ -90,6 +90,6 @@ export let ruleDelete = function(data){
     
   };
 
-export let ruleExport = function(){
+export let exportRule = function(){
 
 };
