@@ -113,3 +113,40 @@ WebServer只提供API，不提供界面，包括登录界面
 rootDir+"/"+filePath+"/"+baseName+"."+extName
 ```
 
+### 打包规范
+
+```
+mxapp打包规范：
+    * 格式：zip压缩格式
+
+    * 后缀：.mxapp
+
+    * 目录结构：
+      - [F]config.json:
+      - [D]script：结构与在DFS目录中的script一致，默认与app目录结构相同
+      - [D]app：结构与在DFS中app目录一致
+
+    * config.json格式：
+      {
+             "dir": "前端指定的DFS的目录",
+             "app": "dir最后一级的目录",
+             "name": "主键",
+             "cnname": "中文名称",
+             "enname": "英文名称",
+             "url": "mxapp目录地址，默认index.html",
+             "icon": "hello.png",
+             "seat": 681,
+             "target": "_blank",
+             "selected": 0,
+             "version": "1.0.0",
+             "author": "wecise",
+             "classes": ["类定义1", "类定义2"]
+      }
+
+    * 其他说明：
+      config.json的一些信息来源于/matrix/portal/tools，根据指定的name来获取。
+      
+商店类设计待定：
+    可能涉及的功能：程序上传，发布，下载，版本管理，搜索
+```
+

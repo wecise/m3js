@@ -179,9 +179,9 @@ setTitle
 ### Dfs
 
 ```
-dfsNew
+dfs.newFile
 
-dfsDelete
+dfs.deleteFile
 
 dfsRename
 
