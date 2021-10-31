@@ -196,7 +196,6 @@ let langList = function() {
  *          -> i18n 语言包
  *    -> moment 时间库
  *    -> animate 动画效果
- *    -> icons 图标
  *    -> vue vue支持
  *       -> elementui 常用UI组件
  *          -> theme 可切换主题皮肤CSS
@@ -417,7 +416,6 @@ let mergeConfig = function(mconfig, cfg) {
  *          -> i18n 语言包
  *    -> moment 时间库
  *    -> animate 动画效果
- *    -> icons 图标
  *    -> vue vue支持
  *       -> elementui 常用UI组件
  *          -> theme 可切换主题皮肤CSS

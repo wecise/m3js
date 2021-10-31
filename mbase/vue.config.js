@@ -176,23 +176,6 @@ let vue_config = {
     },
     // 配置Webpack处理规则
     chainWebpack(config) {
-        // 转换 icons 目录下的 svg，通过 svg-sprite-loader 加载
-        // set svg-sprite-loader
-        config.module
-            .rule('svg')
-            .exclude.add(resolve('src/assets/icons'))
-            .end()
-        config.module
-            .rule('icons')
-            .test(/\.svg$/)
-            .include.add(resolve('src/assets/icons'))
-            .end()
-            .use('svg-sprite-loader')
-            .loader('svg-sprite-loader')
-            .options({
-                symbolId: 'icon-[name]'
-            })
-            .end()
         // 将处理规则的配置信息打印输出到 console
         // console.log("chain config: ",config);
     },
