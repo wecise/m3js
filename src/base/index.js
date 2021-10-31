@@ -69,7 +69,9 @@ let merge = function (o, n) {
             G.sessionid = res.data.message;
             resolve(res);
         }).catch(err=>{
-            reject(err.data);
+            var msg = err && (err.data && err.data.message || err.data) || err
+            window.state && window.state(`<b style="color:red">${msg}，请确认环境(.env)配置是否正确，修改环境配置需要重启服务</b>`)
+            reject(err && err.data);
         })
     })
 }
@@ -85,7 +87,6 @@ let autoConnect = function () {
                 resolve();
             }).catch(err=>{
                 reject(err.message);
-                window.state && window.state(err.message);
             })
         } else {
             resolve();
@@ -109,7 +110,7 @@ let callFS = function (fileName, param) {
         }).then(res=>{
             resolve(res.data);
         }).catch(err=>{
-            reject(err.data);
+            reject(err && err.data || err);
         })
     })
 };
@@ -136,6 +137,7 @@ let authUser = function () {
             resolve();
         }).catch(e=>{
             reject(e);
+            window.state && window.state(`<b style="color:red">用户密码验证错误</b>`)
         })
     })
 };
