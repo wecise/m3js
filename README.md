@@ -32,8 +32,6 @@ M³小应用以 Vue 组件形式进行开发。[Vue](https://cn.vuejs.org/v2/gui
 
 在前端开发过程中，会经常使用Node.js中的[npm](https://docs.npmjs.com/about-npm)命令。
 
-
-
 ## 开发流程
 
 下面以Mac操作系统为例，说明M³小应用开发流程。
@@ -45,6 +43,7 @@ M³小应用以 Vue 组件形式进行开发。[Vue](https://cn.vuejs.org/v2/gui
 1. 创建工程目录
 
 工程目录可以创建在你电脑上任何位置，这里以创建在 /opt/code 目录下为例。
+
 ```
 mkdir -p /opt/code/MyM3App
 cd /opt/code/MyM3App
@@ -70,27 +69,29 @@ m3js init
 cd /opt/code/MyM3App
 vi .env
 ```
+
 编辑.env文件
 
 ```
-NODE_ENV="development"
-VUE_APP_M3_APP="m3app"
-VUE_APP_M3_TITLE="M3小应用"
-VUE_APP_M3_APP_VERSION="1.0.0"
-VUE_APP_M3_HOST="47.92.151.165:8080"
-VUE_APP_M3_COMPANY="wecise"
-VUE_APP_M3_USERNAME="username"
-VUE_APP_M3_PASSWORD="123456"
+NODE_ENV="development"                # 指定Node运行在开发模式
+VUE_APP_M3_APP="m3app"                # M³小应用的简称，由英文字母、数字、下划线组成
+VUE_APP_M3_TITLE="M3小应用"            # M³小应用的中文名称
+VUE_APP_M3_APP_VERSION="1.0.0"        # M³小应用的版本
+VUE_APP_M3_HOST="47.92.151.165:8080"  # M³平台的数据服务地址
+VUE_APP_M3_COMPANY="wecise"           # 可通过M³平台申请注册公司信息
+VUE_APP_M3_USERNAME="username"        # 可通过M³平台申请注册用户
+VUE_APP_M3_PASSWORD="123456"          # 可通过M³平台修改用户密码
 ```
 
 5. 本地试运行
 
 ```
 cd /opt/code/MyM3App
-node_modules/\@wecise/m3js/cmd run
+m3js run
 ```
 
 终端显示类似如下内容：
+
 ```
   App running at:
   - Local:   http://localhost:8080
@@ -110,7 +111,6 @@ M³小应用以 Vue 组件形式进行开发。所有 Vue 组件均存放在工�
 
 M3JS在初始化M³小应用时，已经创建好入口主文件 App.vue 和一些常用的 Vue组件。后面会逐一说明这些组件的功能。
 
-
 ### M³小应用测试
 
 ......
@@ -118,9 +118,10 @@ M3JS在初始化M³小应用时，已经创建好入口主文件 App.vue 和一�
 ### M³小应用发布
 
 执行M3JS发布命令，M3JS 自动完成编译、部署工作
+
 ```
 cd /opt/code/MyM3App
-node_modules/\@wecise/m3js/cmd publish
+m3js publish
 ```
 
 通过浏览器访问M³平台，激活刚刚发布的 M³小应用。激活工作只需要执行一次。
