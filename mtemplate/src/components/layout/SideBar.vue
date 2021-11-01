@@ -112,7 +112,7 @@ export default{
     data(){
         return {
             model: null,
-            preFixIcon: '${assetURLBase}/images/apps/png/',
+            preFixIcon: `${window.assetURLBase}/images/apps/png/`,
             postFixIcon: '',
             isCollapse: true,
             defaultActive: '/matrix/home',
@@ -128,7 +128,7 @@ export default{
     },
     filters:{
         pickIcon(icon){
-            return `${assetURLBase}/images/apps/png/${icon}`;
+            return `${window.assetURLBase}/images/apps/png/${icon}`;
         }
     },
     methods: {
