@@ -112,7 +112,7 @@ export default{
     data(){
         return {
             model: null,
-            preFixIcon: '/static/assets/images/apps/png/',
+            preFixIcon: '${assetURLBase}/images/apps/png/',
             postFixIcon: '',
             isCollapse: true,
             defaultActive: '/matrix/home',
