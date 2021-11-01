@@ -110,7 +110,8 @@ let vue_config = {
         config.externals["vue"] = "Vue";
         config.externals["element-ui"] = "ELEMENT";
         // HTML模版，需要配合 config.externals 引入相应js
-        let assetsLibPath = IS_PROD?"/static/app/assets":"assets"
+        let staticAssetsURLBase = IS_PROD?"/static/app/assets":"assets"
+        let publicAssetsURLBase = (IS_PROD?"":"http://"+process.env.VUE_APP_M3_HOST)+"/static/assets"
         config.plugins.push(new HtmlWebpackPlugin({
             filename: "index.html",
             templateContent: `<!DOCTYPE html>
@@ -119,14 +120,15 @@ let vue_config = {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <script src="${assetsLibPath}/js/lodash.js"></script>
-    <script src="${assetsLibPath}/js/moment.js"></script>
-    <script src="${assetsLibPath}/js/vue.js"></script>
-    <script src="${assetsLibPath}/js/element-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="${assetsLibPath}/css/loading.css" />
-    <link rel="stylesheet" type="text/css" href="${assetsLibPath}/css/lds-ripple.css" />
+    <script src="${staticAssetsURLBase}/js/lodash.js"></script>
+    <script src="${staticAssetsURLBase}/js/moment.js"></script>
+    <script src="${staticAssetsURLBase}/js/vue.js"></script>
+    <script src="${staticAssetsURLBase}/js/element-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="${staticAssetsURLBase}/css/loading.css" />
+    <link rel="stylesheet" type="text/css" href="${staticAssetsURLBase}/css/lds-ripple.css" />
     <title>${process.env.VUE_APP_M3_TITLE}</title>
     <script>
+        window.assetsURLBase="${publicAssetsURLBase}";
         window.timeStart=window.timePhase=Date.now();
         window.errorCount=0;
         Date.prototype.format=function(f){var o={"M+":this.getMonth()+1,"d+":this.getDate(),"h+":this.getHours(),"m+":this.getMinutes(),"s+":this.getSeconds(),"S":this.getMilliseconds()};if(/(y+)/.test(f))f=f.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length));for(var k in o)if(new RegExp("("+k+")").test(f))f=f.replace(RegExp.$1,RegExp.$1.length==1?o[k]:("00"+ o[k]).substr((""+ o[k]).length));return f}

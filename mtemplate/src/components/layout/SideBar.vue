@@ -128,7 +128,7 @@ export default{
     },
     filters:{
         pickIcon(icon){
-            return `/static/assets/images/apps/png/${icon}`;
+            return `${assetURLBase}/images/apps/png/${icon}`;
         }
     },
     methods: {

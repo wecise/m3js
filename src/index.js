@@ -18,42 +18,42 @@ export let callFS = m3.callFS;
 export let callService = m3.callService;
 
 /* html */
-export let html = require("./html");
+export let html = m3.html = require("./html");
 
 /* theme */
-export let theme = require("./theme");
+export let theme = m3.theme = require("./theme");
 
 /* omdb */
-export let omdb = require('./omdb');
+export let omdb = m3.omdb = require('./omdb');
 
 /* job */
-export let job = require('./job');
+export let job = m3.job = require('./job');
 
 /* user */
-export let user = require('./user');
+export let user = m3.user = require('./user');
 
 /* dfs */
-export let dfs = require('./dfs');
+export let dfs = m3.dfs = require('./dfs');
 
 /* app */
-export let app = require('./app');
+export let app = m3.app = require('./app');
 
 /* rule */
-export let rule = require('./rule');
+export let rule = m3.rule = require('./rule');
 
 /* policy */
-export let policy = require('./policy');
+export let policy = m3.policy = require('./policy');
 
 /* console log */
-export let consolelog = require('./consolelog');
+export let consolelog = m3.consolelog = require('./consolelog');
 
 /* trigger */
-export let trigger = require('./trigger');
+export let trigger = m3.trigger = require('./trigger');
 
-export let event = require("./event");
+export let event = m3.event = require("./event");
 
 /* utils */
-export let utils = {
+export let utils = m3.utils = {
     jsFormat: require("./utils/jsFormat.js"),
     htmlFormat: require("./utils/htmlFormat.js"),
     adjustColor: function(color, amount) {
@@ -61,4 +61,4 @@ export let utils = {
     }
 };
 
-export let cookie = require("./cookie");
+export let cookie = m3.cookie = require("./cookie");
