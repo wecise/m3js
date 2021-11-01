@@ -89,4 +89,4 @@ let EDITOR_THEME = [
     },
 ];
 
-export default {setTheme, initTheme, themes, EDITOR_THEME}
+export {setTheme, initTheme, themes, EDITOR_THEME}

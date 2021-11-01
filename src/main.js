@@ -22,7 +22,7 @@ let m3config = {
 
 // 加载m3js
 import("./index.js").then((m)=>{
-    m.default.go(m3config)
+    m.go(m3config)
 }).catch((e)=>{
     console.error(e)
 });

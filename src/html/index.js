@@ -140,12 +140,4 @@ let fullScreenByEl = function(el) {
     }
 }
 
-let exports = {}
-exports.setTitle = setTitle;
-exports.setAppAsHome = setAppAsHome;
-exports.setAppAsHomeForAllUser = setAppAsHomeForAllUser;
-exports.fullScreen = fullScreen;
-exports.fullScreenByEl = fullScreenByEl;
-exports.bytesToSize = bytesToSize;
-
-export default exports
+export {setTitle, setAppAsHome, setAppAsHomeForAllUser, fullScreen, fullScreenByEl, bytesToSize}

@@ -1,5 +1,5 @@
 
-import Cookies from 'js-cookie';
+//import Cookies from 'js-cookie';
 
 // // get cookie
 // export let get = function(key){
@@ -29,4 +29,4 @@ import Cookies from 'js-cookie';
 //   return ""
 // };
 
-export default Cookies
+export * from 'js-cookie';
