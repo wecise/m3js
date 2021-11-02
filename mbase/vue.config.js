@@ -45,7 +45,12 @@ let vue_config = {
         contentBase: [
             //path.join(process.cwd(), "public"), //默认工作目录下的public目录
             path.join(__dirname, "public"), //追加本文件所在目录下的public目录
-        ]
+        ],
+        proxy: {
+            "/static": {
+                target: `http://${process.env.VUE_APP_M3_HOST}/static`
+            }
+        }
     },
     // 编译结果输出目录
     outputDir: 'app/matrix/' + process.env.VUE_APP_M3_APP,
@@ -111,7 +116,7 @@ let vue_config = {
         config.externals["element-ui"] = "ELEMENT";
         // HTML模版，需要配合 config.externals 引入相应js
         let staticAssetsURLBase = IS_PROD?"/static/app/assets":"assets"
-        let publicAssetsURLBase = (IS_PROD?"":"http://"+process.env.VUE_APP_M3_HOST)+"/static/assets"
+        let publicAssetsURLBase = "/static/assets"
         config.plugins.push(new HtmlWebpackPlugin({
             filename: "index.html",
             templateContent: `<!DOCTYPE html>
