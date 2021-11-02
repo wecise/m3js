@@ -95,6 +95,16 @@ WebServer只提供API，不提供界面，包括登录界面
 
 /static/app/matrix/[appname]/\*.\*
 
+
+
+## 打包安装
+
+### 测试
+
+
+
+
+
 ## 代码规范
 
 ### 代码复用

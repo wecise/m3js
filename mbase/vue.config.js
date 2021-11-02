@@ -48,8 +48,26 @@ let vue_config = {
         ],
         proxy: {
             "/static": {
-                target: `http://${process.env.VUE_APP_M3_HOST}/static`
-            }
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/user": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/matrix": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/script": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/web": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/config": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
+            "/fs": {
+                target: `http://${process.env.VUE_APP_M3_HOST}`,
+            },
         }
     },
     // 编译结果输出目录
@@ -115,7 +133,7 @@ let vue_config = {
         config.externals["vue"] = "Vue";
         config.externals["element-ui"] = "ELEMENT";
         // HTML模版，需要配合 config.externals 引入相应js
-        let staticAssetsURLBase = IS_PROD?"/static/app/assets":"assets"
+        let staticCodeURLBase = IS_PROD?"/static/app/assets":"assets"
         let publicAssetsURLBase = "/static/assets"
         config.plugins.push(new HtmlWebpackPlugin({
             filename: "index.html",
@@ -125,12 +143,12 @@ let vue_config = {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <script src="${staticAssetsURLBase}/js/lodash.js"></script>
-    <script src="${staticAssetsURLBase}/js/moment.js"></script>
-    <script src="${staticAssetsURLBase}/js/vue.js"></script>
-    <script src="${staticAssetsURLBase}/js/element-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="${staticAssetsURLBase}/css/loading.css" />
-    <link rel="stylesheet" type="text/css" href="${staticAssetsURLBase}/css/lds-ripple.css" />
+    <script src="${staticCodeURLBase}/js/lodash.js"></script>
+    <script src="${staticCodeURLBase}/js/moment.js"></script>
+    <script src="${staticCodeURLBase}/js/vue.js"></script>
+    <script src="${staticCodeURLBase}/js/element-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="${staticCodeURLBase}/css/loading.css" />
+    <link rel="stylesheet" type="text/css" href="${staticCodeURLBase}/css/lds-ripple.css" />
     <title>${process.env.VUE_APP_M3_TITLE}</title>
     <script>
         window.assetsURLBase="${publicAssetsURLBase}";

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.NODE_ENV === 'production'?window.location.origin:'http://'+process.env.VUE_APP_M3_HOST,
+  baseURL: window.location.origin,
   timeout: 60000 * 10,
   responseType: 'json'
 });

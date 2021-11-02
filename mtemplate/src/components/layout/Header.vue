@@ -90,7 +90,7 @@ export default{
                 window.open(key, '_blank');
             } else {
                 if(key === 'home'){
-                    this.m3.setAppAsHome(this,{url:'/home'});
+                    this.m3.html.setAppAsHome(this,{url:'/home'});
                 } else if(key==='signout'){
                     window.open(`/user/logout/${this.auth.Company.name}`,'_parent');
                 } 
