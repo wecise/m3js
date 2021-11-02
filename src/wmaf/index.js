@@ -80,7 +80,6 @@ let lang = function(name) {
             });
             //Vue.prototype.i18n = window.i18n;
             m3.merge(Vue.prototype.$ELEMENT, {
-                size: m3.cookie.get('size') || 'small',
                 i18n: (key, value) => window.i18n.t(key, value)
             });
             resolve()

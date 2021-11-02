@@ -24,17 +24,19 @@ let m3config = {
 }
 
 // 加载m3js
-import("@wecise/m3js").then((m)=>{
-    m.go(m3config)
+import("@wecise/m3js").then((m3)=>{
+    m3.go(m3config)
     /*******************************************************************************************
-     **** m.default.go 所做的操作如下。如需定制化处理，可以使用下面的代码代替 m.default.go(m3config) ****
+     **** m3.go 所做的操作如下。如需定制化处理，可以使用下面的代码代替 m3.go(m3config) ****
      *******************************************************************************************
-    let m3 = m.default;
     window.state && window.state("正在初始化小应用配置...")
     // m3js加载完成，根据配置信息动态有序异步加载依赖组件，完成M3小应用初始化
     m3.init(m3config).then(()=>{
         window.state && window.state("正在渲染页面...")
-        // m3.render完成的工作是渲染Vue页面，也可以写成
+        // 设置基本样式
+        m3.merge(Vue.prototype.$ELEMENT, {
+            size: m3.cookie.get('size') || 'mini',
+        })        // m3.render完成的工作是渲染Vue页面，也可以写成
         // new Vue({
         //     render: h => h(window.App),
         //     mounted: function(){
