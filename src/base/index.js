@@ -70,7 +70,19 @@ let merge = function (o, n) {
             resolve(res);
         }).catch(err=>{
             var msg = err && (err.data && err.data.message || err.data) || err
-            window.state && window.state(`<b style="color:red">${msg}，请确认环境(.env)配置是否正确，修改环境配置需要重启服务</b>`)
+            // 停止背景动画，显示错误信息
+            var bgloading = document.getElementById("bgloading")
+            if (bgloading) {
+                bgloading.className = ""
+            }
+            window.state && window.state(`<b style="color:red">${msg}，<br/><br/>
+                服务器连接失败，请检查确认如下信息：
+                <ul><li>开发环境(.env)配置是否正确
+                </li><li>用户、密码是否正确
+                </li><li>服务器连接地址正确
+                </li><li>服务器工作正常
+                </li><li>修改环境配置后服务是否已经重启
+                </li><ul></b>`)
             reject(err && err.data);
         })
     })
@@ -328,7 +340,7 @@ let loadCompos = function() {
             }
         } catch(e) {
             reject(e)
-            console.error(e)
+            //console.error(e)
         }
     }
     /**
@@ -366,7 +378,7 @@ let loadCompos = function() {
             }
         } catch(e) {
             reject(e)
-            console.error(e)
+            //console.error(e)
         }
     }
     return new Promise(function(resolve, reject){
@@ -395,7 +407,6 @@ let loadCompos = function() {
             }
         }catch(e){
             reject(e)
-            console.error(e)
         }
     })
 }
@@ -436,11 +447,9 @@ let compose = function(cfg) {
                 resolve();
             }).catch((e)=>{
                 reject(e)
-                console.error(e)
             });
         } catch(e) {
             reject(e)
-            console.error(e)
         }
     })
 }

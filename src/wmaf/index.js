@@ -85,7 +85,6 @@ let lang = function(name) {
             resolve()
         }).catch((e) => {
             reject(e);
-            console.error(e);
         })
     })
 }
@@ -98,14 +97,12 @@ let pageSetting = function() {
             // 样式直接生效，无需后续处理
         }).catch((e) => {
             reject(e);
-            console.error(e);
         })
         lang(window.M3_LANG).then(()=>{
             window.state && window.state("语言包加载完成...")
             resolve();
         }).catch((e) => {
             reject(e);
-            console.error(e);
         })
         m3.html.setTitle(m3.auth);
     })
@@ -124,7 +121,6 @@ let render = function() {
             }).$mount('#'+m3config.rootDivID)
         } catch(e) {
             reject(e);
-            console.error(e);
         }
     })
 }
@@ -158,7 +154,6 @@ let init = function(cfg) {
             })
         }).catch(e=>{
             reject(e);
-            console.error(e);
         })
     })
 }

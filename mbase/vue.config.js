@@ -171,7 +171,7 @@ let vue_config = {
     </noscript>
     <div id="error_count" style="position:fixed;right:5px;bottom:5px;color:red;display:none;" class="el-icon-warning">0</div>
     <div id="preload" class="preload" style="position:fixed;display:block;width:100vw;height:100vh;overflow:hidden;font-size:10px;">
-        <div class="lds-ripple" style="position:absolute;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <div id="bgloading" class="lds-ripple" style="position:absolute;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         <div style="position:absolute;width:100%;height:100%;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;">
             <label id="preload_message" style="flex:0 0 auto;">正在加载页面...</label>
         </div>
