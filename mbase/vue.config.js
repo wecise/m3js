@@ -133,7 +133,9 @@ let vue_config = {
         config.externals["vue"] = "Vue";
         config.externals["element-ui"] = "ELEMENT";
         // HTML模版，需要配合 config.externals 引入相应js
-        let staticCodeURLBase = IS_PROD?"/static/app/assets":"assets"
+        if(!process.env.VUE_APP_M3_ASSETS) {
+            process.env.VUE_APP_M3_ASSETS = IS_PROD?"/static/app/assets":"assets"
+        }
         let publicAssetsURLBase = "/static/assets"
         config.plugins.push(new HtmlWebpackPlugin({
             filename: "index.html",
@@ -143,12 +145,12 @@ let vue_config = {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <script src="${staticCodeURLBase}/js/lodash.js"></script>
-    <script src="${staticCodeURLBase}/js/moment.js"></script>
-    <script src="${staticCodeURLBase}/js/vue.js"></script>
-    <script src="${staticCodeURLBase}/js/element-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="${staticCodeURLBase}/css/loading.css" />
-    <link rel="stylesheet" type="text/css" href="${staticCodeURLBase}/css/lds-ripple.css" />
+    <script src="${process.env.VUE_APP_M3_ASSETS}/js/lodash.js"></script>
+    <script src="${process.env.VUE_APP_M3_ASSETS}/js/moment.js"></script>
+    <script src="${process.env.VUE_APP_M3_ASSETS}/js/vue.js"></script>
+    <script src="${process.env.VUE_APP_M3_ASSETS}/js/element-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="${process.env.VUE_APP_M3_ASSETS}/css/loading.css" />
+    <link rel="stylesheet" type="text/css" href="${process.env.VUE_APP_M3_ASSETS}/css/lds-ripple.css" />
     <title>${process.env.VUE_APP_M3_TITLE}</title>
     <script>
         window.assetsURLBase="${publicAssetsURLBase}";

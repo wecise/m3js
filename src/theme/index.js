@@ -26,7 +26,7 @@ let setTheme = async function(name) {
             Cookies.set("m3-theme", name)
         }
         window.state && window.state("正在加载主题样式["+name+":"+theme+"]...");
-        loadThemeCSS(`assets/theme/element-${theme}/index.css`);
+        loadThemeCSS(`${process.env.VUE_APP_M3_ASSETS}/theme/element-${theme}/index.css`);
     } catch(e) {
         console.error("加载主题样式["+name+":"+theme+"]失败"+e.message);
     }
