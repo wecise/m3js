@@ -1100,6 +1100,9 @@
         var this$1 = this;
   
         var router = this.$router;
+        if(!router){
+          return "router is undefined";
+        }
         var current = this.$route;
         var ref = router.resolve(
           this.to,
