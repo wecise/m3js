@@ -34,7 +34,7 @@ let setTheme = async function(name) {
 
 // 样式主题
 let initTheme = function(name) {
-    return setTheme(name || Cookies.get("m3-theme"))
+    return setTheme(name || Cookies.get("m3-theme") || "dark")
 }
 
 let EDITOR_THEME = [
