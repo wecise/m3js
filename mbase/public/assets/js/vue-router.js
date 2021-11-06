@@ -1,4 +1,5 @@
 /* download from https://www.unpkg.com/vue-router@3.5.3/dist/vue-router.js */
+/* fix bug: this.$router maybe undefined in RouterLink.render */
 /*!
   * vue-router v3.5.3
   * (c) 2021 Evan You
