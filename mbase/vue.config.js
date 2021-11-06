@@ -148,6 +148,7 @@ let vue_config = {
     <script src="${process.env.VUE_APP_M3_ASSETS}/js/lodash.js"></script>
     <script src="${process.env.VUE_APP_M3_ASSETS}/js/moment.js"></script>
     <script src="${process.env.VUE_APP_M3_ASSETS}/js/vue.js"></script>
+    <script src="${process.env.VUE_APP_M3_ASSETS}/js/vue-router.js"></script>
     <script src="${process.env.VUE_APP_M3_ASSETS}/js/element-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="${process.env.VUE_APP_M3_ASSETS}/css/loading.css" />
     <link rel="stylesheet" type="text/css" href="${process.env.VUE_APP_M3_ASSETS}/css/lds-ripple.css" />
