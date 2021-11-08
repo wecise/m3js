@@ -6,6 +6,7 @@ export let VERSION = m3.VERSION;
 
 /** framework */
 export let go = m3.go
+export let pageSetting = m3.pageSetting
 export let init = m3.init
 export let render = m3.render
 export let completed = m3.completed
