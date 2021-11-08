@@ -412,8 +412,8 @@ let loadCompos = function() {
 }
 
 let mergeConfig = function(mconfig, cfg) {
-    G = cfg.global||mconfig.global||G;
-    merge(mconfig, cfg, {global:1, mods:1})
+    G = cfg&&cfg.global||mconfig&&mconfig.global||G;
+    merge(mconfig, cfg)
     mconfig.mods = combin_mods(mconfig.mods, cfg.mods);
     return mconfig;
 }
@@ -438,7 +438,7 @@ let mergeConfig = function(mconfig, cfg) {
  *              -> 其他应用组件由应用自行控制 
  */
 let compose = function(cfg) {
-    m3config = mergeConfig(m3config, cfg||{});
+    m3config = mergeConfig(m3config, cfg);
     G.m3 = this;
     return new Promise((resolve, reject) => {
         try {
