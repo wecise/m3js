@@ -438,7 +438,7 @@ let mergeConfig = function(mconfig, cfg) {
  *              -> 其他应用组件由应用自行控制 
  */
 let compose = function(cfg) {
-    m3config = mergeConfig(m3config, cfg);
+    m3config = mergeConfig(m3config, cfg||{});
     G.m3 = this;
     return new Promise((resolve, reject) => {
         try {
