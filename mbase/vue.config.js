@@ -68,6 +68,9 @@ let vue_config = {
             "/fs": {
                 target: `http://${process.env.VUE_APP_M3_HOST}`,
             },
+            "/help":{
+                target: `http://${process.env.VUE_APP_M3_HOST}/help`
+            },
         }
     },
     // 编译结果输出目录

@@ -32,24 +32,30 @@ import("@wecise/m3js").then((m3)=>{
     window.state && window.state("正在初始化小应用配置...")
     // m3js加载完成，根据配置信息动态有序异步加载依赖组件，完成M3小应用初始化
     m3.init(m3config).then(()=>{
-        window.state && window.state("正在渲染页面...")
-        // 设置基本样式
-        m3.merge(Vue.prototype.$ELEMENT, {
-            size: m3.cookie.get('size') || 'mini',
-        })        // m3.render完成的工作是渲染Vue页面，也可以写成
-        // new Vue({
-        //     render: h => h(window.App),
-        //     mounted: function(){
-        //         window.state && window.state("页面渲染完成...")
-        //         m3.completed() // 加载数据
-        //     },
-        // }).$mount('#app')
-        m3.render().then(()=>{
-            window.state && window.state("正在加载数据...")
-            // 此时Vue渲染已经完成，但是页面还不能正常显示，还需要加载页面相关数据，并驱动Vue相关组件更新显示状态
-            m3.completed().then(()=>{
-                // 此时页面才能正常显示
-                window.state && window.state("页面输出完成.");
+        window.state && window.state("正在配置页面...")
+        m3.pageSetting().then(()=>{
+            window.state && window.state("正在渲染页面...")
+            // 设置基本样式
+            m3.merge(Vue.prototype.$ELEMENT, {
+                size: m3.cookie.get('size') || 'mini',
+            })
+            // m3.render完成的工作是渲染Vue页面，也可以写成
+            // new Vue({
+            //     render: h => h(window.App),
+            //     mounted: function(){
+            //         window.state && window.state("页面渲染完成...")
+            //         m3.completed() // 加载数据
+            //     },
+            // }).$mount('#app')
+            m3.render().then(()=>{
+                window.state && window.state("正在加载数据...")
+                // 此时Vue渲染已经完成，但是页面还不能正常显示，还需要加载页面相关数据，并驱动Vue相关组件更新显示状态
+                m3.completed().then(()=>{
+                    // 此时页面才能正常显示
+                    window.state && window.state("页面输出完成.");
+                }).catch((e)=>{
+                    console.error(e)
+                })
             }).catch((e)=>{
                 console.error(e)
             })
