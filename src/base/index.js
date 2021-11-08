@@ -412,9 +412,9 @@ let loadCompos = function() {
 }
 
 let mergeConfig = function(mconfig, cfg) {
-    G = cfg&&cfg.global||mconfig&&mconfig.global||G;
+    G = cfg&&cfg.global||mconfig.global||G;
     merge(mconfig, cfg)
-    mconfig.mods = combin_mods(mconfig.mods, cfg.mods);
+    mconfig.mods = combin_mods(mconfig.mods, cfg&&cfg.mods||{});
     return mconfig;
 }
 
