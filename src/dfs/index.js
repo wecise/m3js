@@ -39,7 +39,7 @@ export let write = function(data) {
       url: `/fs${data.parent}/${data.name}${window.auth.isAdmin?'?issys=true':''}`,
       param: fm
     }).then(res=>{
-      dfsSyncToLocal(data);
+      syncToLocal(data);
       resolve(res.data);
     }).catch(err=>{
       reject(err);
@@ -104,10 +104,10 @@ export let newFile = function(data) {
         contentType: false
       }
     }).then(res=>{
-      dfsSyncToLocal(data);
+      syncToLocal(data);
       resolve(data.name);
     }).catch(err=>{
-      reject(err.data);
+      reject(err);
     })
       
   })
