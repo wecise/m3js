@@ -94,16 +94,6 @@ let setTitle = function(auth){
 };
 
 /**
- * 单位转换
- */
-let bytesToSize = function(bytes) {
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes == 0) return '0 Byte';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
-};
-
-/**
  * 全屏控制
  */
 let fullScreen = function(mode) {
@@ -140,4 +130,9 @@ let fullScreenByEl = function(el) {
     }
 }
 
-export {setTitle, setAppAsHome, setAppAsHomeForAllUser, fullScreen, fullScreenByEl, bytesToSize}
+
+let adjustColor = function(color, amount) {
+    return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+}
+
+export {setTitle, setAppAsHome, setAppAsHomeForAllUser, fullScreen, fullScreenByEl, adjustColor}

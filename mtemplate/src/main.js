@@ -36,7 +36,7 @@ import("@wecise/m3js").then((m3)=>{
         m3.pageSetting().then(()=>{
             window.state && window.state("正在渲染页面...")
             // 设置基本样式
-            m3.merge(Vue.prototype.$ELEMENT, {
+            m3.utils.merge(Vue.prototype.$ELEMENT, {
                 size: m3.cookie.get('size') || 'mini',
             })
             // m3.render完成的工作是渲染Vue页面，也可以写成

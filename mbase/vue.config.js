@@ -3,40 +3,11 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
+const utils = require('../src/utils')
 const IS_PROD = process.env.NODE_ENV === 'production'
 const IS_M3JS = process.env.VUE_APP_M3_APP === "m3js"
 const IS_DEBUG = process.env.VUE_APP_M3_DEBUG && process.env.VUE_APP_M3_DEBUG.indexOf("vue.config")>=0
 const productionGzipExtensions = ['html', 'js', 'css']
-
-/**
- * 两个对象的深度合并，合并结果保存在第一个对象中
- * 如果数据类型不同，第二个对象中对应的数据将覆盖第一个对象
- * 同一对象直接返回
- */
-let merge = function (o, n) {
-    if(n===undefined) return o; //n 未定义，返回 o
-    if(o===undefined) return n; //o 未定义，n有值，返回 n
-    if(n==null || typeof n !== 'object') return n; //n 为空或不是对象，返回n
-    if(o==null || typeof o !== 'object') return n; //o 为空或不是对象，n 是对象，返回n
-    if(n === o) return o; // n和o为同一对象，返回o
-    if(Array.isArray(o) && Array.isArray(n)) { // 数组合并
-        for(let i=0;i<n.length;i++){
-            o.push(n[i])
-        }
-    } else {
-        let keys = Object.keys(n); // n的全部key集合
-        for(let i =0,len=keys.length; i<len; i++) {
-            let key = keys[i];
-            o[key] = merge(o[key], n[key]);
-        }
-    }
-    //console.log("o:"+o)
-    return o;
-}
-
-function resolve(dir) {
-    return path.join(process.cwd(), dir)
-}
 
 let vue_config = {
     // 开发阶段本地web服务
@@ -215,8 +186,8 @@ let vue_config = {
 }
 
 let merge_vue_config = function(app_config) {
-    m3config = merge({}, vue_config)
-    m3config = merge(m3config, app_config)
+    m3config = utils.merge({}, vue_config)
+    m3config = utils.merge(m3config, app_config)
     if(m3config.configureWebpack != vue_config.configureWebpack) {
         m3config.configureWebpack = (oconfig) => {
             // 先执行M3定义的Webpack配置

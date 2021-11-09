@@ -21,15 +21,12 @@ import moment from 'moment';
 import 'moment/dist/locale/zh-cn.js';
 import 'moment/dist/locale/en-gb.js';
 
-import animate from 'animate.css'
-
 import Vue from 'vue';
 
-window.M3_LANG = 'zh-CN';
+window.M3_LANG = window.M3_LANG || 'zh-CN';
 
 Vue.prototype.m3 = m3;
 window.m3 = m3;
-Vue.use(animate);
 window.moment = moment;
 Vue.prototype.moment = moment;
 Vue.prototype.moment.locale(window.M3_LANG);
@@ -47,7 +44,7 @@ mods.VueI18n = {
     f: () => import('vue-i18n'),
 }
 mods.element = {
-    f: () => import('../element'),
+    f: () => import('element-ui'),
 }
 mods.theme = {
     f: () => {
@@ -63,7 +60,7 @@ mods.html = {
 let m3config = {
     global: window,
     rootDivID: "app",
-    lang: "zh-CN", 
+    lang: window.M3_LANG, 
     theme: "", // 默认使用cookie中保存的信息或使用内置缺省值
     mods,
 }
@@ -79,7 +76,7 @@ let lang = function(name) {
                 messages: res, 
             });
             //Vue.prototype.i18n = window.i18n;
-            m3.merge(Vue.prototype.$ELEMENT, {
+            m3.utils.merge(Vue.prototype.$ELEMENT, {
                 i18n: (key, value) => window.i18n.t(key, value)
             });
             resolve()

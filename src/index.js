@@ -1,3 +1,6 @@
+/**
+ * M³小应用开发过程中与M³平台的交互功能
+ */
 
 import m3 from "./wmaf"
 
@@ -5,15 +8,24 @@ import m3 from "./wmaf"
 export let VERSION = m3.VERSION;
 
 /** framework */
+/** 一步启动M3小应用框架 */
 export let go = m3.go
-export let pageSetting = m3.pageSetting
+
+/** 初始化，动态加载依赖包 */
 export let init = m3.init
+/** 设置页面基本样式、语言、标题 */
+export let pageSetting = m3.pageSetting
+/** 开启VUE渲染 */
 export let render = m3.render
+/** 
+ *  VUE渲染完成，等待数据加载，页面输出
+ *  VUE渲染完成后，数据未加载完成前，页面仍然处于“白屏”状态，仍需等待一定时间，页面才能出现
+ */
 export let completed = m3.completed
 
 /** 通用功能函数 */
 export let http = m3.http;
-export let merge = m3.merge;
+export let utils = m3.utils;
 /** 平台交互基本功能 */
 export let callFS = m3.callFS;
 export let callService = m3.callService;
@@ -51,22 +63,8 @@ export let consolelog = m3.consolelog = require('./consolelog');
 /* trigger */
 export let trigger = m3.trigger = require('./trigger');
 
+/* event */
 export let event = m3.event = require("./event");
 
-/* utils */
-export let utils = m3.utils = {
-    jsFormat: require("./utils/jsFormat.js"),
-    htmlFormat: require("./utils/htmlFormat.js"),
-    adjustColor: function(color, amount) {
-        return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
-    },
-    // 单位转换
-    bytesToSize: function(bytes) {
-        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-        if (bytes == 0) return '0 Byte';
-        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-        return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
-    }
-};
-
+/* cookie */
 export let cookie = m3.cookie = require("./cookie");

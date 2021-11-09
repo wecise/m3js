@@ -10,6 +10,7 @@
 const VERSION = "1.0.0";
 
 import http from "../axios/http"
+import utils from "../utils"
 
 /**
  * 动态模块加载 import("...") 或 require("...") 只能用字符串做参数，不支持变量，
@@ -30,32 +31,6 @@ let m3config = {
     theme: "", // 默认使用cookie中保存的信息或使用内置缺省值
     displayLoadingState: false,
     mods: {},
-}
-
-/**
- * 两个对象的深度合并，合并结果保存在第一个对象中
- * 如果数据类型不同，第二个对象中对应的数据将覆盖第一个对象
- * 同一对象直接返回
-**/
-let merge = function (o, n) {
-    if(n===undefined) return o; //n 未定义，返回 o
-    if(o===undefined) return n; //o 未定义，n有值，返回 n
-    if(n==null || typeof n !== 'object') return n; //n 为空或不是对象，返回n
-    if(o==null || typeof o !== 'object') return n; //o 为空或不是对象，n 是对象，返回n
-    if(n === o) return o; // n和o为同一对象，返回o
-    if(Array.isArray(o) && Array.isArray(n)) { // 数组合并
-        for(let i=0;i<n.length;i++){
-            o.push(n[i])
-        }
-    } else {
-        let keys = Object.keys(n); // n的全部key集合
-        for(let i =0,len=keys.length; i<len; i++) {
-            let key = keys[i];
-            o[key] = merge(o[key], n[key]);
-        }
-    }
-    //console.log("o:"+o)
-    return o;
 }
 
 /**
@@ -413,7 +388,7 @@ let loadCompos = function() {
 
 let mergeConfig = function(mconfig, cfg) {
     G = cfg&&cfg.global||mconfig.global||G;
-    merge(mconfig, cfg)
+    utils.merge(mconfig, cfg)
     mconfig.mods = combin_mods(mconfig.mods, cfg&&cfg.mods||{});
     return mconfig;
 }
@@ -457,21 +432,25 @@ let compose = function(cfg) {
 let exports = {}
 /** 版本信息 */
 exports.VERSION = VERSION;
-/** 通用功能函数 */
+/** 通用功能模块 */
 exports.http = http;
+exports.utils = utils;
 /** 通用功能函数 */
-exports.merge = merge;
+exports.merge = utils.merge;
 /** 配置合并 */
 exports.mergeConfig = mergeConfig;
 /** 有序异步动态加载 */
 exports.compose = compose;
-/** 平台交互基本功能 */
+/** M³平台交互基本功能 */
 exports.callFS = callFS;
 exports.callService = callService;
-/** 连接平台 */
+/** 连接M³平台 */
 exports.connect = connect;
+/** M³平台支持的语言列表 */
 exports.langList = langList;
+/** M³平台认证信息 */
 exports.auth = auth;
+/** M³平台全局配置信息 */
 exports.global = global;
 
 export default exports
