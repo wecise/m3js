@@ -111,6 +111,20 @@ let vue_config = {
         if(!process.env.VUE_APP_M3_ASSETS) {
             process.env.VUE_APP_M3_ASSETS = IS_PROD?"/static/app/assets":"assets"
         }
+        var preloadcsshtml = "";
+        if(process.env.VUE_APP_M3_PRELOAD_CSS) {
+            var preloadcss = process.env.VUE_APP_M3_PRELOAD_CSS.split(",")
+            for(var i=0;i<preloadcss.length;i++){
+                preloadcsshtml += `\r\n<link rel="stylesheet" type="text/css" href="${process.env.VUE_APP_M3_ASSETS}/css/${preloadcss[i]}.css" />`;
+            }
+        }
+        var preloadjshtml = "";
+        if(process.env.VUE_APP_M3_PRELOAD_JS) {
+            var preloadjs = process.env.VUE_APP_M3_PRELOAD_JS.split(",")
+            for(var i=0;i<preloadjs.length;i++){
+                preloadjshtml += `\r\n<script src="${process.env.VUE_APP_M3_ASSETS}/css/${preloadjs[i]}.js"></script>`;
+            }
+        }
         let publicAssetsURLBase = "/static/assets"
         config.plugins.push(new HtmlWebpackPlugin({
             filename: "index.html",
@@ -124,8 +138,8 @@ let vue_config = {
     <script src="${process.env.VUE_APP_M3_ASSETS}/js/moment.js"></script>
     <script src="${process.env.VUE_APP_M3_ASSETS}/js/vue.js"></script>
     <script src="${process.env.VUE_APP_M3_ASSETS}/js/vue-router.js"></script>
-    <script src="${process.env.VUE_APP_M3_ASSETS}/js/element-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="${process.env.VUE_APP_M3_ASSETS}/css/loading.css" />
+    <script src="${process.env.VUE_APP_M3_ASSETS}/js/element-ui.js"></script>${preloadjshtml}
+    <link rel="stylesheet" type="text/css" href="${process.env.VUE_APP_M3_ASSETS}/css/loading.css" />${preloadcsshtml}
     <title>${process.env.VUE_APP_M3_TITLE}</title>
     <script>
         window.assetsURLBase="${publicAssetsURLBase}";
@@ -135,6 +149,7 @@ let vue_config = {
         console.oerror=console.error;console.error=function(){window.errorCount++;var e=document.getElementById("error_count");if(e){e.innerHTML=" "+window.errorCount;e.style.display="";}console.oerror.call(this,...arguments);}
         console.odebug=console.debug;console.debug=function(){var t=Date.now();console.odebug.call(this,new Date().format("yyyy-MM-dd hh:mm:ss.S"),"("+(t-window.timePhase)+"/"+(t-window.timeStart)+")",...arguments)}
         window.state=(s)=>{if(s){console.debug("[M3S]",s);var e=document.getElementById("preload_message");if(e)e.innerHTML=s}window.timePhase=Date.now()}
+        window.ldsclear=()=>{var bg=document.getElementById("preload_background");if(bg){bg.className=""}}
         window.state("正在加载页面...")
     </script>
     <link rel="icon" href="favicon.ico"/>

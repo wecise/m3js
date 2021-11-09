@@ -46,10 +46,7 @@ let m3config = {
         }).catch(err=>{
             var msg = err && (err.data && err.data.message || err.data) || err
             // 停止背景动画，显示错误信息
-            var bgloading = document.getElementById("bgloading")
-            if (bgloading) {
-                bgloading.className = ""
-            }
+            window.ldsclear && window.ldsclear();
             window.state && window.state(`<b style="color:red">${msg}，<br/><br/>
                 服务器连接失败，请检查确认如下信息：
                 <ul><li>开发环境(.env)配置是否正确
