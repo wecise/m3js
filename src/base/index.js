@@ -10,7 +10,7 @@
 const VERSION = "1.0.0";
 
 import http from "../axios/http"
-import utils from "../utils"
+import mu from "../utils/mu"
 
 /**
  * 动态模块加载 import("...") 或 require("...") 只能用字符串做参数，不支持变量，
@@ -388,7 +388,7 @@ let loadCompos = function() {
 
 let mergeConfig = function(mconfig, cfg) {
     G = cfg&&cfg.global||mconfig.global||G;
-    utils.merge(mconfig, cfg)
+    mu.merge(mconfig, cfg)
     mconfig.mods = combin_mods(mconfig.mods, cfg&&cfg.mods||{});
     return mconfig;
 }
@@ -434,9 +434,6 @@ let exports = {}
 exports.VERSION = VERSION;
 /** 通用功能模块 */
 exports.http = http;
-exports.utils = utils;
-/** 通用功能函数 */
-exports.merge = utils.merge;
 /** 配置合并 */
 exports.mergeConfig = mergeConfig;
 /** 有序异步动态加载 */

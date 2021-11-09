@@ -565,3 +565,5 @@
     return output.join('');
 
 }
+
+export default {jsFormat}

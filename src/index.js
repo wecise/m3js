@@ -25,10 +25,12 @@ export let completed = m3.completed
 
 /** 通用功能函数 */
 export let http = m3.http;
-export let utils = m3.utils;
 /** 平台交互基本功能 */
 export let callFS = m3.callFS;
 export let callService = m3.callService;
+
+/* utils */
+export let utils = m3.utils = require("./utils");
 
 /* html */
 export let html = m3.html = require("./html");

@@ -3,7 +3,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
-const utils = require('../src/utils')
+const mu = require('../src/utils/mu')
 const IS_PROD = process.env.NODE_ENV === 'production'
 const IS_M3JS = process.env.VUE_APP_M3_APP === "m3js"
 const IS_DEBUG = process.env.VUE_APP_M3_DEBUG && process.env.VUE_APP_M3_DEBUG.indexOf("vue.config")>=0
@@ -186,8 +186,8 @@ let vue_config = {
 }
 
 let merge_vue_config = function(app_config) {
-    m3config = utils.merge({}, vue_config)
-    m3config = utils.merge(m3config, app_config)
+    m3config = mu.merge({}, vue_config)
+    m3config = mu.merge(m3config, app_config)
     if(m3config.configureWebpack != vue_config.configureWebpack) {
         m3config.configureWebpack = (oconfig) => {
             // 先执行M3定义的Webpack配置

@@ -412,3 +412,5 @@ function style_html(html_source, indent_size, indent_character, max_char) {
   }
   return multi_parser.output.join('');
 }
+
+export default {htmlFormat: style_html}
