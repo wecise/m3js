@@ -135,4 +135,17 @@ let adjustColor = function(color, amount) {
     return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
 }
 
-export {setTitle, setAppAsHome, setAppAsHomeForAllUser, fullScreen, fullScreenByEl, adjustColor}
+
+function loadCSS(cssid, cssurl){
+    var cssTag = document.getElementById(cssid);
+    var head = document.getElementsByTagName('head').item(0);
+    if(cssTag) head.removeChild(cssTag);
+    var css = document.createElement('link');
+    css.href = cssurl;
+    css.rel = 'stylesheet';
+    css.type = 'text/css';
+    css.id = cssid;
+    head.appendChild(css);
+}
+
+export {setTitle, setAppAsHome, setAppAsHomeForAllUser, fullScreen, fullScreenByEl, adjustColor, loadCSS}

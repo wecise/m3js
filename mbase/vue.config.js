@@ -58,12 +58,13 @@ let vue_config = {
             config.plugins = [];
         }
         if (IS_PROD) { // 生产环境
-            // 混淆代码，去除注释
+            // 混淆代码，格式化，去除注释
             config.plugins.push(new UglifyJsPlugin({
                 uglifyOptions: {
-                    mangle: true,
+                    mangle: true, // 混淆代码
                     output: {
-                        comments: false,
+                        beautify: false, // 代码格式化
+                        comments: true, // 去除注释
                     },
                 },
             }));
@@ -125,7 +126,6 @@ let vue_config = {
     <script src="${process.env.VUE_APP_M3_ASSETS}/js/vue-router.js"></script>
     <script src="${process.env.VUE_APP_M3_ASSETS}/js/element-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="${process.env.VUE_APP_M3_ASSETS}/css/loading.css" />
-    <link rel="stylesheet" type="text/css" href="${process.env.VUE_APP_M3_ASSETS}/css/lds-ripple.css" />
     <title>${process.env.VUE_APP_M3_TITLE}</title>
     <script>
         window.assetsURLBase="${publicAssetsURLBase}";
@@ -146,7 +146,7 @@ let vue_config = {
     </noscript>
     <div id="error_count" style="position:fixed;right:5px;bottom:5px;color:red;display:none;" class="el-icon-warning">0</div>
     <div id="preload" class="preload" style="position:fixed;display:block;width:100vw;height:100vh;overflow:hidden;font-size:10px;">
-        <div id="bgloading" class="lds-ripple" style="position:absolute;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <div id="preload_background" class="${process.env.VUE_APP_M3_LOADING_ACTING||'lds-acting'}" style="position:absolute;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         <div style="position:absolute;width:100%;height:100%;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;">
             <label id="preload_message" style="flex:0 0 auto;">正在加载页面...</label>
         </div>

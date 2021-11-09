@@ -106,7 +106,7 @@ let callFS = function (fileName, param) {
  * Call a m3service interface by nats for M3 platform
  */
 let callService = function (service, action, params) {
-    service = (process.env.NODE_ENV==='production'?"v1":(process.env.VUE_APP_M3_SERVICE_VERSION||"dev"))+"."+service
+    service = (process.env.VUE_APP_M3_SERVICE_VERSION||(process.env.NODE_ENV==='production'?"v1":"dev"))+"."+service
     let input = encodeURIComponent(JSON.stringify({ service: service, action: action, params: params }));
     return callFS("/matrix/nats/action.js", input);
 };
