@@ -104,7 +104,10 @@ export let newFile = function(data) {
         contentType: false
       }
     }).then(res=>{
-      syncToLocal(data);
+      // sync to local must in ['/app','script','/web']
+      if( data.parent.startsWith('/app') || data.parent.startsWith('/script') || data.parent.startsWith('/web') ){
+        syncToLocal(data)
+      };
       resolve(data.name);
     }).catch(err=>{
       reject(err);
