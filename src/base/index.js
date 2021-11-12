@@ -9,6 +9,7 @@
 
 const VERSION = "1.0.0";
 
+import Cookies from "js-cookie";
 import http from "../axios/http"
 import mu from "../utils/mu"
 
@@ -103,9 +104,19 @@ let callFS = function (fileName, param) {
  * Call a m3service interface by nats for M3 platform
  */
 let callService = function (service, action, params) {
-    service = (process.env.VUE_APP_M3_SERVICE_VERSION||(process.env.NODE_ENV==='production'?"v1":"dev"))+"."+service
-    let input = encodeURIComponent(JSON.stringify({ service: service, action: action, params: params }));
-    return callFS("/matrix/nats/action.js", input);
+    return new Promise(function(resolve, reject) {
+        service = (process.env.VUE_APP_M3_SERVICE_VERSION||(process.env.NODE_ENV==='production'?"v1":"dev"))+"."+service
+        sessionid = Cookies.get("svccontext")
+        let input = encodeURIComponent(JSON.stringify({ service: service, action: action, params: params }));
+        callFS("/matrix/nats/action.js", input).then((data)=>{
+            resolve(data)
+            if(data.context) {
+                Cookies.set("svccontext", data.context)
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
 };
 
 /**
