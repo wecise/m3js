@@ -11,3 +11,4 @@ export let jsFormat = jsf.jsFormat
 export let htmlFormat = hf.htmlFormat
 export let merge = mu.merge
 export let bytesSize = mu.bytesSize
+export let adjustColor = mu.adjustColor

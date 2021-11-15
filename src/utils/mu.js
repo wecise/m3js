@@ -41,4 +41,12 @@ let merge = function (o, n) {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 };
 
-module.exports = { merge, bytesSize }
+
+/**
+ * 颜色反差
+ */
+ let adjustColor = function(color, amount) {
+    return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+};
+
+module.exports = { merge, bytesSize, adjustColor }
