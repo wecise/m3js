@@ -106,13 +106,13 @@ let callFS = function (fileName, param) {
 let callService = function (service, action, params) {
     return new Promise(function(resolve, reject) {
         service = (process.env.VUE_APP_M3_SERVICE_VERSION||(process.env.NODE_ENV==='production'?"v1":"dev"))+"."+service
-        sessionid = Cookies.get("svccontext")
-        let input = encodeURIComponent(JSON.stringify({ service: service, action: action, params: params }));
+        let context = Cookies.get("svccontext")
+        let input = encodeURIComponent(JSON.stringify({ service: service, action: action, context: context, params: params }));
         callFS("/matrix/nats/action.js", input).then((data)=>{
-            resolve(data)
-            if(data.context) {
-                Cookies.set("svccontext", data.context)
+            if(data && data.message && data.message.context) {
+                Cookies.set("svccontext", data.message.context)
             }
+            resolve(data)
         }).catch(err=>{
             reject(err);
         })
