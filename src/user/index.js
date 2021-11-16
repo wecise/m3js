@@ -134,4 +134,20 @@
                  
              })
          };
+
+         /* User Password Vaild */
+
+         export let passwordVaild = function(data){
+               
+          return new Promise( function (resolve, reject) {
+            
+            http.post({
+              url: `/user/vali_password`,
+              param: data
+            }).then(res=>{
+              resolve(res.data);
+            })
+              
+          })
+      };
                
