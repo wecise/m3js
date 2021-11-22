@@ -12,3 +12,5 @@ export let htmlFormat = hf.htmlFormat
 export let merge = mu.merge
 export let bytesSize = mu.bytesSize
 export let adjustColor = mu.adjustColor
+export let copyToClipboard = mu.copyToClipboard
+export let formatDuration = formatDuration

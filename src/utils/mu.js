@@ -31,7 +31,7 @@ let merge = function (o, n) {
     return o;
 }
 
-/**
+/*
  * 字节数单位转换
  */
  let bytesSize = function(bytes) {
@@ -42,11 +42,46 @@ let merge = function (o, n) {
 };
 
 
-/**
- * 颜色反差
+/*
+    获取颜色色差
  */
  let adjustColor = function(color, amount) {
     return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
 };
 
-module.exports = { merge, bytesSize, adjustColor }
+/*
+    字符串复制到剪贴板
+*/
+let  copyToClipboard = function(str){     
+    const el = document.createElement('textarea');     
+    el.value = str;     
+    el.setAttribute('readonly', '');     
+    el.style.position = 'absolute';     
+    el.style.left = '-9999px';     
+    document.body.appendChild(el);     
+    const selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;     
+    el.select();     
+    document.execCommand('copy');     
+    document.body.removeChild(el);     
+    if (selected) {         
+        document.getSelection().removeAllRanges();         
+        document.getSelection().addRange(selected);     
+    } 
+};
+
+/*  
+    转换毫秒数的可读格式
+*/
+let formatDuration = function(ms){     
+    if (ms < 0) ms = -ms; 
+    const time = {         
+        day: Math.floor(ms / 86400000),         
+        hour: Math.floor(ms / 3600000) % 24,         
+        minute: Math.floor(ms / 60000) % 60,         
+        second: Math.floor(ms / 1000) % 60,         
+        millisecond: Math.floor(ms) % 1000      
+    };     
+    return Object.entries(time).filter(val => val[1] !== 0).map(([key, val]) => `${val} ${key}${val !== 1 ? "s" : ""}`).join(","); 
+};
+
+module.exports = { merge, bytesSize, adjustColor, copyToClipboard, formatDuration }
