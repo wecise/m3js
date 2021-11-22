@@ -14,3 +14,4 @@ export let bytesSize = mu.bytesSize
 export let adjustColor = mu.adjustColor
 export let copyToClipboard = mu.copyToClipboard
 export let formatDuration = formatDuration
+export let detectDeviceType = detectDeviceType

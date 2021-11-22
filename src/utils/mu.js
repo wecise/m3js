@@ -84,4 +84,11 @@ let formatDuration = function(ms){
     return Object.entries(time).filter(val => val[1] !== 0).map(([key, val]) => `${val} ${key}${val !== 1 ? "s" : ""}`).join(","); 
 };
 
-module.exports = { merge, bytesSize, adjustColor, copyToClipboard, formatDuration }
+/*  
+    分辨设备是移动设备还是桌面设备
+*/
+let detectDeviceType = function(){
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? "Mobile" : "Desktop";
+};
+
+module.exports = { merge, bytesSize, adjustColor, copyToClipboard, formatDuration, detectDeviceType }
