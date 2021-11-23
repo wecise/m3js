@@ -106,6 +106,7 @@ let vue_config = {
         config.externals["moment"] = "moment";
         config.externals["../moment"] = "moment"; // 单独加载 moment 内部语言包时使用
         config.externals["vue"] = "Vue";
+        config.externals["vue-router"] = "VueRouter";
         config.externals["element-ui"] = "ELEMENT";
         // HTML模版，需要配合 config.externals 引入相应js
         if(!process.env.VUE_APP_M3_ASSETS) {
