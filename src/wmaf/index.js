@@ -124,12 +124,41 @@ let render = function() {
 
 let renderCompleted = function(resolve, reject) {
     try {
-        if(document.getElementsByClassName("m3").length>0){
-            document.getElementById("preload").style.display = "none";
-            window.loaded = true;
+        if(window.loaded){
             resolve();
         }else{
-            setTimeout(()=>renderCompleted(resolve, reject),0);
+            let preload_div = document.getElementById("preload")
+            if(preload_div && preload_div.nextElementSibling){
+                let vueRoot=preload_div.nextElementSibling.__vue__;
+                if(vueRoot){
+                    preload_div.style.display = "none";
+                    window.loaded = true;
+                    window.state && window.state("页面输出完成.");
+                    resolve();
+                }else{
+                    setTimeout(()=>renderCompleted(resolve, reject),0);
+                }
+            }else{
+                console.warn(`M³小应用规范：请从m3js加载vue cli配置信息，主程序异步调用m3.init，例如：
+    vue.config.js:
+        const m3config = require("@wecise/m3js/mbase/vue.config")
+        module.exports = m3config({
+            configureWebpack: {
+                entry: {
+                    app: "./src/main.js"
+                }
+            }
+        })
+    src/main.js:
+        const m3 = require("@wecise/m3js");
+        m3.init().then(()=>{
+            m3.render().then(()=>{
+
+            });
+        });
+`);
+                reject("不符合M³小应用开发规范")
+            }
         }
     } catch(e) {
         reject(e)
@@ -145,8 +174,10 @@ let completed = function() {
 let init = function(cfg) {
     m3config = m3.mergeConfig(m3config, cfg)
     return new Promise((resolve, reject)=>{
+        window.loaded=false;
         m3.compose(m3config).then((a)=>{
             resolve(a);
+            setTimeout(completed,300); //确保处理完成动作被调用
         }).catch(e=>{
             reject(e);
         })
