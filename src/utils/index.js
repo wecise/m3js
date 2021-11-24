@@ -13,5 +13,5 @@ export let merge = mu.merge
 export let bytesSize = mu.bytesSize
 export let adjustColor = mu.adjustColor
 export let copyToClipboard = mu.copyToClipboard
-export let formatDuration = formatDuration
-export let detectDeviceType = detectDeviceType
+export let formatDuration = mu.formatDuration
+export let detectDeviceType = mu.detectDeviceType
