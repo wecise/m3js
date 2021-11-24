@@ -31,6 +31,30 @@ let merge = function (o, n) {
     return o;
 }
 
+/* 动态加载CSS, 相同cssid覆盖加载 */
+function loadCSS(cssid, cssurl){
+    var cssTag = document.getElementById(cssid);
+    var head = document.getElementsByTagName('head').item(0);
+    if(cssTag) head.removeChild(cssTag);
+    var css = document.createElement('link');
+    css.href = cssurl;
+    css.rel = 'stylesheet';
+    css.type = 'text/css';
+    css.id = cssid;
+    head.appendChild(css);
+}
+
+/* 动态加载script, 相同jsid覆盖加载 */
+function loadJS(jsid, jsurl){
+    var scriptTag = document.getElementById(jsid);
+    var head = document.getElementsByTagName('head').item(0);
+    if(scriptTag) head.removeChild(scriptTag);
+    var script = document.createElement('script');
+    script.src = jsurl;
+    script.id = jsid;
+    head.appendChild(script);
+}
+
 /*
  * 字节数单位转换
  */
@@ -91,4 +115,4 @@ let detectDeviceType = function(){
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? "Mobile" : "Desktop";
 };
 
-module.exports = { merge, bytesSize, adjustColor, copyToClipboard, formatDuration, detectDeviceType }
+module.exports = { merge, loadCSS, loadJS, bytesSize, adjustColor, copyToClipboard, formatDuration, detectDeviceType }
