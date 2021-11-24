@@ -154,7 +154,22 @@ export let rename = function(data){
     })
       
   })
+}
 
+// dfs exist check
+export let check = function(data){
+
+  return new Promise( function (resolve, reject){
+    
+    http.get({
+      url: `/fs${data.parent}/${data.name}?type=check${window.auth.isAdmin?'&issys=true':''}`
+    }).then(res=>{
+      resolve(res.data.message);
+    }).catch(err=>{
+      reject(err.data);
+    })
+
+  })
 
 }
 
@@ -195,7 +210,7 @@ export let refresh = function(data){
   })
 }
 
-// dfsMove
+// dfs Move
 export let move = function(data){
 
   return new Promise( function (resolve, reject) {
@@ -206,6 +221,28 @@ export let move = function(data){
 
     http.post({
       url: `/fs/move${window.auth.isAdmin?'?issys=true':''}`,
+      param: fm
+    }).then(res=>{
+      resolve(res.data);
+    }).catch(err=>{
+      reject(err.data);
+    })
+      
+  })
+
+};
+
+// dfs Copy
+export let copy = function(data){
+
+  return new Promise( function (resolve, reject) {
+    
+    let fm = new FormData();
+    fm.append("srcpath", data.srcpath.replace(/\/\//g,'/'));
+    fm.append("dstpath", data.dstpath.replace(/\/\//g,'/'));
+
+    http.post({
+      url: `/fs/copy${window.auth.isAdmin?'?issys=true':''}`,
       param: fm
     }).then(res=>{
       resolve(res.data);
