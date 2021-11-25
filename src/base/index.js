@@ -47,15 +47,14 @@ let m3config = {
         }).catch(err=>{
             var msg = err && (err.data && err.data.message || err.data) || err
             // 停止背景动画，显示错误信息
-            window.ldsclear && window.ldsclear();
-            window.state && window.state(`<b style="color:red">${msg}，<br/><br/>
+            window.errorState && window.errorState(`${msg}，<br/><br/>
                 服务器连接失败，请检查确认如下信息：
                 <ul><li>开发环境(.env)配置是否正确
                 </li><li>用户、密码是否正确
                 </li><li>服务器连接地址正确
                 </li><li>服务器工作正常
                 </li><li>修改环境配置后服务是否已经重启
-                </li><ul></b>`)
+                </li><ul>`)
             reject(err && err.data);
         })
     })

@@ -150,7 +150,9 @@ let vue_config = {
         console.oerror=console.error;console.error=function(){window.errorCount++;var e=document.getElementById("error_count");if(e){e.innerHTML=" "+window.errorCount;e.style.display="";}console.oerror.call(this,...arguments);}
         console.odebug=console.debug;console.debug=function(){var t=Date.now();console.odebug.call(this,new Date().format("yyyy-MM-dd hh:mm:ss.S"),"("+(t-window.timePhase)+"/"+(t-window.timeStart)+")",...arguments)}
         window.state=(s)=>{if(s){console.debug("[M3S]",s);var e=document.getElementById("preload_message");if(e)e.innerHTML=s}window.timePhase=Date.now()}
-        window.ldsclear=()=>{var bg=document.getElementById("preload_background");if(bg){bg.className=""}}
+        window.ldsClear=()=>{var bg=document.getElementById("preload_background");if(bg){bg.className=""}}
+        window.errorStateCount=0;
+        window.errorState=(s)=>{if(window.errorStateCount==0){window.errorStateCount++;window.ldsClear();window.state("<b style='color:red'>"+s+"</b>");}}
         window.state("正在加载页面...")
     </script>
     <link rel="icon" href="favicon.ico"/>
@@ -160,7 +162,7 @@ let vue_config = {
     <noscript>
         <strong>Please enable JavaScript to continue.</strong>
     </noscript>
-    <div id="error_count" style="position:fixed;right:5px;bottom:5px;color:red;display:none;" class="el-icon-warning">0</div>
+    <div id="error_warning" style="position:fixed;right:5px;bottom:5px;color:red;"><span id="error_count" style="display:none;" class="el-icon-warning"></span></div>
     <div id="preload" class="preload" style="position:fixed;display:block;width:100vw;height:100vh;overflow:hidden;font-size:10px;">
         <div id="preload_background" class="${process.env.VUE_APP_M3_LOADING_ACTING||'lds-acting'}" style="position:absolute;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         <div style="position:absolute;width:100%;height:100%;display:flex;flex-flow:column nowrap;align-items:center;justify-content:center;">

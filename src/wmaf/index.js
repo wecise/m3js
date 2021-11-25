@@ -60,6 +60,7 @@ mods.html = {
 let m3config = {
     global: window,
     rootDivID: "app",
+    renderTimeout: 1000, //动态加载完成之后，等待页面输出完成的时间
     lang: window.M3_LANG, 
     theme: "", // 默认使用cookie中保存的信息或使用内置缺省值
     mods,
@@ -122,11 +123,18 @@ let render = function() {
     })
 }
 
+let completedTimeLimit = 0
 let renderCompleted = function(resolve, reject) {
     try {
         if(window.loaded){
             resolve();
         }else{
+            if(Date.now()>completedTimeLimit){
+                throw `页面渲染超时，确认需要更长的渲染时间，可以通过如下方式调整渲染超时设置
+    m3.init({
+        renderTimeout:${m3config.renderTimeout}, //毫秒
+    }) `;
+            }
             let preload_div = document.getElementById("preload")
             if(preload_div && preload_div.nextElementSibling){
                 let vueRoot=preload_div.nextElementSibling.__vue__;
@@ -139,7 +147,7 @@ let renderCompleted = function(resolve, reject) {
                     setTimeout(()=>renderCompleted(resolve, reject),0);
                 }
             }else{
-                console.warn(`M³小应用规范：请从m3js加载vue cli配置信息，主程序异步调用m3.init，例如：
+                throw `M³小应用规范：请从m3js加载vue cli配置信息，主程序异步调用m3.init，例如：
     vue.config.js:
         const m3config = require("@wecise/m3js/mbase/vue.config")
         module.exports = m3config({
@@ -156,18 +164,28 @@ let renderCompleted = function(resolve, reject) {
 
             });
         });
-`);
-                reject("不符合M³小应用开发规范")
+`;
             }
         }
     } catch(e) {
+        // 停止背景动画，显示错误信息
+        window.errorState && window.errorState("<pre>"+e+"</pre>");
         reject(e)
     }
 }
 
 let completed = function() {
     return new Promise((resolve, reject)=>{
-        renderCompleted(resolve, reject);
+        if(!window.loaded){
+            if(completedTimeLimit == 0){
+                console.debug("开始渲染超时计时")
+                completedTimeLimit = Date.now()+m3config.renderTimeout;
+                renderCompleted(resolve, reject);
+            } else {
+                //未超时之前，延长渲染超时时间
+                completedTimeLimit = Date.now()+m3config.renderTimeout;
+            }
+        }
     })
 }
 
@@ -177,9 +195,10 @@ let init = function(cfg) {
         window.loaded=false;
         m3.compose(m3config).then((a)=>{
             resolve(a);
-            setTimeout(completed,300); //确保处理完成动作被调用
+            setTimeout(completed,m3config.renderTimeout/4); //确保处理完成动作被调用，固定时间的延迟处理，效率上一般不如渲染完成后主动调用
         }).catch(e=>{
             reject(e);
+            completed(); //确保处理完成动作被调用
         })
     })
 }
@@ -209,7 +228,7 @@ let go = function(m3config) {
                 // 此时Vue渲染已经完成，但是页面还不能正常显示，还需要加载页面相关数据，并驱动Vue相关组件更新显示状态
                 m3.completed().then(()=>{
                     // 此时页面才能正常显示
-                    window.state && window.state("页面输出完成.");
+                    // window.state && window.state("页面输出完成.");
                 }).catch((e)=>{
                     console.error(e)
                 })
