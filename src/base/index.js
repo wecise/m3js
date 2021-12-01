@@ -104,7 +104,7 @@ let callFS = function (fileName, param) {
  */
 let callService = function (service, action, params) {
     params = arguments[arguments.length-1]
-    method = arguments.length>3 && arguments[2] || params.method || ""
+    let method = arguments.length>3 && arguments[2] || params.method || ""
     return new Promise(function(resolve, reject) {
         service = (process.env.VUE_APP_M3_SERVICE_VERSION||(process.env.NODE_ENV==='production'?"v1":"dev"))+"."+service
         let context = Cookies.get("m3context")

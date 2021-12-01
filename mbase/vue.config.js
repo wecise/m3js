@@ -127,7 +127,7 @@ let vue_config = {
             }
         }
         let publicAssetsURLBase = "/static/assets"
-        config.htmlTemplateContent = `<!DOCTYPE html>
+        let htmlTemplateContent = `<!DOCTYPE html>
 <html>
     <head>
     <meta charset="utf-8">
@@ -173,7 +173,7 @@ let vue_config = {
 </html>`
         config.plugins.push(new HtmlWebpackPlugin({
             filename: "index.html",
-            templateContent: config.htmlTemplateContent
+            templateContent: htmlTemplateContent
         }));
         // 设置目录别名
         if(!config.resolve) {
