@@ -108,6 +108,7 @@ let callService = function (service, action, params) {
         let context = Cookies.get("m3context")
         let input = encodeURIComponent(JSON.stringify({ service: service, action: action, context: context, params: params }));
         callFS("/matrix/nats/action.js", input).then((data)=>{
+            // data={status: "ok", message: {Continuing: "", Error: null, Result: {}, context: "m3.context.id"}}
             if(data && data.message) {
                 if(data.message.context) {
                     Cookies.set("m3context", data.message.context)

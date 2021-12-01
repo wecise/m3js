@@ -127,9 +127,7 @@ let vue_config = {
             }
         }
         let publicAssetsURLBase = "/static/assets"
-        config.plugins.push(new HtmlWebpackPlugin({
-            filename: "index.html",
-            templateContent: `<!DOCTYPE html>
+        config.htmlTemplateContent = `<!DOCTYPE html>
 <html>
     <head>
     <meta charset="utf-8">
@@ -173,6 +171,9 @@ let vue_config = {
     <!-- built files will be auto injected -->
     </body>
 </html>`
+        config.plugins.push(new HtmlWebpackPlugin({
+            filename: "index.html",
+            templateContent: config.htmlTemplateContent
         }));
         // 设置目录别名
         if(!config.resolve) {
