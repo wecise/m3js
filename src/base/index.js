@@ -103,15 +103,23 @@ let callFS = function (fileName, param) {
  * Call a m3service interface by nats for M3 platform
  */
 let callService = function (service, action, params) {
+    params = arguments[arguments.length-1]
+    let method = arguments.length>3 && arguments[2] || params.method || ""
     return new Promise(function(resolve, reject) {
         service = (process.env.VUE_APP_M3_SERVICE_VERSION||(process.env.NODE_ENV==='production'?"v1":"dev"))+"."+service
-        let context = Cookies.get("svccontext")
-        let input = encodeURIComponent(JSON.stringify({ service: service, action: action, context: context, params: params }));
+        let context = Cookies.get("m3context")
+        let input = encodeURIComponent(JSON.stringify({service: service, action: action, method: method, context: context, params: params }));
         callFS("/matrix/nats/action.js", input).then((data)=>{
-            if(data && data.message && data.message.context) {
-                Cookies.set("svccontext", data.message.context)
+            // data={status: "ok", message: {Continuing: "", Error: null, Result: {}, context: "m3.context.id"}}
+            if(data && data.message) {
+                if(data.message.context) {
+                    Cookies.set("m3context", data.message.context)
+                }
+                resolve(data.message)
+            }else{
+                console.debug(service+" response error", data)
+                reject("response message format error")
             }
-            resolve(data)
         }).catch(err=>{
             reject(err);
         })
