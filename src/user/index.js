@@ -20,6 +20,8 @@
                  url: `/admin/users?fullname=/`
                }).then(res=>{
                  resolve(res.data);
+               }).catch(err=>{
+                reject(err.data)
                })
                  
              })
@@ -34,6 +36,8 @@
                  url: `/admin/users?fullname=${data}`
                }).then(res=>{
                  resolve(res.data);
+               }).catch(err=>{
+                reject(err.data)
                })
                  
              })
@@ -49,6 +53,8 @@
                  param: JSON.stringify(data)
                }).then(res=>{
                  resolve(res.data);
+               }).catch(err=>{
+                reject(err.data)
                })
                  
              })
@@ -81,6 +87,8 @@
                      param: JSON.stringify(fm)
                  }).then(res=>{
                      resolve(res.data);
+                 }).catch(err=>{
+                  reject(err.data)
                  })
                  
              })
@@ -96,6 +104,8 @@
                  param: JSON.stringify(data)
                }).then(res=>{
                  resolve(res.data);
+               }).catch(err=>{
+                reject(err.data)
                })
                  
              })
@@ -111,6 +121,8 @@
                  param: JSON.stringify(data)
                }).then(res=>{
                  resolve(res.data);
+               }).catch(err=>{
+                reject(err.data)
                })
                  
              })
@@ -130,6 +142,8 @@
                  }
                }).then(res=>{
                  resolve(res.data);
+               }).catch(err=>{
+                reject(err.data)
                })
                  
              })
@@ -146,8 +160,9 @@
               param: data
             }).then(res=>{
               resolve(res.data);
-            })
+            }).catch(err=>{
+              reject(err.data)
+             })
               
           })
       };
-               
