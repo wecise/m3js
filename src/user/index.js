@@ -117,8 +117,7 @@
              return new Promise( function (resolve, reject) {
                
                http.get({
-                 url: `/admin/users/${user.id}?to=${newGroup.id}`,
-                 param: JSON.stringify(data)
+                 url: `/admin/users/${user.id}?to=${newGroup.id}`
                }).then(res=>{
                  resolve(res.data);
                }).catch(err=>{
@@ -166,3 +165,4 @@
               
           })
       };
+               
