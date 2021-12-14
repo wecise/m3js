@@ -104,10 +104,7 @@ export let newFile = function(data) {
         contentType: false
       }
     }).then(res=>{
-      // sync to local must in ['/app','script','/web']
-      if( data.parent.startsWith('/app') || data.parent.startsWith('/script') || data.parent.startsWith('/web') ){
-        syncToLocal(data)
-      };
+      syncToLocal(data)
       resolve(data.name);
     }).catch(err=>{
       reject(err);
@@ -257,6 +254,10 @@ export let copy = function(data){
 // dfsSyncToLocal
 export let syncToLocal = function(data){
 
+  // sync to local must in ['/app','script','/web']
+  if( !data.parent.startsWith('/app') || !data.parent.startsWith('/script') || !data.parent.startsWith('/web') ){
+    return false;
+  };
 
   return new Promise( function (resolve, reject) {
     
