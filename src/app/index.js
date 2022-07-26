@@ -60,3 +60,66 @@ export let importApp = function(data){
         
     })
 };
+
+export let packApp = function(data){
+      
+    return new Promise( function (resolve, reject) {
+      
+        let url = `/app/pack`;
+        let fm = new FormData();
+        fm.append("uploadfile", data.uploadfile);
+        fm.append("name", data.name);
+        fm.append("version", data.version);
+        fm.append("dir", data.dir);
+        
+        if(!_.isEmpty(data.file)){
+            data.file.forEach(v=>{
+                fm.append("file", v);
+            })
+        }
+        if(!_.isEmpty(data.rule)){
+            data.rule.forEach(v=>{
+                fm.append("rule", v);
+            })
+        }
+        if(!_.isEmpty(data.job)){
+            data.job.forEach(v=>{
+                fm.append("job", v);
+            })
+        }
+        if(!_.isEmpty(data.class)){
+            data.class.forEach(v=>{
+                fm.append("class", v);
+            })
+        }
+        http.post({
+            url: url,
+            param: fm
+        }).then(res=>{
+            resolve(res.data);
+        }).catch(err=>{
+            reject(err);
+        })
+        
+    })
+};
+
+
+export let unPackApp = function(data){
+      
+    return new Promise( function (resolve, reject) {
+      
+        let url = `/app/unpack`;
+        let fm = new FormData();
+        fm.append("filepath", data.filepath);
+        http.post({
+            url: url,
+            param: fm
+        }).then(res=>{
+            resolve(res.data);
+        }).catch(err=>{
+            reject(err);
+        })
+        
+    })
+};

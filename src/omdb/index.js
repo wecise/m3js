@@ -19,3 +19,19 @@ export let getClassFieldsById = function(id){
       
   })
 }
+
+export let getClassListById = function(id){
+  
+  return new Promise( function (resolve, reject) {
+      
+    http.get({
+      url: `/mxobject/schema/class/list`,
+      param: {id:id} 
+    }).then(res=>{
+      resolve(res.data);
+    }).catch(err=>{
+      reject(err.data);
+    })
+      
+  })
+}
