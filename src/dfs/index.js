@@ -293,13 +293,36 @@ export let unzip = function(data,file){
   })
 };
 
-// dfsZip
+// dfsZip single file
 export let zip = function(data,file){
 
   return new Promise( function (resolve, reject) {
   
     http.post({
       url: `/fs/export?srcpath=${data.srcpath}&issys=true`,
+      param:{
+        responseType:"arraybuffer"
+      }
+    }).then(res=>{
+      resolve(res.data);
+    }).catch(err=>{
+      reject(err);
+    })
+      
+  })
+};
+
+// dfsZip multiple files
+export let zips = function(data,file){
+
+  return new Promise( function (resolve, reject) {
+
+    let srcpaths = data.map(v=>{
+       return `srcpath=${v}`;
+    }).join("&")
+    
+    http.post({
+      url: `/fs/export?${srcpaths}&issys=true`,
       param:{
         responseType:"arraybuffer"
       }
