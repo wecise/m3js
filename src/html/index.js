@@ -71,6 +71,9 @@ let setTitle = function(auth){
                 let name = res.message;
                 if(!m3._.isEmpty(name)) {
                     document.title = name['cnname'] || name['enname'];
+
+                    const headerEl = document.querySelector('.header>div>span');
+                    headerEl.innerHTML = ' ' + name['cnname'] || name['enname'];
                 } else {
                     document.title = auth.Company.title;
                 }
